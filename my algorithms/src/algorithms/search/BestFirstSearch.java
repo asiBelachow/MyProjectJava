@@ -7,7 +7,19 @@ import java.util.Iterator;
 import java.util.PriorityQueue;
 
 
+/*
+Advantages of - Best-First Search
+ 1) Takes advantage of domain information to guide search
+ 2) Greedy advance to the goal 
 
+Advantages of - Best-First SearchDepth first search
+ 1) May arrive at solutions without examining much of search space
+ 2) Needs little memory (only node in current path needs to be stored)
+
+I choose to implement best first search with a priority queue because we always want the 
+less cost step to the the target (goal position)
+
+*/
 
 /**
  * <h1>BestFirstSearch</h1><p>
