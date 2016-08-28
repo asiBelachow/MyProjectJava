@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<list key="EGit.KnownHosts">
+		<item value="git.eclipse.org"/>
+		<item value="github.com"/>
+		<item value="bitbucket.org"/>
+	</list>
+	<section name="GitCommitMessageComponent">
+		<list key="C:\Users\Asi\git\Maze3DProject\.git">
+			<item value="false"/>
+			<item value="asiBelachow &lt;israelisraeli488@gmail.com&gt;"/>
+			<item value="upload files"/>
+			<item value="asiBelachow &lt;israelisraeli488@gmail.com&gt;"/>
+			<item value="0000000000000000000000000000000000000000"/>
+		</list>
+	</section>
+	<section name="org.eclipse.egit.ui.internal.staging.StagingView">
+		<item value="511,488" key="STAGING_SASH_FORM_WEIGHT"/>
+		<item value="false" key="sortItemState"/>
+		<item value="500,500" key="HORIZONTAL_SASH_FORM_WEIGHT"/>
+	</section>
+</section>
