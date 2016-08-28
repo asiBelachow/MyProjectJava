@@ -60,7 +60,7 @@ public class Demo {
 		System.out.println("Number of nodes evaluated: "+ dfs1Searcher.getNumberOfNodesEvaluated());
 		
 		
-/*		OutputStream out=new MyCompressorOutputStream(new FileOutputStream("1.maz"));
+		OutputStream out=new MyCompressorOutputStream(new FileOutputStream("1.maz"));
 		out.write(myMaze.toByteArray());
 		out.flush();
 		out.close();
@@ -71,6 +71,6 @@ public class Demo {
 		in.close(); 
 		 
 		Maze3D loaded=new Maze3D(b);  
-		System.out.println(loaded.equals(myMaze));*/
+		System.out.println(loaded.equals(myMaze));
 	}
 }
