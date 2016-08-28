@@ -21,8 +21,8 @@ import io.MyDecompressorInputStream;
 public class Demo {
 	
 	public void run() throws IOException{
-		Maze3D myMaze=  new GrowingTreeGenerator(new  GrowingTreeRandom()).generate(5, 5, 5);
-		Maze3D myMaze1 = new GrowingTreeGenerator(new  GrowingTreeLast()).generate(5, 5, 5);
+		Maze3D myMaze=  new GrowingTreeGenerator(new  GrowingTreeRandom()).generate(3, 3, 3);
+		Maze3D myMaze1 = new GrowingTreeGenerator(new  GrowingTreeLast()).generate(3, 3, 3);
 		
 		
 		System.out.println(myMaze.toString());
@@ -60,7 +60,7 @@ public class Demo {
 		System.out.println("Number of nodes evaluated: "+ dfs1Searcher.getNumberOfNodesEvaluated());
 		
 		
-		OutputStream out=new MyCompressorOutputStream(new FileOutputStream("1.maz"));
+/*		OutputStream out=new MyCompressorOutputStream(new FileOutputStream("1.maz"));
 		out.write(myMaze.toByteArray());
 		out.flush();
 		out.close();
@@ -71,6 +71,6 @@ public class Demo {
 		in.close(); 
 		 
 		Maze3D loaded=new Maze3D(b);  
-		System.out.println(loaded.equals(myMaze));
+		System.out.println(loaded.equals(myMaze));*/
 	}
 }

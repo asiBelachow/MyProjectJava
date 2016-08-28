@@ -8,9 +8,6 @@ import java.io.IOException;
 
 
 import algorithms.demo.Demo;
-import algorithms.maze3DGenerators.GrowingTreeGenerator;
-import algorithms.maze3DGenerators.GrowingTreeLast;
-import algorithms.maze3DGenerators.GrowingTreeRandom;
 import algorithms.maze3DGenerators.Maze3D;
 
 
