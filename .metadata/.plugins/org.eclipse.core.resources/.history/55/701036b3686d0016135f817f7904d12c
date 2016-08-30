@@ -10,7 +10,7 @@ import algorithms.search.State;
 
 /**
  * <h1>State<T></h1><p>
- * This class extends the CommonSearchable class and its define a searchable Maze3D
+ * This class implements the Comparable interface and its define state of given search problem (Maze3D)
  * @param <T> the generic type
  * @author Asi Belachow
  * @version 1.0
@@ -21,13 +21,6 @@ public class SearchableMaze3D<T> extends CommonSearchable<Position> {
 	
 	//------------------------------Constructors-------------------------//
 	
-	
-	/**
-	 * <h1>SearchableMaze3D</h1><p>
-	 * <i><ul>SearchableMaze3D(Maze3D myMaze)<i><p>
-	 * Initialization a Searchable Maze3D
-	 * @param - aMaze3D
-	 */
 	public SearchableMaze3D(Maze3D myMaze) {
 		super(myMaze);
 	}

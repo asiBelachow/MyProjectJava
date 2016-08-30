@@ -26,7 +26,6 @@ public class SearchableMaze3D<T> extends CommonSearchable<Position> {
 	 * <h1>SearchableMaze3D</h1><p>
 	 * <i><ul>SearchableMaze3D(Maze3D myMaze)<i><p>
 	 * Initialization a Searchable Maze3D
-	 * @param - aMaze3D
 	 */
 	public SearchableMaze3D(Maze3D myMaze) {
 		super(myMaze);

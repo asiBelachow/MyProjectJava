@@ -104,9 +104,6 @@ public class Maze3D {
 		this.setyAxis(data.readInt());
 		this.setStart(new Position(data.readInt(), data.readInt(), data.readInt()));
 		this.setEnd(new Position(data.readInt(), data.readInt(), data.readInt()));
-		System.out.println(getzAxis());
-		System.out.println(getStart());
-		System.out.println(getEnd());
 		this.array = new int[getzAxis()][getxAxis()][getyAxis()];
 		
 		for (int i=0;i<getzAxis();i++)
