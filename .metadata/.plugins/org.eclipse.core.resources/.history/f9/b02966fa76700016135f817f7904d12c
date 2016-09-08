@@ -1,0 +1,15 @@
+package allCommands;
+
+import model.Model;
+
+public abstract class ClientCommands implements Command {
+	
+	Model m;
+
+	@Override
+	public abstract void doCommmand(String[] param);
+		
+	
+
+
+}

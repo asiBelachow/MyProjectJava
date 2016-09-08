@@ -1,0 +1,24 @@
+package view;
+
+import java.io.IOException;
+
+
+
+/**
+ * This interface is the view part of our MVC architecture used for displaying solution <br>
+ * and forwarding commands clients
+ * 
+ * @author Asi Belachow
+ * @version 1.0
+ * @since 2016-02-09
+ *
+ */
+public interface View {
+	
+	void start();
+	
+	public void forwardCommand(String command, String[] parm) throws IOException;
+	
+	public void displaySolution(String solution);
+
+}

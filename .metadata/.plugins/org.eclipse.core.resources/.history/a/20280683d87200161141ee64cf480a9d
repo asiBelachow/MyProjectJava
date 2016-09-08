@@ -1,0 +1,216 @@
+package model;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Iterator;
+import algorithms.maze3DGenerators.GrowingTreeGenerator;
+import algorithms.maze3DGenerators.GrowingTreeRandom;
+import algorithms.maze3DGenerators.Maze3D;
+import controller.Controller;
+import io.MyCompressorOutputStream;
+import io.MyDecompressorInputStream;
+
+public class MyModel extends MyCommonModel {
+	
+	
+	//------------------------------Constructors-------------------------//
+	
+	public MyModel(Controller cont) {
+		super(cont);
+	}
+
+	
+	//-------------------------Functionality-------------------------//
+	
+	@Override
+	public void dirPath(String path) {
+		
+		if(path.length()==0){
+			cont.setSolution("The directory is empty");
+			return;
+		}
+		File dir = new File(path);
+		if(!dir.isDirectory()){
+			cont.setSolution("The path is not a directory");
+			return;
+		}
+	
+		String[] temp = dir.list();
+		StringBuilder sb = new StringBuilder();
+		sb.append("\nThe files in "+ path + " are: \n");
+		for (String s : temp){
+			sb.append(s+"\n");
+		}
+		cont.setSolution(sb.toString());
+		
+	}
+
+	@Override
+	public void generateMaze3D(String mazeName, int z, int x, int y) {
+		
+		if ( !mapMaze3D.containsKey(mazeName)){
+			
+			Maze3D maze = new GrowingTreeGenerator(new GrowingTreeRandom()).generate(z, x, y);
+			mapMaze3D.put(mazeName, maze);
+		/// TODO 
+			return;
+		}
+		
+		
+		
+		
+		
+		
+	}
+
+	@Override
+	public void CrossSectionByDimention(int index, String dimension,  String mazeName) {
+		
+		if (mapMaze3D.containsKey(mazeName)){
+
+			Maze3D maze = mapMaze3D.get(mazeName);
+			int[][] temp;
+			if(dimension == "z"){
+				temp = maze.getCrossSectionByZ(index);
+			}
+			if(dimension == "x"){
+				temp = maze.getCrossSectionByX(index);
+			}
+			if(dimension == "y"){
+				temp = maze.getCrossSectionByY(index);
+			}
+			
+			cont.setSolution(temp.toString());
+		}
+		
+		
+	}
+
+	@Override
+	public void saveMaze(String mazeName, String path) throws IOException  {
+		
+
+			if(mapMaze3D.containsKey(mazeName)){
+				OutputStream out = new MyCompressorOutputStream(new FileOutputStream(path+".maz"));
+				try{
+				out.write(mapMaze3D.get(mazeName).toByteArray());
+				out.flush();
+				out.close();
+				}catch (Exception e) {
+					cont.setSolution("Error while trying to save the maze, please try again");
+				}
+				cont.setSolution("The maze: "+mazeName+" successfully saved");
+				return;
+			}
+		
+	
+			cont.setSolution("The maze: " + mazeName + " not exits");
+
+	}
+
+	@Override
+	public void loadMaze(String file, String mazeName) throws IOException {
+		boolean flag = false;
+		try {
+			File f = new File(file+".maz");
+			@SuppressWarnings("resource")
+			InputStream in=new MyDecompressorInputStream( new FileInputStream(f));
+			byte b[] = new byte[(int) f.length()];
+			in.read(b);
+			Maze3D maze = new Maze3D(b);
+			mapMaze3D.put(mazeName, maze);
+			
+		} catch (FileNotFoundException e) {
+			flag=true;
+			cont.setSolution("The file: "+file+ " not found");
+		}
+		
+		if(flag == false){
+			cont.setSolution("Maze: "+mazeName+ " loaded sucssefuly");
+		}
+	}
+
+	@Override
+	public void solveMaze(String mazeName, String alg) {
+		
+		if ( mapMaze3D.containsKey(mazeName)){
+	
+			
+			//SearchableMaze3D<Position> sMaze = new SearchableMaze3D<Position>(mapMaze3D.get(mazeName));
+		}
+		
+	}
+
+
+	@Override
+	public void displayMaze(String name) {
+		
+		if(mapMaze3D.containsKey(name)){
+			cont.setSolution(mapMaze3D.get(name).toString());
+			return;
+		}
+	
+		cont.setSolution(("Maze: "+name+ " not found"));	
+	}
+	
+	
+	@Override
+	public void displaySolution(String mazeName) {
+		if(mapSolution.containsKey(mazeName)){
+			cont.setSolution(mapSolution.get(mazeName).toString());
+			return;
+		}
+		
+		cont.setSolution("The maze: "+ mazeName+" not found");
+	}
+	
+	@Override
+	public void displayListOfAllMaze() {
+		
+		if(mapMaze3D.isEmpty()){
+			cont.setSolution("The database empty");
+			return;
+		}
+		StringBuilder sb = new StringBuilder();
+		Iterator<String> iter = mapMaze3D.keySet().iterator();
+		int i=1;
+		sb.append("\nList of all maze:\n");
+		while (iter.hasNext()){
+			sb.append(i+") "+iter.next()+"\n");
+		}
+		
+		cont.setSolution(sb.toString()+"\n");
+		
+	}
+	
+	public void displayMenu(){
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("*********************************************************************\n");
+		sb.append("*                               CLI Menu                            *\n");
+		sb.append("*********************************************************************\n");
+		sb.append("1) To view file in directory enter: dir <path>\n");
+		sb.append("2) To generate new Maze3D enter: generate_maze <name> <other params>\n");
+		sb.append("3) To display a Maze3d enter: display <name>\n");
+		sb.append("4) To dispaly cross section of the Maze3D enter: display cross section <index{xz,x,y} <name>\n");
+		sb.append("5) To display a Maze3d enter: display <name>\n");
+		sb.append("6) To save a Maze3D enter: save maze <name> <file name>\n");
+		sb.append("7) To load saved Maze3D enter: load maze <file name> <name>\n");
+		sb.append("8) To solve a Maze3D enter: solve <name> <algorithm(BFS,DFS)>\n");
+		sb.append("9) To display the solution path of the maze enter: display_solution <name>\n");
+		sb.append("10) To display the menu enter: display menu\n");
+		sb.append("11) To exit enter: exit\n");
+		
+		cont.setSolution(sb.toString());
+	
+	}
+	
+	
+
+
+}

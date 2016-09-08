@@ -1,0 +1,18 @@
+package allCommands;
+
+import java.io.IOException;
+
+public class DisplayMenu extends ClientCommands {
+
+	@Override
+	public void doCommmand(String[] param) throws IOException {
+		
+
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getName();
+	}
+
+}

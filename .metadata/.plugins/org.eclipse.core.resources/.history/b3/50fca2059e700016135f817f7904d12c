@@ -1,0 +1,68 @@
+package model;
+
+import controller.Controller;
+
+public abstract class MyCommonModel implements Model {
+	
+	protected Controller cont;
+	
+	//------------------------------Constructors-------------------------//
+	
+	/**
+	 *<h1>MyCommonModel</h1><p>
+	 * <i><ul>MyCommonModel(Controller cont)<i><p>
+	 * Initialize a new Model
+	 *
+	 * @param Controller
+	 */
+	public MyCommonModel(Controller cont) {
+		
+		this.cont = cont;
+	}
+	
+	
+	//-----------------------------setters and getters-------------------//
+
+	public Controller getCont() {
+		return cont;
+	}
+
+	public void setCont(Controller cont) {
+		this.cont = cont;
+	}
+
+
+
+	
+	//-------------------------Functionality-------------------------//
+	
+	@Override
+	public abstract void dirPath(String path);
+
+
+
+	@Override
+	public abstract void generateMaze3D(String mazeName, int z, int x, int y);
+
+
+
+	@Override
+	public abstract void CrossSectionByDimention(String crossSection, int dimension, String mazeName);
+
+
+
+	@Override
+	public abstract void saveMaze(String mazeName, String file);
+
+
+	@Override
+	public abstract void loadMaze(String file, String mazeName);
+
+
+
+	@Override
+	public abstract void solveMaze(String mazeName, String alg);
+
+	
+
+}

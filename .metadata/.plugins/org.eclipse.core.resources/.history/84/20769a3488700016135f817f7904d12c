@@ -1,0 +1,68 @@
+package view;
+
+import controller.Controller;
+
+public abstract class MyCommonView implements View {
+	
+	
+	protected Controller cont;
+	
+	protected CLI cli;
+	
+	
+	//------------------------------Constructors-------------------------//
+	
+	/**
+	 *<h1>MyCommonView</h1><p>
+	 * <i><ul>MyCommonView(Controller cont)<i><p>
+	 * Initialize a new View
+	 *
+	 * @param Controller
+	 */
+	public MyCommonView(Controller cont) {
+		this.cont = cont;
+	}
+
+
+	
+	
+	//-----------------------------setters and getters-------------------//
+	
+	public Controller getCont() {
+		return cont;
+	}
+
+
+	public void setCont(Controller cont) {
+		this.cont = cont;
+	}
+	
+	public CLI getCli() {
+		return cli;
+	}
+
+
+	public void setCli(CLI cli) {
+		this.cli = cli;
+	}
+	
+	
+	//-------------------------Functionality-------------------------//
+	
+	@Override
+	public void start() {
+	
+		cli.start();
+		
+	}
+	
+	@Override
+	public abstract void forwardCommand(String command, String[] parm);
+
+
+
+
+	
+	
+
+}

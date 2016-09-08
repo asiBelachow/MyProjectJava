@@ -1,0 +1,11 @@
+package view;
+
+public interface View {
+	
+	void start();
+	
+	public void forwardCommand(String command, String[] parm);
+	
+	public void displaySolution(String solution);
+
+}

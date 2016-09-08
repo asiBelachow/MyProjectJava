@@ -1,0 +1,27 @@
+package controller;
+
+import javax.swing.text.View;
+
+import model.Model;
+
+/**
+ * <h1>The Interface Controller</h1><p>
+ * Controller interface define the functionality that needed in order <br>
+ * to transfer orders(commands between the view and the model <br>
+ * @author Asi Belachow
+ * @version 1.0
+ * @since 2016-30-08
+ */
+public interface Controller {
+	
+	void setModel(Model m);
+	
+	void setView(View v);
+	
+	void setCommands();
+	
+	void HashMap<String,Command> getCommands();
+		
+
+	
+}

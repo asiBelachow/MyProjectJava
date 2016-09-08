@@ -1,0 +1,14 @@
+package controller;
+
+import javax.swing.text.View;
+
+import model.Model;
+
+public class MyController extends MyCommonController {
+
+	public MyController(View v , Model m) {
+		super();
+	}
+	
+	
+}

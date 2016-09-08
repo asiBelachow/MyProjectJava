@@ -1,0 +1,40 @@
+package model;
+
+public interface Model {
+	
+
+	/**
+	 * <h1>Get directory path</h1><p>
+	 * <i><ul>void getDirPath(String path)<i><p>
+	 * Display all files and folders in a given directory
+	 * @param String- the directory
+	 */
+	public void dirPath(String path);
+	
+	
+	/**
+	 * <h1>Generate Maze3D</h1><p>
+	 * <i><ul>void generateMaze3D(String mazeName)<i><p>
+	 * Generate new Maze3D
+	 * @param String- name of Maze3D
+	 */
+	public void generateMaze3D(String mazeName);
+	
+	
+	/**
+	 * <h1>Cross Section By Dimension</h1><p>
+	 * <i><ul>void CrossSectionByDimention(String command, int dimension, String mazeName)<i><p>
+	 * Generate a cross section of Maze3D by given dimension 
+	 * @param String- The command 
+	 * @param int - The dimension 
+	 * * @param String - The mazeName
+	 */
+	public void CrossSectionByDimention(String crossSection, int dimension, String mazeName);
+	
+	
+	
+	
+		
+
+
+}

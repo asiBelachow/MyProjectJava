@@ -1,4 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="algorithms.demo.Demo"/>
+<fullyQualifiedTypeName name="allCommands.SaveMaze"/>
+<fullyQualifiedTypeName name="allCommands.LoadMaze"/>
+<fullyQualifiedTypeName name="allCommands.SolveMaze3D"/>
+<fullyQualifiedTypeName name="allCommands.DisplayCrossSectionByDimension"/>
+<fullyQualifiedTypeName name="allCommands.DisplaySolution"/>
+<fullyQualifiedTypeName name="algorithms.demo.SearchableMaze3D"/>
+<fullyQualifiedTypeName name="algorithms.maze3DGenerators.Position"/>
+<fullyQualifiedTypeName name="java.io.OutputStream"/>
+<fullyQualifiedTypeName name="io.MyCompressorOutputStream"/>
+<fullyQualifiedTypeName name="java.io.FileOutputStream"/>
+<fullyQualifiedTypeName name="java.io.IOException"/>
+<fullyQualifiedTypeName name="java.util.concurrent.ExecutorService"/>
+<fullyQualifiedTypeName name="java.util.concurrent.Executors"/>
+<fullyQualifiedTypeName name="controller.MyController"/>
+<fullyQualifiedTypeName name="javax.swing.text.View"/>
+<fullyQualifiedTypeName name="view.MyView"/>
+<fullyQualifiedTypeName name="java.io.BufferedReader"/>
+<fullyQualifiedTypeName name="java.io.PrintWriter"/>
+<fullyQualifiedTypeName name="javax.sound.midi.SysexMessage"/>
+<fullyQualifiedTypeName name="java.lang.System"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="java.io.InputStreamReader"/>
+<fullyQualifiedTypeName name="view.CLI"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="algorithms.maze3DGenerators.GrowingTreeGenerator"/>
+<fullyQualifiedTypeName name="algorithms.maze3DGenerators.GrowingTreeRandom"/>
+<fullyQualifiedTypeName name="allCommands.DisplyListOfAllMaze"/>
+<fullyQualifiedTypeName name="java.lang.Iterable"/>
+<fullyQualifiedTypeName name="java.util.concurrent.ConcurrentHashMap"/>
+<fullyQualifiedTypeName name="java.lang.StringBuilder"/>
+<fullyQualifiedTypeName name="allCommands.DisplayMenu"/>
+<fullyQualifiedTypeName name="model.MyModel"/>
+<fullyQualifiedTypeName name="algorithms.maze3DGenerators.Maze3D"/>
+<fullyQualifiedTypeName name="java.io.File"/>
+<fullyQualifiedTypeName name="java.net.PasswordAuthentication"/>
+<fullyQualifiedTypeName name="javax.naming.PartialResultException"/>
+<fullyQualifiedTypeName name="allCommands.Command"/>
+<fullyQualifiedTypeName name="model.Model"/>
+<fullyQualifiedTypeName name="view.View"/>
+<fullyQualifiedTypeName name="algorithms.search.Solution"/>
+<fullyQualifiedTypeName name="controller.Controller"/>
+<fullyQualifiedTypeName name="java.lang.Override"/>
+<fullyQualifiedTypeName name="java.lang.Runnable"/>
 </qualifiedTypeNameHistroy>

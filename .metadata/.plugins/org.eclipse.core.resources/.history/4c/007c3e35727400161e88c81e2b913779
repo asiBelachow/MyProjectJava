@@ -1,0 +1,40 @@
+package allCommands;
+
+import java.io.IOException;
+
+import model.Model;
+
+
+
+/**
+ * The Class .
+ * 
+ */
+
+/**
+ * <h1>The Class ClientCommands</h1><p>
+* The Class Command ClientCommands define the common 
+ * @author Asi Belachow
+ * @version 1.0
+ * @since 2016-09-05
+ */
+
+public abstract class ClientCommands implements Command {
+	
+	Model m;
+	
+	
+	public ClientCommands(Model m) {
+		this.m = m;
+	}
+
+	@Override
+	public abstract void doCommmand(String[] param) throws IOException;
+		
+@Override
+	public abstract String toString();
+
+	
+
+
+}

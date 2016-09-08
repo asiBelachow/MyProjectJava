@@ -1,0 +1,90 @@
+package model;
+
+import java.io.IOException;
+
+public interface Model {
+	
+
+	/**
+	 * <h1>Get directory path</h1><p>
+	 * <i><ul>void getDirPath(String path)<i><p>
+	 * Display all files and folders in a given directory
+	 * @param String- the directory
+	 */
+	public void dirPath(String path);
+	
+	
+	/**
+	 * <h1>Generate Maze3D</h1><p>
+	 * <i><ul>void generateMaze3D(String mazeName)<i><p>
+	 * Generate new Maze3D
+	 * @param String- name of Maze3D
+	 */
+	public void generateMaze3D(String mazeName, int z, int x, int y);
+	
+	
+	/**
+	 * <h1>Cross Section By Dimension</h1><p>
+	 * <i><ul>void CrossSectionByDimention(String command, int dimension, String mazeName)<i><p>
+	 * Generate a cross section of Maze3D by given dimension .
+	 * @param crossSection
+	 * @param dimension 
+	 * @param mazeName 
+	 */
+	public void CrossSectionByDimention(String crossSection, int dimension, String mazeName);
+	
+	
+	/**
+	 * <h1>Display maze 3D</h1><p>
+	 * <i><ul>void displayMaze3D(String name)<i><p>
+	 * Get a name of Maze3D and display it
+	 * @param name the name
+	 */
+	public void displayMaze(String name);
+
+	
+	/**
+	 * <h1>Save Maze</h1><p>
+	 * <i><ul>void saveMaze(String mazeName, String file)<i><p>
+	 * Save Maze3D to given directory
+	 * @param mazeName
+	 * @param file 
+	 */
+	public void saveMaze(String mazeName, String path) throws IOException;
+	
+	
+	/**
+	 * <h1>Load Maze</h1><p>
+	 * <i><ul>void loadMaze(String file, String mazeName)<i><p>
+	 * Load Maze3D from a given directory
+	 * @param file
+	 * @param mazeName 
+	 */
+	public void loadMaze(String file, String mazeName) throws IOException;
+	
+	
+	/**
+	 * <h1>Solve maze</h1><p>
+	 * <i><ul>void solveMaze(String mazeName, String alg)<i><p>
+	 * Solve a given Maze3D with given search algorithm 
+	 * @param mazeName 
+	 * @param alg
+	 */
+	public void solveMaze(String mazeName, String alg);
+	
+	
+	/**
+	 * <h1>Display Solution</h1><p>
+	 * <i><ul>void displaySolution(String mazeName)<i><p>
+	 * Display the solution path of a given name of maze
+	 * @param String - The name of the maze
+	 */
+	public void displaySolution(String mazeName);
+	
+	public void displayListOfAllMaze();
+	
+	public void displayMenu();
+		
+
+
+}

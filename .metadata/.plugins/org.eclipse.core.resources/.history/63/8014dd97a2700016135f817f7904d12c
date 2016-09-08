@@ -1,0 +1,84 @@
+package model;
+
+import java.io.File;
+
+import controller.Controller;
+
+public class MyModel extends MyCommonModel {
+	
+	
+	//------------------------------Constructors-------------------------//
+	
+	public MyModel(Controller cont) {
+		super(cont);
+	}
+
+	
+	//-------------------------Functionality-------------------------//
+	
+	@Override
+	public void dirPath(String path) {
+		
+		if( path.isEmpty()){
+			cont.setSolution("The path is invalid".split(" "));
+			return;
+		}
+		
+		File dir = new File(path);
+		File[] files = dir.listFiles();
+		if (files.length == 0) {
+		    System.out.println("The directory is empty");
+		    return;
+		} 
+		if(!dir.isDirectory()){
+			cont.setSolution("The path is not a directory".split(" "));
+			return;
+		}
+		   
+		
+		cont.setSolution(dir.list());
+		
+		
+	}
+
+	@Override
+	public void generateMaze3D(String mazeName, int z, int x, int y) {
+		
+		//Need to implements in thread
+		
+	}
+
+	@Override
+	public void CrossSectionByDimention(String crossSection, int dimension, String mazeName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void saveMaze(String mazeName, String file) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void loadMaze(String file, String mazeName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void solveMaze(String mazeName, String alg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void displayMaze3D(String name) {
+		
+		
+	}
+	
+	
+
+}

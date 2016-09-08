@@ -1,0 +1,26 @@
+package allCommands;
+
+import model.Model;
+
+public class DisplayCrossSectionByDimension extends ClientCommands {
+
+	public DisplayCrossSectionByDimension(Model m) {
+		super(m);
+		
+	}
+	
+	
+	@Override
+	public void doCommmand(String[] param) {
+		
+		m.CrossSectionByDimention(param[3], Integer.parseInt(param[4]), param[5]);
+
+	}
+	
+	@Override
+	public String toString() {
+		return getClass().getName();
+	}
+
+
+}

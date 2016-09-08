@@ -1,0 +1,18 @@
+package allCommands;
+
+import model.Model;
+
+public class DisplayMaze extends ClientCommands {
+
+	public DisplayMaze(Model m) {
+		super(m);
+	}
+	
+	@Override
+	public void doCommmand(String[] param) {
+		m.d
+		
+
+	}
+
+}

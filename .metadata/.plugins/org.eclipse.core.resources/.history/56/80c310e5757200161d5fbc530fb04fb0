@@ -1,0 +1,25 @@
+package allCommands;
+
+import java.io.IOException;
+
+import model.Model;
+
+public abstract class ClientCommands implements Command {
+	
+	Model m;
+	
+	
+	public ClientCommands(Model m) {
+		this.m = m;
+	}
+
+	@Override
+	public abstract void doCommmand(String[] param) throws IOException;
+		
+@Override
+	public abstract String toString();
+
+	public abstract void menu();
+
+
+}

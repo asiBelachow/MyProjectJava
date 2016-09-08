@@ -1,0 +1,11 @@
+package allCommands;
+
+public class DisplaySolution extends ClientCommands {
+
+	@Override
+	public void doCommmand(String[] param) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

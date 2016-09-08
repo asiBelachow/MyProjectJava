@@ -1,0 +1,18 @@
+package allCommands;
+
+import model.Model;
+
+public class SaveMaze extends ClientCommands {
+
+	public SaveMaze(Model m) {
+		super(m);
+
+	}
+
+	@Override
+	public void doCommmand(String[] param) {
+	m.saveMaze(param[1], param[2]);
+
+	}
+
+}

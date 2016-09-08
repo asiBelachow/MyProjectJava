@@ -1,0 +1,34 @@
+package view;
+
+import controller.Controller;
+
+public class MyView extends MyCommonView {
+	
+	
+	//------------------------------Constructors-------------------------//
+	
+	public MyView(Controller cont) {
+		super(cont);
+	}
+
+	
+	
+	
+	//-----------------------------setters and getters-------------------//
+	
+	
+	
+	
+	
+	
+	
+	//-------------------------Functionality-------------------------//
+	
+	
+	@Override
+	public void forwardCommandToViewCommand(String command, String[] param) {
+		
+		cont.forwardCommandToModel(command, param);
+		
+	}
+}

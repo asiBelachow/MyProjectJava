@@ -1,0 +1,29 @@
+package allCommands;
+
+import model.Model;
+
+public class DisplaySolution extends ClientCommands {
+
+	
+	/**
+	 * <h1>Display Maze</h1><p>
+	 * This Class define the command to show a the menu</br>
+	 */
+	public DisplaySolution(Model m) {
+		super(m);
+	
+	}
+
+	@Override
+	public void doCommmand(String[] param) {
+		System.out.println(param[2]);
+		m.displaySolution(param[2]);
+	}
+	
+	@Override
+	public String toString() {
+		return getClass().getName();
+	}
+
+
+}

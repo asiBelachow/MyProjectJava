@@ -1,0 +1,26 @@
+package allCommands;
+
+import model.Model;
+
+public class DisplayCrossSectionByDimension extends ClientCommands {
+
+	public DisplayCrossSectionByDimension(Model m) {
+		super(m);
+		
+	}
+	
+	
+	@Override
+	public void doCommmand(String[] param) {
+		
+		m.displayListOfAllMaze();
+
+	}
+	
+	@Override
+	public String toString() {
+		return getClass().getName();
+	}
+
+
+}

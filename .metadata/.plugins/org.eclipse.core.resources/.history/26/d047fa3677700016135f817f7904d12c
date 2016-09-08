@@ -1,0 +1,17 @@
+package allCommands;
+
+public class DirPath extends ClientCommands {
+
+	public DirPath(Model m) {
+		super(m);
+		
+	}
+	
+	
+	@Override
+	public void doCommmand(String[] param) {
+		m.dirPath(param);
+
+	}
+
+}

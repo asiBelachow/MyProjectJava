@@ -1,0 +1,26 @@
+package controller;
+
+import allCommands.Command;
+
+public  class MyController extends MyCommonController {
+
+	@Override
+	public void forwardCommand(String command, String[] param) {
+		
+		Command com = commands.get(param[1]);
+		com.doCommmand(com);
+		
+	}
+	
+	
+	@Override
+	public void setSolution(String[] solution) {
+		
+		
+	}
+	
+
+
+	
+	
+}

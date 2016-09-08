@@ -1,0 +1,18 @@
+package controller;
+
+import allCommands.Command;
+
+public abstract class MyController extends MyCommonController {
+
+	@Override
+	public void forwardCommandToModel(String command, String[] param) {
+		
+		Command = commands.get(commands);
+		
+	}
+	
+
+
+	
+	
+}

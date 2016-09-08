@@ -1,0 +1,19 @@
+package allCommands;
+
+import model.Model;
+
+public class DisplayCrossSectionByDimension extends ClientCommands {
+
+	public DisplayCrossSectionByDimension(Model m) {
+		super(m);
+		
+	}
+	
+	
+	@Override
+	public void doCommmand(String[] param) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

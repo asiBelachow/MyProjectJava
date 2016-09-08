@@ -1,0 +1,23 @@
+package allCommands;
+
+import model.Model;
+
+public class DisplaySolution extends ClientCommands {
+
+	public DisplaySolution(Model m) {
+		super(m);
+	
+	}
+
+	@Override
+	public void doCommmand(String[] param) {
+		
+	}
+	
+	@Override
+	public String toString() {
+		return getClass().getName();
+	}
+
+
+}

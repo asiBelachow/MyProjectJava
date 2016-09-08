@@ -1,0 +1,26 @@
+package allCommands;
+
+import java.io.IOException;
+
+import model.Model;
+import model.MyModel;
+
+public class DisplayMenu extends ClientCommands {
+
+	public DisplayMenu(Model m){
+		super(m);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void doCommmand(String[] param) throws IOException {
+		m.displayMenu();
+
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getName();
+	}
+
+}

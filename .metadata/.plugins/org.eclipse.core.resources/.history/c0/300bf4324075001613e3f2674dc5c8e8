@@ -1,0 +1,259 @@
+package model;
+
+import java.awt.PointerInfo;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Iterator;
+
+import algorithms.demo.SearchableMaze3D;
+import algorithms.maze3DGenerators.GrowingTreeGenerator;
+import algorithms.maze3DGenerators.GrowingTreeRandom;
+import algorithms.maze3DGenerators.Maze3D;
+import algorithms.maze3DGenerators.Position;
+import algorithms.search.BestFirstSearch;
+import algorithms.search.DepthFirstSearch;
+import algorithms.search.Searcher;
+import algorithms.search.Solution;
+import controller.Controller;
+import io.MyCompressorOutputStream;
+import io.MyDecompressorInputStream;
+
+public class MyModel extends MyCommonModel {
+	
+	
+	//------------------------------Constructors-------------------------//
+	
+	public MyModel(Controller cont) {
+		super(cont);
+	}
+
+	
+	//-------------------------Functionality-------------------------//
+	
+	@Override
+	public void dirPath(String path) {
+		//Checks if the file empty
+		if(path.length()==0){
+			controller.setSolution("The directory is empty");
+			return;
+		}
+		//Open the file
+		File dir = new File(path);
+		//Checks if the path is directory if not, return a message to the controller
+		if(!dir.isDirectory()){
+			controller.setSolution("The path is not a directory");
+			return;
+		}
+		//Get list of  all files and folders in the given path and  forward to the controller
+		String[] temp = dir.list();
+		StringBuilder sb = new StringBuilder();
+		sb.append("\nThe files in "+ path + " are: \n");
+		for (String s : temp){
+			sb.append(s+"\n");
+		}
+		controller.setSolution(sb.toString());
+		
+	}
+
+	@Override
+	public void generateMaze3D(String mazeName, int z, int x, int y) {
+
+		
+		 Runnable r = new Runnable() {
+			 
+			 
+			public void run() {
+				if ( !mapMaze3D.containsKey(mazeName)){
+					System.out.println("aaa");
+					Maze3D maze = (new GrowingTreeGenerator(new GrowingTreeRandom())).generate(z, x, y);
+					mapMaze3D.put(mazeName, maze);
+					controller.setSolution("The maze "+ mazeName + " is ready");
+					return;
+				}
+				controller.setSolution("The maze "+ mazeName + " already exits");
+			}
+		};
+		
+		execute(r);	
+	}
+
+	@Override
+	public void CrossSectionByDimention(int index, String dimension,  String mazeName) {
+		
+		
+		if (mapMaze3D.containsKey(mazeName)){
+			
+			Maze3D maze = mapMaze3D.get(mazeName);
+			if(dimension.equals("z")){
+				if(index>0 && index<maze.getzAxis()-1){
+					controller.setSolution(maze.printCrossByAxis(maze.getCrossSectionByX(index)));
+					
+				}else
+					controller.setSolution("You enter invalid index");
+				return;
+			}
+			if(dimension.equals("x")){
+				if(index>0 && index<maze.getxAxis()){
+					controller.setSolution(maze.printCrossByAxis(maze.getCrossSectionByY(index)));
+					
+				}else
+					controller.setSolution("You enter invalid index");
+				return;
+			}
+			if(dimension.equals("y")){
+				if(index>0 && index<maze.getyAxis()){
+					controller.setSolution(maze.printCrossByAxis(maze.getCrossSectionByZ(index)));
+				
+				}else
+					controller.setSolution("You enter invalid index");
+				return;
+			}
+		}
+		
+		
+		controller.setSolution("Maze: " + mazeName + " not found");
+		
+	}
+
+	@Override
+	public void saveMaze(String mazeName, String path) throws IOException  {
+		
+
+			if(mapMaze3D.containsKey(mazeName)){
+				OutputStream out = new MyCompressorOutputStream(new FileOutputStream(path+".maz"));
+				try{
+				out.write(mapMaze3D.get(mazeName).toByteArray());
+				out.flush();
+				out.close();
+				}catch (Exception e) {
+					controller.setSolution("Error while trying to save the maze, please try again");
+				}
+				controller.setSolution("The maze: "+mazeName+" successfully saved");
+				return;
+			}
+		
+	
+			controller.setSolution("The maze: " + mazeName + " not exits");
+
+	}
+
+	@Override
+	public void loadMaze(String file, String mazeName) throws IOException {
+		boolean flag = false;
+		try {
+			File f = new File(file+".maz");
+			@SuppressWarnings("resource")
+			InputStream in=new MyDecompressorInputStream( new FileInputStream(f));
+			byte b[] = new byte[(int) f.length()];
+			in.read(b);
+			Maze3D maze = new Maze3D(b);
+			mapMaze3D.put(mazeName, maze);
+			
+		} catch (FileNotFoundException e) {
+			flag=true;
+			controller.setSolution("The file: "+file+ " not found");
+		}
+		
+		if(flag == false){
+			controller.setSolution("Maze: "+mazeName+ " loaded sucssefuly");
+		}
+	}
+
+	@Override
+	public void solveMaze(String mazeName, String alg) {
+
+		Runnable r = new Runnable() {
+			public void run() {
+				if ( mapMaze3D.containsKey(mazeName)){
+					Solution<Position> sol = null;
+					if(alg.equals("BFS")){
+						sol = new BestFirstSearch<Position>().search(new SearchableMaze3D<Position>(mapMaze3D.get(mazeName)));
+						controller.setSolution("The solution for: " + mazeName + "is "+sol.toString());
+						return;
+					}
+					if(alg.equals("DFS")){
+						sol = new DepthFirstSearch<Position>().search(new SearchableMaze3D<Position>(mapMaze3D.get(mazeName)));
+						controller.setSolution("The solution for: " + mazeName + "is "+sol.toString());
+						return;
+					}
+				}
+				controller.setSolution("The maze "+ mazeName + " not found");
+			}
+		};
+
+
+	}
+
+
+	@Override
+	public void displayMaze(String name) {
+		
+		if(mapMaze3D.containsKey(name)){
+			controller.setSolution(mapMaze3D.get(name).toString());
+			return;
+		}
+	
+		controller.setSolution(("Maze: "+name+ " not found"));	
+	}
+	
+	
+	@Override
+	public void displaySolution(String mazeName) {
+		if(mapSolution.containsKey(mazeName)){
+			controller.setSolution(mapSolution.get(mazeName).toString());
+			return;
+		}
+		
+		controller.setSolution("The maze: "+ mazeName+" not found");
+	}
+	
+	@Override
+	public void displayListOfAllMaze() {
+		
+		if(mapMaze3D.isEmpty()){
+			controller.setSolution("The database empty");
+			return;
+		}
+		StringBuilder sb = new StringBuilder();
+		Iterator<String> iter = mapMaze3D.keySet().iterator();
+		int i=1;
+		sb.append("\nList of all maze:\n");
+		while (iter.hasNext()){
+			sb.append(i+") "+iter.next()+"\n");
+		}
+		
+		controller.setSolution(sb.toString()+"\n");
+		
+	}
+	
+	public void displayMenu(){
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("*********************************************************************\n");
+		sb.append("*                               CLI Menu                            *\n");
+		sb.append("*********************************************************************\n");
+		sb.append("1) To view file in directory enter: dir <path>\n");
+		sb.append("2) To generate new Maze3D enter: generate_maze <name> <other params>\n");
+		sb.append("3) To display a Maze3d enter: display <name>\n");
+		sb.append("4) To dispaly cross section of the Maze3D enter: display cross section <index{xz,x,y} <name>\n");
+		sb.append("5) To display a Maze3d enter: display <name>\n");
+		sb.append("6) To save a Maze3D enter: save maze <name> <file name>\n");
+		sb.append("7) To load saved Maze3D enter: load maze <file name> <name>\n");
+		sb.append("8) To solve a Maze3D enter: solve <name> <algorithm(BFS,DFS)>\n");
+		sb.append("9) To display the solution path of the maze enter: display_solution <name>\n");
+		sb.append("10) To display the menu enter: display menu\n");
+		sb.append("11) To exit enter: exit\n");
+		
+		controller.setSolution(sb.toString());
+	
+	}
+	
+	
+
+
+}

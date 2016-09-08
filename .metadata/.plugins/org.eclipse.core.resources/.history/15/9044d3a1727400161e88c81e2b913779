@@ -1,0 +1,17 @@
+package allCommands;
+
+import java.io.IOException;
+
+/**
+ * <h1>The Interface Maze3dGenerator.</h1><p>
+ * The interface Command define the 
+ * @author Asi Belachow
+ * @version 1.0
+ * @since 2016-09-05
+ */
+public interface Command {
+	
+	void doCommmand(String[] param) throws IOException;
+
+	String toString();
+}

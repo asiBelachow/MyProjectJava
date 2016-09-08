@@ -1,0 +1,9 @@
+package allCommands;
+
+import java.io.IOException;
+
+public interface Command {
+	
+	void doCommmand(String[] param) throws IOException;
+
+}

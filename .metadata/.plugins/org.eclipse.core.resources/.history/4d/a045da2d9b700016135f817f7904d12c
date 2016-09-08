@@ -1,0 +1,21 @@
+package allCommands;
+
+import model.Model;
+
+public class GenerateMaze3D extends ClientCommands {
+
+	
+	
+	
+	public GenerateMaze3D(Model m) {
+		super(m);
+
+	}
+
+	@Override
+	public void doCommmand(String[] param) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

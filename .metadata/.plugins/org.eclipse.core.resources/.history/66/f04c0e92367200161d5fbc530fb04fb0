@@ -1,0 +1,27 @@
+package controller;
+
+import java.io.IOException;
+
+import allCommands.Command;
+
+public  class MyController extends MyCommonController {
+
+	@Override
+	public void forwardCommand(String command, String[] param) throws IOException {
+		Command com = commands.get(command);
+		com.doCommmand(param);
+		
+	}
+	
+	
+	@Override
+	public void setSolution(String solution) {
+		v.displaySolution(solution);
+		
+	}
+	
+
+
+	
+	
+}
