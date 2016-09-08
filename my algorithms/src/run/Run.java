@@ -2,21 +2,24 @@ package run;
 
 import algorithms.maze3DGenerators.Maze3DGenerator;
 import algorithms.maze3DGenerators.Position;
-
+import algorithms.maze3DGenerators.SimpleMaze3dGenerator;
 
 import java.io.IOException;
 
 
 import algorithms.demo.Demo;
+import algorithms.maze3DGenerators.GrowingTreeGenerator;
+import algorithms.maze3DGenerators.GrowingTreeLast;
+import algorithms.maze3DGenerators.GrowingTreeRandom;
 import algorithms.maze3DGenerators.Maze3D;
 
 
 public class Run {
 
 	public static void main(String[] args) {
-		//testMazeGenerator(new SimpleMaze3dGenerator());
-		//testMazeGenerator(new GrowingTreeGenerator(new GrowingTreeLast()));
-		//testMazeGenerator(new GrowingTreeGenerator(new GrowingTreeRandom()));
+		testMazeGenerator(new SimpleMaze3dGenerator());
+		testMazeGenerator(new GrowingTreeGenerator(new GrowingTreeLast()));
+		testMazeGenerator(new GrowingTreeGenerator(new GrowingTreeRandom()));
 		
 		Demo d = new Demo();
 		try {
@@ -52,13 +55,13 @@ public class Run {
 			//Get 2d cross sections of the 3d maze 
 			int[][] maze2dx=maze.getCrossSectionByX(2); 
 			System.out.println("\nCross section by X:\n");
-			maze.printCrossByAxis(maze2dx);
+			System.out.println(maze.printCrossByAxis(maze2dx));
 			int[][] maze2dy=maze.getCrossSectionByY(5); 
 			System.out.println("\nCross section by Y:\n");
-			maze.printCrossByAxis(maze2dy);
+			System.out.println(maze.printCrossByAxis(maze2dy));
 			int[][] maze2dz=maze.getCrossSectionByZ(0); 
 			System.out.println("\nCross section by Z:\n");
-			maze.printCrossByAxis(maze2dz);
+			System.out.println(maze.printCrossByAxis(maze2dz));
 			// this should throw an exception! 
 			maze.getCrossSectionByX(-1); 
 			

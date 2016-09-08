@@ -21,8 +21,8 @@ import io.MyDecompressorInputStream;
 public class Demo {
 	
 	public void run() throws IOException{
-		Maze3D myMaze=  new GrowingTreeGenerator(new  GrowingTreeRandom()).generate(3, 3, 3);
-		Maze3D myMaze1 = new GrowingTreeGenerator(new  GrowingTreeLast()).generate(3, 3, 3);
+		Maze3D myMaze=  new GrowingTreeGenerator(new  GrowingTreeRandom()).generate(10,10, 10);
+		Maze3D myMaze1 = new GrowingTreeGenerator(new  GrowingTreeLast()).generate(5, 5, 5);
 		
 		
 		System.out.println(myMaze.toString());

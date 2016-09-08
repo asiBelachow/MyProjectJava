@@ -56,7 +56,6 @@ public class Solution<T> {
 	public String toString(){
 		
 		StringBuilder str = new StringBuilder();
-		
 		for( int i=0; i<solution.size(); i++){
 			
 			str.append(""+ solution.get(i).getState()+" ");

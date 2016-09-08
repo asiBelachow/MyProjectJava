@@ -26,7 +26,7 @@ public interface Maze3DGenerator {
 	 * </ul>
 	 *	<p>
 	 * @param zAxis - the maze's Z dimension.
-	 * @param xAxis - the maze's Z dimension.
+	 * @param xAxis - the maze's X dimension.
 	 * @param yAxis - the maze's Y dimension.
 	 * @return Maze3d object
 	 */
