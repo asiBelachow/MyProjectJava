@@ -418,27 +418,6 @@ public class Maze3D {
 		return possibleMovesArray;	
 	}
 	
-/*	public ArrayList<Position> getPossibleMoves(Position p){
-		
-		ArrayList<Position> pMoves = getAllMoves(p);
-		Iterator<Position> iter = pMoves.iterator();
-		while ( iter.hasNext()){
-			Position temp = iter.next();
-			if( !(checkPositionBoundsNoException(temp))){
-				iter.remove();
-				continue;
-			}
-			
-			if(temp.equals(obj))
-			
-			
-			
-			
-			if(getValueByIndex(temp) != 0)
-				iter.remove();
-		}
-		return pMoves;
-	}*/
 	
 	/**
 	 * <h1>Get all possible moves</h1><p>
@@ -566,7 +545,7 @@ public class Maze3D {
 			}
 			return crossByY;
 		}else
-			throw new IndexOutOfBoundsException("invalid section "+ y);
+			throw new IndexOutOfBoundsException("invalid index "+ y);
 	}
 	
 	/**
@@ -589,7 +568,7 @@ public class Maze3D {
 		}
 		else
 		{
-			throw new IndexOutOfBoundsException("invalid section "+ z);
+			throw new IndexOutOfBoundsException("invalid index "+ z);
 		}
 	}
 	
@@ -612,7 +591,7 @@ public class Maze3D {
 			return crossByX;
 		}
 		else
-			throw new IndexOutOfBoundsException("invalid section "+ x);
+			throw new IndexOutOfBoundsException("invalid index "+ x);
 	}
 	
 	
@@ -624,16 +603,16 @@ public class Maze3D {
 	 *
 	 * @param arr the section
 	 */
-	public void printCrossByAxis(int [][] arr){
+	public String printCrossByAxis(int [][] arr){
 
-		String str = new String();
+		StringBuilder sb = new StringBuilder();
 		for (int i=0;i<arr.length;i++){
 			for( int j=0; j<arr[i].length;j++){
-				str += arr[i][j]+"   ";
+				sb.append(arr[i][j]+"   "); 
 			}
-			str+="\n";	
+			sb.append("\n");	
 		}
-		System.out.println(str);
+		return sb.toString();
 	}
 	
 	
