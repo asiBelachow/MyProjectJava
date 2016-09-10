@@ -13,7 +13,6 @@ import controller.Controller;
  * @author Asi Belachow
  * @version 1.0
  * @since 2016-05-09
- *
  */
 public interface Model {
 	
@@ -31,7 +30,10 @@ public interface Model {
 	 * <h1>Generate Maze3D</h1><p>
 	 * <i><ul>void generateMaze3D(String mazeName)<i><p>
 	 * Generate new Maze3D
-	 * @param String- name of Maze3D
+	 * @param mazeName - the name of the maze
+	 * @param z - zAxis dimension
+	 * @param x - xAxis dimension
+	 * @param y - yAxis dimension
 	 */
 	public void generateMaze3D(String mazeName, int z, int x, int y);
 	
@@ -55,7 +57,6 @@ public interface Model {
 	 */
 	public void displayMaze(String name);
 
-	
 	/**
 	 * <h1>Save Maze</h1><p>
 	 * <i><ul>void saveMaze(String mazeName, String file)<i><p>
@@ -90,7 +91,7 @@ public interface Model {
 	 * <h1>Display Solution</h1><p>
 	 * <i><ul>void displaySolution(String mazeName)<i><p>
 	 * Display the solution path of a given name of maze
-	 * @param String - The name of the maze
+	 * @param mazeName - The name of the maze
 	 */
 	public void displaySolution(String mazeName);
 	
@@ -110,6 +111,17 @@ public interface Model {
 	 * Display the menu of the command
 	 */
 	public void displayMenu();
+	
+	
+	
+	/**
+	 * <h1>Close</h1><p>
+	 * <i><ul>void close()<i><p>
+	 * Close the application,
+	 * Close all open threads
+	 */
+	public void close();
+	
 		
 
 

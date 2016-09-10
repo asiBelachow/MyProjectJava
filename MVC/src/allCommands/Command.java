@@ -11,7 +11,6 @@ import java.io.IOException;
  */
 public interface Command {
 	
-	
 	/**
 	* <h1>Do commmand.</h1><p>
 	* <i><ul>void doCommmand(String[] param)<i><p>

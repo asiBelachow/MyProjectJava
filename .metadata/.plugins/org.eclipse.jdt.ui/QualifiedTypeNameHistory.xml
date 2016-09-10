@@ -6,8 +6,6 @@
 <fullyQualifiedTypeName name="allCommands.SolveMaze3D"/>
 <fullyQualifiedTypeName name="allCommands.DisplayCrossSectionByDimension"/>
 <fullyQualifiedTypeName name="allCommands.DisplaySolution"/>
-<fullyQualifiedTypeName name="algorithms.demo.SearchableMaze3D"/>
-<fullyQualifiedTypeName name="algorithms.maze3DGenerators.Position"/>
 <fullyQualifiedTypeName name="java.io.OutputStream"/>
 <fullyQualifiedTypeName name="io.MyCompressorOutputStream"/>
 <fullyQualifiedTypeName name="java.io.FileOutputStream"/>
@@ -40,8 +38,19 @@
 <fullyQualifiedTypeName name="allCommands.Command"/>
 <fullyQualifiedTypeName name="model.Model"/>
 <fullyQualifiedTypeName name="view.View"/>
-<fullyQualifiedTypeName name="algorithms.search.Solution"/>
 <fullyQualifiedTypeName name="controller.Controller"/>
 <fullyQualifiedTypeName name="java.lang.Override"/>
 <fullyQualifiedTypeName name="java.lang.Runnable"/>
+<fullyQualifiedTypeName name="algorithms.demo.SearchableMaze3D"/>
+<fullyQualifiedTypeName name="algorithms.search.Searcher"/>
+<fullyQualifiedTypeName name="algorithms.search.Solution"/>
+<fullyQualifiedTypeName name="algorithms.search.BestFirstSearch"/>
+<fullyQualifiedTypeName name="java.awt.PointerInfo"/>
+<fullyQualifiedTypeName name="algorithms.maze3DGenerators.Position"/>
+<fullyQualifiedTypeName name="algorithms.search.DepthFirstSearch"/>
+<fullyQualifiedTypeName name="algorithms.search.State"/>
+<fullyQualifiedTypeName name="java.lang.IndexOutOfBoundsException"/>
+<fullyQualifiedTypeName name="org.eclipse.swt.widgets.Display"/>
+<fullyQualifiedTypeName name="org.eclipse.swt.widgets.Shell"/>
+<fullyQualifiedTypeName name="allCommands.Close"/>
 </qualifiedTypeNameHistroy>

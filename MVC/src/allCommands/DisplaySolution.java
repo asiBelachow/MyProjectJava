@@ -18,8 +18,7 @@ public class DisplaySolution extends ClientCommands {
 
 	@Override
 	public void doCommmand(String[] param) {
-		System.out.println(param[2]);
-		m.displaySolution(param[2]);
+		m.displaySolution(param[1]);
 	}
 
 	@Override

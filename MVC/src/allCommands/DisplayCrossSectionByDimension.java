@@ -22,7 +22,7 @@ public class DisplayCrossSectionByDimension extends ClientCommands {
 	@Override
 	public void doCommmand(String[] param) {
 		
-		m.CrossSectionByDimention(Integer.parseInt(param[3]), param[4], param[5]);
+		m.CrossSectionByDimention(Integer.parseInt(param[1]), param[2], param[3]);
 
 	}
 	

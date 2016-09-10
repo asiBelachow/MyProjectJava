@@ -19,7 +19,7 @@ public class SaveMaze extends ClientCommands {
 	@Override
 	public void doCommmand(String[] param) throws IOException {
 
-		m.saveMaze(param[2], param[3]);
+		m.saveMaze(param[1], param[2]);
 	}
 	
 	@Override

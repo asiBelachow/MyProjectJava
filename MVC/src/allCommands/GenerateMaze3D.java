@@ -20,10 +20,10 @@ public class GenerateMaze3D extends ClientCommands {
 
 	@Override
 	public void doCommmand(String[] param) {
-	 String mazeName = param[2];
-	 int z = Integer.parseInt(param[3]);
-	 int x = Integer.parseInt(param[4]);
-	 int y = Integer.parseInt(param[5]);
+	 String mazeName = param[1];
+	 int z = Integer.parseInt(param[2]);
+	 int x = Integer.parseInt(param[3]);
+	 int y = Integer.parseInt(param[4]);
 	 m.generateMaze3D(mazeName, z, x, y);
 	
 

@@ -1,9 +1,0 @@
-package view;
-
-public interface View {
-	
-	void start();
-	
-	public void forwardCommandToViewCController(String command, String[] parm);
-
-}

@@ -1,4 +1,4 @@
-commit_dialog_history_messages=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<messages>\r\n<message>remove the comment in the save and load the maze to file</message>\r\n<message>Add answer for the question in part b</message>\r\n<message>Add JavaDoc</message>\r\n<message>new files</message>\r\n<message>upload files</message>\r\n</messages>
+commit_dialog_history_messages=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<messages>\r\n<message>add javadoc</message>\r\n<message>add saved maze</message>\r\n<message>update files </message>\r\n<message>add saved maze&apos;s</message>\r\n<message>Change catch message in displayCrossSection &\#x0A;from &quot;invalid section&quot; to &quot;invalid index&quot;</message>\r\n<message>Add classes to controller</message>\r\n<message>Add a java doc</message>\r\n<message>Add MVC a architectural pattern for implementing user commands </message>\r\n<message>Update the refernce</message>\r\n<message>remove the comment in the save and load the maze to file</message>\r\n</messages>
 eclipse.preferences.version=1
 resourcehistory_graph_split=500,500
 resourcehistory_rev_split=700,300

@@ -149,6 +149,8 @@ public abstract class MyCommonModel implements Model {
 	 */
 	@Override
 	public abstract void displayMenu();
+	
+	public abstract void close();
 
 
 	

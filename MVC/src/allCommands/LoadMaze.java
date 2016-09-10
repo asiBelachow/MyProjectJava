@@ -19,7 +19,7 @@ public class LoadMaze extends ClientCommands {
 
 	@Override
 	public void doCommmand(String[] param) throws IOException {
-		m.loadMaze(param[2], param[3]);
+		m.loadMaze(param[1], param[2]);
 
 	}
 	

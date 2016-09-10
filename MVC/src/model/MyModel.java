@@ -64,17 +64,16 @@ public class MyModel extends MyCommonModel {
 		
 		 Runnable r = new Runnable() {
 			 
-			 
 			public void run() {
 				//Checks if maze already exists
 				if ( !mapMaze3D.containsKey(mazeName)){
 					//Generate new maze
 					Maze3D maze = (new GrowingTreeGenerator(new GrowingTreeRandom())).generate(z, x, y);
 					mapMaze3D.put(mazeName, maze);
-					controller.setSolution("The maze "+ mazeName + " is ready");
+					controller.setSolution("\nThe maze \""+ mazeName + "\" is ready");
 					return;
 				}
-				controller.setSolution("The maze "+ mazeName + " already exits");
+				controller.setSolution("The maze \""+ mazeName + "\" already exits");
 			}
 		};
 		
@@ -109,7 +108,7 @@ public class MyModel extends MyCommonModel {
 			}
 		}
 		//If the maze not found return a message to the CLI
-		controller.setSolution("Maze: " + mazeName + " not found");
+		controller.setSolution("Maze: \"" + mazeName + "\" not found");
 		
 	}
 
@@ -129,12 +128,12 @@ public class MyModel extends MyCommonModel {
 				controller.setSolution("Error while trying to save the maze, please try again");
 			}
 			//Send message to the CLI that the save was successful
-			controller.setSolution("The maze: "+mazeName+" successfully saved");
+			controller.setSolution("The maze: \""+ mazeName+ "\" successfully saved");
 			return;
 		}
 
 		//If the maze not found return a message to the CLI
-		controller.setSolution("The maze: " + mazeName + " not exits");
+		controller.setSolution("The maze: \"" + mazeName + "\" not exits");
 
 	}
 
@@ -154,11 +153,11 @@ public class MyModel extends MyCommonModel {
 			
 		} catch (FileNotFoundException e) {
 			flag=true;
-			controller.setSolution("The file: "+file+ " not found");
+			controller.setSolution("The file: \""+ file + "\" not found");
 		}
 		
 		if(flag == false){
-			controller.setSolution("Maze: "+mazeName+ " loaded sucssefuly");
+			controller.setSolution("Maze: \""+mazeName+ "\" loaded sucssefuly");
 		}
 	}
 
@@ -175,17 +174,18 @@ public class MyModel extends MyCommonModel {
 					if(alg.equals("BFS")){
 						sol = new BestFirstSearch<Position>().search(new SearchableMaze3D<Position>(mapMaze3D.get(mazeName)));
 						mapSolution.put(mazeName, sol);
-						controller.setSolution("\nThe solution for: " + mazeName + " is ready");
+						controller.setSolution("\nThe solution for: \"" + mazeName + "\" is ready");
 						return;
 					}
 					if(alg.equals("DFS")){
 						sol = new DepthFirstSearch<Position>().search(new SearchableMaze3D<Position>(mapMaze3D.get(mazeName)));
-						controller.setSolution("The solution for: " + mazeName + " is is ready ");
+						controller.setSolution("The solution for: \"" + mazeName + "\" is is ready ");
+						mapSolution.put(mazeName, sol);
 						return;
 					}
 				}
 				//If the maze not exists update the CLI
-				controller.setSolution("The maze "+ mazeName + " not found");
+				controller.setSolution("The maze \""+ mazeName + "\" not found");
 			}
 		};
 		
@@ -199,12 +199,18 @@ public class MyModel extends MyCommonModel {
 	public void displayMaze(String name) {
 		
 		if(mapMaze3D.containsKey(name)){
-			
-			controller.setSolution(mapMaze3D.get(name).toString());
+			StringBuilder sb = new StringBuilder();
+			sb.append("\n");
+			sb.append("Enterance: " + mapMaze3D.get(name).getStart().toString());
+			sb.append("\n");
+			sb.append("Exit: " + mapMaze3D.get(name).getEnd().toString());
+			sb.append("\n");
+			sb.append(mapMaze3D.get(name).toString());
+			controller.setSolution(sb.toString());
 			return;
 		}
 	
-		controller.setSolution(("Maze: "+name+ " not found"));	
+		controller.setSolution(("Maze: \""+name+ "\" not found"));	
 	}
 	
 	
@@ -216,7 +222,7 @@ public class MyModel extends MyCommonModel {
 			return;
 		}
 		//If not exits, return message to hte CLI
-		controller.setSolution("The maze: "+ mazeName+" not found");
+		controller.setSolution("The maze: \""+ mazeName+"\" not found");
 	}
 	
 	@Override
@@ -242,25 +248,30 @@ public class MyModel extends MyCommonModel {
 	public void displayMenu(){
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append("*********************************************************************\n");
+		sb.append("\n*********************************************************************\n");
 		sb.append("*                               CLI Menu                            *\n");
 		sb.append("*********************************************************************\n");
 		sb.append("1) To view file in directory enter: dir <path>\n");
 		sb.append("2) To generate new Maze3D enter: generate_maze <name> <other params>\n");
 		sb.append("3) To display a Maze3d enter: display <name>\n");
-		sb.append("4) To dispaly cross section of the Maze3D enter: display cross section <index{xz,x,y} <name>\n");
+		sb.append("4) To dispaly cross section of the Maze3D enter: display_cross_section <index{xz,x,y} <name>\n");
 		sb.append("5) To display a Maze3d enter: display <name>\n");
-		sb.append("6) To save a Maze3D enter: save maze <name> <file name>\n");
-		sb.append("7) To load saved Maze3D enter: load maze <file name> <name>\n");
+		sb.append("6) To save a Maze3D enter: save_maze <name> <file name>\n");
+		sb.append("7) To load saved Maze3D enter: load_maze <file name> <name>\n");
 		sb.append("8) To solve a Maze3D enter: solve <name> <algorithm(BFS,DFS)>\n");
 		sb.append("9) To display the solution path of the maze enter: display_solution <name>\n");
-		sb.append("10) To display the menu enter: display menu\n");
+		sb.append("10) To display the menu enter: menu\n");
 		sb.append("11) To exit enter: exit\n");
 		
 		controller.setSolution(sb.toString());
 	
 	}
-	
+
+	public void close(){
+		controller.setSolution("CLI closing...");
+		pool.shutdown();
+		controller.setSolution("CLI closed...");
+	}
 	
 
 

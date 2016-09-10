@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-
+import allCommands.Close;
 import allCommands.Command;
 import allCommands.DirPath;
 import allCommands.DisplayCrossSectionByDimension;
@@ -46,7 +46,6 @@ public abstract class MyCommonController implements Controller {
 	
 	protected ExecutorService threadPool;
 	
-	
 	//-------------------------Constructors-------------------------//
 	
 	/**
@@ -70,7 +69,6 @@ public abstract class MyCommonController implements Controller {
 		this.v = v;
 	}
 	
-	
 
 	/**
 	 * <h1>Sets the commands</h1><p>
@@ -83,20 +81,19 @@ public abstract class MyCommonController implements Controller {
 		commands = new HashMap<String, Command>();
 
 		commands.put("dir [^\n]+", new DirPath(m));
-		commands.put("generate maze [A-Za-z0-9]+ [0-9]{1,2} [0-9]{1,2} [0-9]{1,2}", new GenerateMaze3D(m));
+		commands.put("generate_maze [A-Za-z0-9]+ [0-9]{1,2} [0-9]{1,2} [0-9]{1,2}", new GenerateMaze3D(m));
 		commands.put("display [A-Za-z0-9]+", new DisplayMaze(m));
-		commands.put("display cross section [0-9]{1,2} [A-Za-z0-9]+ [A-Za-z0-9]+", new DisplayCrossSectionByDimension(m));
-		commands.put("save maze [A-Za-z0-9]+ [^\n]+", new SaveMaze(m));
-		commands.put("load maze [^\n]+ [A-Za-z0-9]+", new LoadMaze(m));
+		commands.put("display_cross_section [0-9]{1,2} [A-Za-z0-9]+ [A-Za-z0-9]+", new DisplayCrossSectionByDimension(m));
+		commands.put("save_maze [A-Za-z0-9]+ [^\n]+", new SaveMaze(m));
+		commands.put("load_maze [^\n]+ [A-Za-z0-9]+", new LoadMaze(m));
 		commands.put("solve [A-Za-z0-9]+ [A-Za-z0-9]+", new SolveMaze(m));
-		commands.put("display solution [A-Za-z0-9]+", new DisplaySolution(m));
-		commands.put("display menu", new DisplayMaze(m));
-		commands.put("list maze", new DisplyListOfAllMaze(m));
+		commands.put("display_solution [A-Za-z0-9]+", new DisplaySolution(m));
+		commands.put("display_menu", new DisplayMaze(m));
+		commands.put("list_maze", new DisplyListOfAllMaze(m));
 		commands.put("menu", new DisplayMenu(m));
+		commands.put("exit", new Close(m));
 		return commands;
 	}
-	
-	
 	
 	/**
 	 * <h1>Gets the commands</h1><p>
@@ -108,7 +105,6 @@ public abstract class MyCommonController implements Controller {
 		return commands;
 	}
 
-	
 	/* (non-Javadoc)
 	 * @see controller.Controller#forwardCommand(java.lang.String, java.lang.String[])
 	 */
@@ -116,13 +112,11 @@ public abstract class MyCommonController implements Controller {
 	public abstract void forwardCommand(String command, String[] param) throws IOException;
 
 	
-	
 	/* (non-Javadoc)
 	 * @see controller.Controller#setSolution(java.lang.String)
 	 */
 	@Override
 	public abstract void setSolution(String solution);
-	
 	
 
 }

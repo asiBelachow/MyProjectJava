@@ -1,7 +1,0 @@
-package allCommands;
-
-public interface Command {
-	
-	void doCommmand(String[] param);
-
-}

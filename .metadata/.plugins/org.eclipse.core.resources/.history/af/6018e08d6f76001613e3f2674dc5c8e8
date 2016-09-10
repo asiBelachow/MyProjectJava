@@ -1,0 +1,10 @@
+
+public class MyWindow extends Test {
+
+	@Override
+	protected void initWidgets() {
+		shell.setText("My window");
+
+	}
+
+}

@@ -13,15 +13,10 @@ public  class MyController extends MyCommonController {
 		
 	}
 	
-	
 	@Override
 	public void setSolution(String solution) {
 		v.displaySolution(solution);
 		
 	}
-	
-
-
-	
-	
+		
 }

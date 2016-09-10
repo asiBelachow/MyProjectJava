@@ -21,7 +21,6 @@ public class CLI extends Thread {
 	
 	//------------------------------Constructors-------------------------//
 	
-	
 	/**
 	 * <h1>CLI</h1><p>
 	 * <i><ul>CLI(	BufferedReader in, PrintWriter out, HashMap<String,Command> map)<i><p>
@@ -72,6 +71,7 @@ public class CLI extends Thread {
 	@Override
 	public void start() {
 		//Get an input from the client
+		out.println("*To view commands enter menu");
 		out.printf("Please enter command: ");
 		String buffer;
 		boolean flag=false;
@@ -86,18 +86,20 @@ public class CLI extends Thread {
 					String command = iter.next();
 					//If  matches forward the command to the view
 					if(buffer.matches(command)){
+						out.println("The process in progress...");
 						v.forwardCommand(command, buffer.split(" "));
+						out.printf("\nPlease enter command: ");
 						flag=true;
-						
+						break;
 					}
 				}
 				if(flag == false){
-					out.println("\n\nCommand "+ buffer +" not found");
-					
+					out.println("\n\nCommand \""+ buffer +"\" not found");
+					out.printf("\nPlease enter command: ");
 				}
-				out.printf("\nPlease enter command: ");
+				
 			}
-			//Add exit function
+			v.forwardCommand(buffer, buffer.split(" "));
 
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -107,13 +109,8 @@ public class CLI extends Thread {
 
 	}
 	
-	
-
-
 	public void displaySolution(String solution){
 			out.println(solution);
-		
-		
 	}
 	
 

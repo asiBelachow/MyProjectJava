@@ -36,8 +36,6 @@ public interface Controller {
 	 */
 	public void setView(View v);
 	
-
-	
 	/**
 	 * <h1>Forward command.</h1><p>
 	 * <i><ul>void forwardCommand(String command,String[] param)<i><p>
@@ -49,8 +47,6 @@ public interface Controller {
 	 */
 	public void forwardCommand(String command,String[] param) throws IOException;
 
-	
-	
 	/**
 	 * <h1>Sets the solution</h1><p>
 	 * <i><ul>void setSolution(String solution)<i><p>
