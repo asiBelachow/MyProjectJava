@@ -1,0 +1,39 @@
+package view;
+
+import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
+
+public abstract class AbstractObservableView extends Observable implements View, Observer {
+
+	protected HashMap<Command, Object> data;
+	private BufferedReader in;
+	private PrintWriter out;
+	protected CLI cli;
+	
+	public AbstractObservableView() {
+		data = new HashMap<Command, Object>();
+	}
+	
+
+	public CLI getCli() {
+		return cli;
+	}
+
+	@Override
+	public void setCli(CLI cli) {
+		this.cli = cli;
+	}
+	
+	@Override
+	public abstract Object getCommand(Command command);
+
+	@Override
+	public abstract void close();
+	
+	@Override
+	public abstract void displaySolution(Object solution);
+	
+	
+
+}

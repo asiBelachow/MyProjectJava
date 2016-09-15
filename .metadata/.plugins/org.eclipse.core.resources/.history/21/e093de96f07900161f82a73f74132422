@@ -1,0 +1,30 @@
+package view;
+
+import java.util.HashMap;
+import java.util.Observable;
+
+public abstract class AbstractObservableView extends Observable implements View {
+
+	protected HashMap<Command, Object> data;
+	protected CLI cli;
+	
+	
+	@Override
+	public abstract void displaySolution(String solution);
+	
+
+	
+
+
+	public CLI getCli() {
+		return cli;
+	}
+
+
+	public void setCli(CLI cli) {
+		this.cli = cli;
+	}
+	
+	
+
+}

@@ -1,0 +1,95 @@
+
+package view;
+
+
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Observable;
+
+import presenter.Command;
+
+
+
+
+
+public class ObservableCLIView extends AbstractObservableView {
+	
+	
+	
+	
+	
+	public ObservableCLIView(BufferedReader in, PrintWriter out) {
+		super(in, out);
+		cli = new CLI(in, out);
+		cli.addObserver(this);
+	}
+
+
+	
+	
+	private HashMap<String, Command> commandMap;
+	
+	
+
+	//------------------------------Constructors-------------------------//
+	
+
+	
+	//-----------------------------setters and getters-------------------//
+
+	
+
+	public HashMap<String, Command> getCommandMap() {
+		return commandMap;
+	}
+
+	public void setCommandMap(HashMap<String, Command> commandMap) {
+		this.commandMap = commandMap;
+	}
+	
+	//-------------------------Functionality-------------------------//
+	
+	
+	
+	
+	@Override
+	public void start(){
+		cli.start();
+	}
+	
+
+	@Override
+	public void close() {
+		try {
+			cli.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+
+	@Override
+	public void displayMessage(String msg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyMazeIsReady(String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+	
+}

@@ -1,0 +1,26 @@
+package view;
+
+import java.util.Observable;
+
+public abstract class MyCommonView extends Observable implements View {
+
+	protected String command;
+	
+	
+	@Override
+	public abstract void displaySolution(String solution);
+	
+
+	@Override
+	public  void setCommand(String command){
+		this.command = command;
+	}
+	
+	@Override
+	public String getCommand(){
+		return this.command;
+	}
+	
+	
+
+}

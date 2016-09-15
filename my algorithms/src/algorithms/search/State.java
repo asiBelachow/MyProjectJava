@@ -1,5 +1,7 @@
 package algorithms.search;
 
+import java.io.Serializable;
+
 /**
  * <h1>State<T></h1><p>
  * This class implements the Comparable interface and its define state of given search problem (Maze3D)
@@ -9,7 +11,9 @@ package algorithms.search;
  * @version 1.0
  * @since 2016-23-08
  */
-public class State<T> {//implements Comparable<State<T>>{
+public class State<T> implements Serializable{//implements Comparable<State<T>>{
+
+	private static final long serialVersionUID = -428403587808162206L;
 
 	private T state;
 	
@@ -18,10 +22,15 @@ public class State<T> {//implements Comparable<State<T>>{
 	private State<T> cameFrom;
 	
 
-	
 	//------------------------------Constructors-------------------------//
 	
-
+	/**
+	 * <h1>Default Constructor</h1><p>
+	 * Initialization a new state
+	 */
+	public State() {
+		
+	}
 	/**
 	 * <h1>Constructor</h1><p>
 	 * Initialization a new state

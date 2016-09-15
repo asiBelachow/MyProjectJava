@@ -7,6 +7,13 @@
 		<item value="1" key="updateSimilarElementsMatchStrategy"/>
 		<item value="false" key="updateTextualMatches"/>
 	</section>
+	<section name="DialogBounds_SuperInterfaceSelectionDialog">
+		<item value="373" key="DIALOG_WIDTH"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+		<item value="549" key="DIALOG_HEIGHT"/>
+		<item value="85" key="DIALOG_X_ORIGIN"/>
+		<item value="-47" key="DIALOG_Y_ORIGIN"/>
+	</section>
 	<section name="org.eclipse.jdt.internal.ui.packageview.PackageExplorerPart">
 		<item value="2" key="layout"/>
 		<item value="true" key="group_libraries"/>
@@ -32,6 +39,17 @@
 	<section name="OptionalMessageDialog.hide.">
 		<item value="true" key="org.eclipse.jdt.ui.typecomment.deprecated"/>
 		<item value="false" key="configure_problem_severity_dialog_id"/>
+	</section>
+	<section name="org.eclipse.jdt.internal.ui.dialogs.OpenTypeSelectionDialog2">
+		<item value="true" key="ShowStatusLine"/>
+		<item value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0D;&#x0A;&lt;History/&gt;" key="History"/>
+	</section>
+	<section name="DialogBounds_GetterSetterTreeSelectionDialog">
+		<item value="528" key="DIALOG_WIDTH"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+		<item value="696" key="DIALOG_HEIGHT"/>
+		<item value="584" key="DIALOG_X_ORIGIN"/>
+		<item value="49" key="DIALOG_Y_ORIGIN"/>
 	</section>
 	<section name="RefactoringWizard.preview">
 		<item value="600" key="width"/>
@@ -69,6 +87,12 @@
 			</section>
 		</section>
 	</section>
+	<section name="SourceActionDialog.methods">
+		<item value="false" key="SynchronizedModifier"/>
+		<item value="false" key="Comments"/>
+		<item value="1" key="VisibilityModifier"/>
+		<item value="false" key="FinalModifier"/>
+	</section>
 	<section name="quick_assist_proposal_size">
 	</section>
 	<section name="JavadocWizardDialog">
@@ -82,6 +106,10 @@
 		<item value="false" key="create_package_info_java"/>
 	</section>
 	<section name="completion_proposal_size">
+		<item value="1046" key="size.y"/>
+		<item value="355" key="size.x"/>
+		<item value="221" key="contextSelector.size.y"/>
+		<item value="331" key="contextSelector.size.x"/>
 	</section>
 	<section name="JarPackageWizard">
 		<item value="false" key="JarPackageWizardPage.INCLUDE_DIRECTORY_ENTRIES"/>
@@ -104,8 +132,16 @@
 		<item value="false" key="JarPackageWizardPage.EXPORT_OUTPUT_FOLDER"/>
 		<list key="JarPackageWizardPage.DESTINATION_NAMES_ID">
 			<item value="C:\Users\Asi\git\DEV\myAlgorithms.jar"/>
+			<item value="C:\Users\Asi\Documents\Study\Computer Science\Year B\Semester C\Java\Projects Assignments\Part C\myAlgorithms.jar"/>
+			<item value="C:\Users\Asi\Documents\Study\Computer Science\Year B\Semester C\Java\Projects Assignments\Part C\mvc.jar"/>
+			<item value="C:\Users\Asi\Desktop\main.jar"/>
+			<item value="C:\Users\Asi\Desktop\myAlgorithms.jar"/>
 			<item value="C:\Users\Asi\Documents\Study\Computer Science\Year B\Semester C\Java\Projects Assignments\Part B\myAlgorithms.jar"/>
 		</list>
+	</section>
+	<section name="AddGetterSetterDialog">
+		<item value="false" key="SortOrdering"/>
+		<item value="false" key="RemoveFinal"/>
 	</section>
 	<section name="JavaElementSearchActions">
 	</section>

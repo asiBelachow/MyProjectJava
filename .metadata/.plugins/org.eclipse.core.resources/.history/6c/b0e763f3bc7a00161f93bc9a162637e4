@@ -1,0 +1,64 @@
+package view;
+
+
+import algorithms.maze3DGenerators.Maze3D;
+import presenter.Presenter;
+
+
+/**
+ * <h1>The Interface View</h1><p>
+ * This interface is the view part of the MVP</br> architecture, used for different
+ * implementations of UI
+
+ * @author Asi Belachow
+ * @version 1.0
+ * @since 2016-10-09
+ *
+ */
+public interface View {
+
+	/**
+	 *<h1> Display solution.</h1>
+	 * <i><ul>void displaySolution(String solution)<i><p>
+	 * Get a solution from the {@link Presenter} and forward it to the client 
+	 * @param solution - the solution
+ 	 */
+	public void displaySolution(Object solution);
+	
+	public Object getCommand(Command command);
+	
+	
+	
+	public void close();
+	
+	public void setCli(CLI cli);
+	
+	
+	
+	
+	
+	public void start();
+	
+	
+	/**
+	 *<h1>Display Message</h1>
+	 * <i><ul>void displayMessage(String msg)<i><p>
+	 * Get a message from the {@link Presenter} and view it to the user
+	 * @param msg - the message
+ 	 */
+	void displayMessage(String msg);
+	
+	
+	/**
+	 *<h1>Notify Maze Is Ready</h1>
+	 * <i><ul>void notifyMazeIsReady(String name)<i><p>
+	 * Get an event that tell the{@link View} the {@link Model} done generating a maze 
+	 * @param name - the name of the Maze3D
+ 	 */
+	void notifyMazeIsReady(String name);
+	
+	
+	
+	
+	
+}

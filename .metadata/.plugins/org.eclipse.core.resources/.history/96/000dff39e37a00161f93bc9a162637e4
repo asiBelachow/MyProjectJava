@@ -1,0 +1,98 @@
+
+package view;
+
+
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Observable;
+
+
+public class ObservableCLIView extends AbstractObservableView {
+	
+	
+	private CLI cli;
+	
+	//------------------------------Constructors-------------------------//
+	
+	public ObservableCLIView(BufferedReader in, PrintWriter out) {
+		super(in, out);
+		cli = new CLI(in, out);
+		cli.addObserver(this);
+	}
+
+
+	//-----------------------------setters and getters-------------------//
+
+	public CLI getCli() {
+		return cli;
+	}
+
+
+	public void setCli(CLI cli) {
+		this.cli = cli;
+	}
+
+	
+	
+	//-------------------------Functionality-------------------------//
+	
+
+	
+	@Override
+	public void start(){
+		cli.start();
+	}
+	
+	
+	@Override
+	public void update(Observable o, Object arg) {
+		if (o == cli) {
+			setChanged();
+			notifyObservers(arg);
+		}
+		
+	}
+	
+
+	@Override
+	public void close() {
+		try {
+			cli.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+
+	@Override
+	public void displayMessage(String msg) {
+		System.out.println(msg);
+		
+	}
+
+	@Override
+	public void notifyMazeIsReady(String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void showDirPath(String str) {
+		System.out.println(str);
+		
+	}
+
+
+	@Override
+	public void getCrossSection(int[][] section) {
+		System.out.println(section.toString());
+		
+	}
+
+	
+	
+}

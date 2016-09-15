@@ -25,8 +25,6 @@ public class Run {
 		CLI client = new CLI(new BufferedReader(new InputStreamReader(System.in)),new PrintWriter(System.out,true),v,c.getCommands());
 		v.setCli(client);
 		v.start();
-		
-
 	}
 
 }

@@ -1,0 +1,14 @@
+package presenter;
+
+
+
+
+public class Properties extends java.util.Properties{
+
+	
+	private static final long serialVersionUID = 555913593004844041L;
+	
+	
+	
+
+}

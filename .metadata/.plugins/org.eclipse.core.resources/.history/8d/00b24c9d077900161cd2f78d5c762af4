@@ -1,0 +1,33 @@
+package view;
+
+
+import presenter.Presenter;
+
+
+/**
+ * <h1>The Interface View</h1><p>
+ * This interface is the view part of the MVP</br> architecture, used for different
+ * implementations of UI
+
+ * @author Asi Belachow
+ * @version 1.0
+ * @since 2016-10-09
+ *
+ */
+public interface View {
+
+	/**
+	 *<h1> Display solution.<h1>
+	 * <i><ul>void displaySolution(String solution)<i><p>
+	 * Get a solution from the {@link Presenter} and forward it to the client 
+	 * @param String - the solution
+ 	 */
+	public void displaySolution(String solution);
+	
+	public void setCommand(String command);
+
+	public String getCommand();
+	
+	public void start();
+	
+}

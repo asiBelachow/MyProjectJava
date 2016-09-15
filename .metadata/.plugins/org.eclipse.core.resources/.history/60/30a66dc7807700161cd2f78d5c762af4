@@ -1,0 +1,22 @@
+package view;
+
+import java.util.Observable;
+
+public abstract class MyCommonView extends Observable implements View {
+
+	String command;
+	
+	
+	@Override
+	public void displaySolution(String solution) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public abstract void setCommand(String command);
+
+	
+	
+
+}

@@ -1,0 +1,12 @@
+package presenter;
+
+
+
+public class Properties extends java.util.Properties{
+
+	
+	
+	
+	
+
+}

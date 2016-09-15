@@ -1,0 +1,27 @@
+package view;
+
+import java.util.Observable;
+
+public abstract class AbstractObservableView extends Observable implements View {
+
+	protected String command;
+	protected CLI cli;
+	
+	
+	@Override
+	public abstract void displaySolution(String solution);
+	
+
+	@Override
+	public  void setCommand(String command){
+		this.command = command;
+	}
+	
+	@Override
+	public String getCommand(){
+		return this.command;
+	}
+	
+	
+
+}

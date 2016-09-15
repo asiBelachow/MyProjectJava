@@ -1,0 +1,29 @@
+package boot;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import model.MyModel;
+import presenter.MyPresenter;
+import view.AbstractObservableView;
+import view.CLI;
+import view.ObservableCLIView;
+
+
+public class Run {
+
+	public static void main(String[] args) {
+		MyModel model = new MyModel();
+		
+		ObservableCLIView view = new ObservableCLIView(new BufferedReader(new InputStreamReader(System.in));
+		view.addObserver(presenter);
+		MyPresenter presenter = new MyPresenter();
+		model.addObserver(presenter);
+		presenter.setModel(model);
+		presenter.setView(view);
+		CLI client = new CLI(new BufferedReader(new InputStreamReader(System.in)),new PrintWriter(System.out,true),view,presenter.getCommands());
+		view.setCli(client);
+		view.start();
+	}
+
+}

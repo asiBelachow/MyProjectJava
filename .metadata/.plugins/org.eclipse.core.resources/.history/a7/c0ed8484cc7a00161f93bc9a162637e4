@@ -1,0 +1,46 @@
+package view;
+
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.util.Observable;
+import java.util.Observer;
+
+public abstract class AbstractObservableView extends Observable implements View, Observer {
+
+	protected BufferedReader in;
+	protected PrintWriter out;
+	protected CLI cli;
+	
+	//------------------------------Constructors-------------------------//
+	
+	public AbstractObservableView(BufferedReader in, PrintWriter out) {
+		this.in = in;
+		this.out = out;
+		
+		cli = new CLI(in, out);
+		cli.addObserver(this);
+	
+	}
+	
+	//-----------------------------setters and getters-------------------//
+	public CLI getCli() {
+		return cli;
+	}
+
+	
+	public void setCli(CLI cli) {
+		this.cli = cli;
+	}
+	
+	//-------------------------Functionality-------------------------//
+	
+
+
+	@Override
+	public abstract void close();
+	
+
+	
+	
+
+}

@@ -1,5 +1,6 @@
 package algorithms.maze3DGenerators;
 
+import java.io.Serializable;
 
 /**
  * This class Position represent the cell in the 3d maze </br>
@@ -9,8 +10,10 @@ package algorithms.maze3DGenerators;
  * @version 1.0
  * @since 2016-30-07
  */
-public class Position {
+public class Position implements Serializable {
 	
+	private static final long serialVersionUID = 3118754725894045017L;
+
 	/** The Constant UP. */
 	public static final Position UP = new Position(2,0, 0);
 	
@@ -42,9 +45,18 @@ public class Position {
 	//------------------------------Constructors-------------------------//
 	
 	/**
-	 * Copy Constructor
-	 *
-	 * @param Position - p
+	 *<h1>Position</h1><p>
+	 * <i><ul>Position()<i><p>
+	 * Initialize a new Position - default CTOR
+	 */
+	public Position() {
+		
+	}
+	
+	/**
+	 *<h1>Position</h1><p>
+	 * <i><ul>Position(Position p)<i><p>
+	 * Initialize a new Position - Copy CTOR
 	 */
 	public Position(Position p) {
 		this.setZ(p.getZ());

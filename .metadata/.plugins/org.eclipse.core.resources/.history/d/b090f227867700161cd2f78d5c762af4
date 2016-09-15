@@ -1,0 +1,11 @@
+package view;
+
+public class MyView extends MyCommonView {
+	
+@Override
+	public void displaySolution(String solution) {
+		
+		
+	}
+
+}
