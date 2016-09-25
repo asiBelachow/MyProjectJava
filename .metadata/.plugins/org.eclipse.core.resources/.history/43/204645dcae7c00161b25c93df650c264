@@ -1,0 +1,22 @@
+package presenter;
+
+import java.io.FileNotFoundException;
+
+public class PropertiesHandler {
+	
+	private static Properties properties;
+	
+	
+	
+	private PropertiesHandler(){
+
+	}
+	
+	
+	public static Properties getInstance() throws FileNotFoundException{
+		
+		
+	}
+	
+
+}

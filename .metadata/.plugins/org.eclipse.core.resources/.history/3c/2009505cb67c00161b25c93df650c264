@@ -1,0 +1,22 @@
+package view;
+
+public class MessageBox {
+	
+	private MessageBox msgBox;
+	
+	private void showMessage(Display display, String title, String msg) {
+		display.syncExec(new Runnable() {
+
+			@Override
+			public void run() {
+
+				if (msgBox != null && !closed) {
+					msgBox.setText(title);
+					msgBox.setMessage(msg);
+					msgBox.open();
+				}
+			}
+		});
+	}
+
+}

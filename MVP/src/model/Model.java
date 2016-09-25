@@ -2,6 +2,10 @@ package model;
 
 import java.io.IOException;
 
+import algorithms.maze3DGenerators.Maze3D;
+import algorithms.maze3DGenerators.Position;
+import algorithms.search.Solution;
+
 
 
 /**
@@ -18,10 +22,11 @@ public interface Model {
 	/**
 	 * <h1>Get directory path</h1><p>
 	 * <i><ul>void getDirPath(String path)<i><p>
-	 * Display all files and folders in a given directory
+	 * Display all files and folders in a given directory.
+	 *
 	 * @param path - the directory
 	 */
-	public void dirPath(String path);
+	public void getDirPath(String path);
 	
 	
 	/**
@@ -44,7 +49,7 @@ public interface Model {
 	 * @param index - the index of the maze
 	 * @param mazeName - the name of the maze
 	 */
-	public void CrossSectionByDimention(int index, String crossSection,  String mazeName);
+	public int[][] CrossSectionByDimention(int index, String crossSection,  String mazeName);
 	
 	
 	/**
@@ -53,7 +58,7 @@ public interface Model {
 	 * Get a name of Maze3D and display it
 	 * @param name - the name of the maze to display
 	 */
-	public void displayMaze(String name);
+	public Maze3D displayMaze(String name);
 
 	/**
 	 * <h1>Save Maze</h1><p>
@@ -62,7 +67,7 @@ public interface Model {
 	 * @param mazeName - the name of the maze
 	 * @param file - the name of the file that will stored the maze
 	 */
-	public void saveMaze(String mazeName, String path) throws IOException;
+	public String saveMaze(String mazeName, String path) throws IOException;
 	
 	
 	/**
@@ -72,7 +77,7 @@ public interface Model {
 	 * @param file - the name of the file 
 	 * @param mazeName - the name for the loaded maze
 	 */
-	public void loadMaze(String file, String mazeName) throws IOException;
+	public Maze3D loadMaze(String file, String mazeName) throws IOException;
 	
 	
 	/**
@@ -91,7 +96,7 @@ public interface Model {
 	 * Display the solution path of a given name of maze
 	 * @param mazeName - The name of the maze
 	 */
-	public void displaySolution(String mazeName);
+	public Solution<Position> displaySolution(String mazeName);
 	
 	
 	/**
@@ -99,7 +104,7 @@ public interface Model {
 	 * <i><ul>void displayListOfAllMaze()<i><p>
 	 * Display the list of all mazes that created
 	 */
-	public void displayListOfAllMaze();
+	public String displayListOfAllMaze();
 	
 	
 
@@ -108,7 +113,7 @@ public interface Model {
 	 * <i><ul>void displayMenu()<i><p>
 	 * Display the menu of the command
 	 */
-	public void displayMenu();
+	public String displayMenu();
 	
 	
 	public Object getCommand(String command);

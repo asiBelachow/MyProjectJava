@@ -1,7 +1,6 @@
 package presenter;
 
 
-import view.View;
 
 public interface Presenter {
 	
@@ -22,15 +21,11 @@ public interface Presenter {
 	
 	
 	
-	/**
-	 * <h1>Sets the solution</h1><p>
-	 * <i><ul>void setSolution(String solution)<i><p>
-	 * Forward the solution to the {@link View}
-	 * @param solution - the solution 
-	 */
-	public void setSolution(String solution);
+	
 
 	
 	public void initCommands();
+	
+	public void initRegexCommand();
 	
 }

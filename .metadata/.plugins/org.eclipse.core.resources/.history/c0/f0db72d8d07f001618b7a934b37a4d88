@@ -1,0 +1,32 @@
+package view.widgets;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Composite;
+
+public abstract class GameCharacter extends Canvas {
+	
+	
+	protected int xAxis1, xAxis2, width, height;
+	protected int oldxAxis1, oldAxis2;
+
+	GameCharacter(Composite parent,int style) {
+		super(parent,SWT.DOUBLE_BUFFERED);
+
+		parent.addPaintListener(new PaintListener() {
+
+			@Override
+			public void paintControl(PaintEvent e) {
+				e.gc.setAntialias(SWT.ON);
+				e.gc.setInterpolation(SWT.PUSH);
+			}
+		});
+	}
+	
+	
+	public abstract void drawCharacter(GC gc, int axis1, int axis2, int width, int height);
+
+}

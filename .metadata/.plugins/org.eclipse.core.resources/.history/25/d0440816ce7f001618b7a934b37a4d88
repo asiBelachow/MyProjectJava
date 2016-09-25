@@ -1,0 +1,15 @@
+package view.widgets;
+
+
+import org.eclipse.swt.widgets.Composite;
+
+import algorithms.maze3DGenerators.Maze3D;
+
+public class Maze3DWidget extends CommonMazeWidget{
+
+	public Maze3DWidget(Composite parent, int style,Maze3D maze) {
+		super(parent, style,maze);
+		
+	}
+
+}

@@ -1,0 +1,237 @@
+package view.widgets;
+
+
+import java.util.ArrayList;
+import java.util.Random;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.widgets.Composite;
+
+import algorithms.maze3DGenerators.Maze3D;
+import algorithms.maze3DGenerators.Position;
+
+public class Maze3DWidget extends CommonMazeWidget{
+	
+	Position position;
+	
+	private Font font;
+	private Color black,black2, green, red;
+	
+	private ArrayList<Color> floorColors;
+	
+	private double a, d;
+	private int w, h;
+	
+	private int[] A,B,C,D,E,F,G;
+
+	public Maze3DWidget(Composite parent, int style,Maze3D maze) {
+		super(parent, style,maze);
+		position = new Position();
+		
+		black = new Color(getDisplay(), 0, 0, 0);
+		black2 = new Color(getDisplay(), 64, 64, 64);
+		green = new Color(getDisplay(), 0, 255, 0);
+		red = new Color(getDisplay(), 255, 0, 0);
+		
+		floorColors = initDistinctFloorColors(maze.getzAxis());
+		
+		font = new Font(getDisplay(), "Arial",12,SWT.BOLD );
+		//cube coordinations (for better performance is constructed here)
+		A = new int[2];
+		B = new int[2];
+		C = new int[2];
+		D = new int[2];
+		E = new int[2];
+		F = new int[2];
+		G = new int[2];
+		System.out.println("111111");
+		addPaintListener(new PaintListener() {
+			
+			@Override
+			public void paintControl(PaintEvent e) {
+				int width = getSize().x;
+				int height = getSize().y;
+				
+				e.gc.setAntialias(SWT.ON);
+				e.gc.setFont(font);
+
+				a = 0;
+				int straightW = width / getMaze().getxAxis();
+				w = (int) ((width - ((a * (getMaze().getzAxis() - 1)) * straightW)) / getMaze().getxAxis());
+
+				h = height / getMaze().getzAxis();
+
+				character.setWidth(w);
+				character.setHeight(h);
+				paintMaze(w, h, a, e);
+			}
+		});
+		
+		addDisposeListener(new DisposeListener() {
+			
+			@Override
+			public void widgetDisposed(DisposeEvent arg0) {
+				font.dispose();
+				black.dispose();
+				black2.dispose();
+				green.dispose();
+				red.dispose();
+			}
+		});
+	}
+
+	@Override
+	public void setCharacterPosition(Position p) {
+		position = p;
+		moveCharacter(p);
+	}
+	
+	private boolean moveCharacter(Position p) {
+		// if at end position
+		if (getMaze().getEnd().equals(p)) {
+			//triggerWin();
+			dispose();
+		}
+		// if not at end position - just move
+		else if (getMaze().checkPositionBounds(p) && getMaze().getValueByIndex(p) == 0) {
+
+			// sets the character position holder to the new position(because
+			// move succeeded)
+			this.position = p;
+			// set accurate character position in relation to the current
+			// width/height cell ratio
+			character.setAxis1((int) Math.round((p.getX() + d) * w));
+			character.setAxis2((p.getY() + 1) * h);
+
+			redraw();
+			
+			return true;
+		}
+		return false;
+	}
+	
+
+	@Override
+	public boolean moveUp() {
+		Position newPosition = new Position(position);
+		newPosition.setZ(newPosition.getZ()+2);
+		return moveCharacter(newPosition);
+	}
+
+	@Override
+	public boolean moveDown() {
+		Position newPosition = new Position(position);
+		newPosition.setZ(newPosition.getZ()-2);
+		return moveCharacter(newPosition);
+	}
+
+	@Override
+	public boolean moveLeft() {
+		Position newPosition = new Position(position);
+		newPosition.setY(newPosition.getY()-2);
+		return moveCharacter(newPosition);
+	}
+
+	@Override
+	public boolean moveRight() {
+		Position newPosition = new Position(position);
+		newPosition.setY(newPosition.getY()+2);
+		return moveCharacter(newPosition);
+	}
+
+	@Override
+	public boolean moveFront() {
+		Position newPosition = new Position(position);
+		newPosition.setX(newPosition.getX()+2);
+		return moveCharacter(newPosition);
+	}
+
+	@Override
+	public boolean moveBack() {
+		Position newPosition = new Position(position);
+		newPosition.setX(newPosition.getX()-2);
+		return moveCharacter(newPosition);
+	}
+	
+	private ArrayList<Color> initDistinctFloorColors(int numOfFloors) {
+		ArrayList<Color> colors = new ArrayList<Color>();
+
+		Random rnd = new Random();
+		for (int i = 0; i < numOfFloors; i++)
+			colors.add(new Color(getDisplay(), rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)));
+
+		return colors;
+	}
+	
+	 private void paintMaze(int w, int h, double a, PaintEvent e) {
+			for (int axis1 = 0; axis1 < getMaze().getxAxis(); axis1++) {
+				d = 0;
+				for (int axis2 = getMaze().getyAxis() - 1; axis2 >= 0; axis2--) {
+
+					if (getMaze().getValueByIndex(position.getX(), axis1, axis2) != 0) {
+						A[0] = (int) Math.round((axis1 + d) * w);
+						A[1] = (axis2 + 1) * h;
+						B[0] = (int) Math.round((axis1 + d + 1) * w);
+						B[1] = (axis2 + 1) * h;
+						C[0] = (int) Math.round((axis1 + d + 1 + a) * w);
+						C[1] = axis2 * h;
+						D[0] = (int) Math.round((axis1 + d + a) * w);
+						D[1] = axis2 * h;
+						E[0] = (int) Math.round((axis1 + d + 1 + a) * w);
+						E[1] = (int) Math.round((axis2 + 0.5) * h);
+						F[0] = (int) Math.round((axis1 + d + 1) * w);
+						F[1] = (int) Math.round((axis2 + 1.5) * h);
+						G[0] = (int) Math.round((axis1 + d) * w);
+						G[1] = (int) Math.round((axis2 + 1.5) * h);
+						// top plain
+						e.gc.setAlpha(150);
+						e.gc.setBackground(floorColors.get(position.getX()));
+						e.gc.setLineStyle(SWT.LINE_SOLID);
+						/*
+						 * //take care of character disappearing between cubes
+						 * if(axis1==pos.getY() && axis2==pos.getZ()-1)
+						 * e.gc.setAlpha(150);
+						 */
+						int[] topPlain = new int[] { A[0],A[1],B[0],B[1],C[0],C[1],D[0],D[1] };
+						e.gc.drawPolygon(topPlain);
+						e.gc.fillPolygon(topPlain);
+						// if to your right there is empty space then draw the right
+						// plain
+						if (axis1 + 1 == getMaze().getxAxis() || axis1 + 1 < getMaze().getxAxis()
+								&& getMaze().getValueByIndex(position.getX(), axis1 + 1, axis2) == 0) {
+							// right plain
+							e.gc.setAlpha(200);
+							e.gc.setBackground(black2);
+							int[] rightPlain = new int[] { B[0],B[1],C[0],C[1],E[0],E[1],F[0],F[1] };
+							e.gc.fillPolygon(rightPlain);
+						}
+
+						// if to your bottom there is empty space then draw the
+						// bottom plain
+						if (axis2 + 1 == getMaze().getzAxis() || axis2 + 1 < getMaze().getzAxis()
+								&& getMaze().getValueByIndex(position.getX(), axis1, axis2 + 1) == 0) {
+							// bottom plain
+							e.gc.setAlpha(200);
+							e.gc.setBackground(black);
+							int[] bottomPlain = new int[] { A[0],A[1],B[0],B[1],F[0],F[1],G[0],G[1] };
+							e.gc.fillPolygon(bottomPlain);
+						}
+					}
+					// paints character and dimensions hints
+					if (axis1 == position.getY() && axis2 == position.getZ()) {
+
+						//paintCharacterAndDimensionHints(e.gc, axis1, axis2, d, a, w, h);
+					}
+
+					d += a;
+				}
+			}
+		}
+
+}

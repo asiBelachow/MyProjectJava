@@ -1,0 +1,93 @@
+package view.widgets;
+
+
+
+import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Composite;
+import algorithms.maze3DGenerators.Maze3D;
+import algorithms.maze3DGenerators.Position;
+import view.MazeWinEventHandler;
+
+public abstract class MazeDisplayer extends Canvas implements GameBoardDisplayAdapter {
+
+	Maze3D maze;
+	
+	protected MazeWinEventHandler winEvent;
+	
+	// Just a stub..
+	int[][] mazeData={
+			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+			{1,0,0,0,0,0,0,0,1,1,0,1,0,0,1},
+			{0,0,1,1,1,1,1,0,0,1,0,1,0,1,1},
+			{1,1,1,0,0,0,1,0,1,1,0,1,0,0,1},
+			{1,0,1,0,1,1,1,0,0,0,0,1,1,0,1},
+			{1,1,0,0,0,1,0,0,1,1,1,1,0,0,1},
+			{1,0,0,1,0,0,1,0,0,0,0,1,0,1,1},
+			{1,0,1,1,0,1,1,0,1,1,0,0,0,1,1},
+			{1,0,0,0,0,0,0,0,0,1,0,1,0,0,1},
+			{1,1,1,1,1,1,1,1,1,1,1,1,0,1,1},
+			};
+	
+	
+	//------------------------------Constructors-------------------------//
+	
+	public MazeDisplayer(Composite parent, int style) {
+		super(parent, style);
+		this.maze= maze;
+	
+	};
+
+	
+	//------------------------------Getters and Setters-------------------------//
+	
+	public MazeWinEventHandler getWinEvent() {
+		return winEvent;
+		
+	}
+
+
+	public void setWinEvent(MazeWinEventHandler winEvent) {
+		this.winEvent = winEvent;
+	}
+	
+	public int[][] getMazeData() {
+		return mazeData;
+	}
+
+
+	public void setMazeData(int[][] mazeData) {
+		this.mazeData = mazeData;
+	}
+	
+
+	
+	public void triggerWin() {
+		if (winEvent != null)
+			winEvent.winGame();
+		else
+			// if there is no win handler - use default syso
+			System.out.println("Win!");
+	}
+	
+	
+	public abstract boolean moveUp();
+
+	public abstract boolean moveDown();
+
+	public abstract boolean moveLeft();
+
+	public abstract boolean moveRight();
+
+	public abstract boolean moveFront();
+
+	public abstract boolean moveBack();
+	
+	public abstract void setCharacterPosition(Position p);
+	
+	public abstract boolean moveCharacter(Position p);
+	
+	
+
+	
+	
+}

@@ -16,6 +16,8 @@ import java.io.InputStream;
  */
 public class MyDecompressorInputStream extends InputStream {
 
+	//------------------------------Data Members-------------------------//
+	
 	private InputStream in;
 	
 	

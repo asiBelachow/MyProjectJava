@@ -31,7 +31,9 @@ less cost step to the the target (goal position)
  * @since 2016-23-08
  */
 public class BestFirstSearch<T> extends CommonSearcher<T> {
-
+	
+	//------------------------------Data Members-------------------------//
+	
 	protected PriorityQueue<State<T>> open;
 	
 	

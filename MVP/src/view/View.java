@@ -19,9 +19,7 @@ public interface View {
 
 	public void close();
 	
-	
-
-	public void start();
+	public void run();
 	
 	
 	/**
@@ -39,7 +37,9 @@ public interface View {
 	 * Get an event that notify the {@link View} about the</br> process of generating maze in the {@link Model}
 	 * @param name - the name of the Maze3D
  	 */
-	void notifyMazeIsReady(String name);
+	public void notifyMazeIsReady(String name);
+	
+	public void notifySolutionIsReady(String name);
 	
 	
 	public void showDirPath(String str);
@@ -51,7 +51,7 @@ public interface View {
 
 	public void displaySolution(Solution<Position> solution);
 	
-	public void generateMaze(Maze3D maze);
+	
 	
 	
 	

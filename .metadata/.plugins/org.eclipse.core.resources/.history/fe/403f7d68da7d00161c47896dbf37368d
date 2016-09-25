@@ -1,0 +1,13 @@
+package view.widgets;
+
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+
+public class Maze3DWidget extends CommonMazeWidget {
+
+	public Maze3DWidget(Composite parent, int style) {
+		super(parent, style);
+		setBackgroundImage(new Image(getDisplay(), "data/image/sonicbg.png"));
+	}
+
+}

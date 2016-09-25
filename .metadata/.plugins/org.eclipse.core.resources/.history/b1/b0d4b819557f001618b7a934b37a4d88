@@ -1,0 +1,67 @@
+package presenter;
+
+import java.io.IOException;
+
+import model.Model;
+import view.View;
+
+public class CommandManger {
+	
+	Model model;
+	View view;
+	
+	public CommandManger(Model model, View view) {
+		this.model = model;
+		this.view =view;
+	}
+	
+	
+
+	public Model getModel() {
+		return model;
+	}
+
+	public void setModel(Model model) {
+		this.model = model;
+	}
+
+	public View getView() {
+		return view;
+	}
+
+	public void setView(View view) {
+		this.view = view;
+	}
+	
+	public HashMap<String,Command> getCommandMap(){
+		
+		
+		
+	}
+	
+	
+	
+	class GenerateMazeCommand implements Command{
+		
+		@Override
+		public void doCommmand(String[] param) throws IOException {
+			model.generateMaze3D(param[1], Integer.parseInt(param[2]), Integer.parseInt(param[3]), Integer.parseInt(param[4]));
+		}
+		
+		@Override
+		public String toString() {
+			return getClass().getName();
+		}
+	}
+	
+	
+	class DirPathCommand implements Command{
+		
+		
+		
+	}
+	
+	
+	
+
+}

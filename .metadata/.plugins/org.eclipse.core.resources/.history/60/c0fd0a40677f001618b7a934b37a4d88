@@ -1,0 +1,85 @@
+package presenter;
+
+import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
+
+import commands.Command;
+import commands.CommandManger;
+import model.Model;
+import view.View;
+
+public abstract class AbstractPresenter implements Observer,Presenter {
+	
+	//------------------------------Data Members-------------------------//
+	
+	Model model;
+	View view;
+	CommandManger commandManger;
+	protected HashMap<String, Command> commands;
+	protected HashMap<String, String> regxCommands;
+
+	
+	//------------------------------Constructors-------------------------//
+	
+
+
+	public AbstractPresenter(Model model, View view) {
+		this.model = model;
+		this.view = view;
+		this.commandManger = new CommandManger(model, view);
+		initCommands();
+	}
+	
+	//-----------------------------setters and getters-------------------//
+	
+	/**
+	 * <h1>Set model</h1><p>
+	 * <i><ul>void setModel(Model m)<i><p>
+	 * Set the data member {@link Model} m
+	 * @param m - the  model
+	 */
+	public void setModel(Model model){
+		this.model = model;
+	}
+	
+	
+	/**
+	 * <h1>Set view</h1><p>
+	 * <i><ul>void setView(View v)<i><p>
+	 * Set the data member {@link View} v
+	 * @param v - the view 
+	 */
+	public void setView(View view){
+		this.view = view;
+		
+	}
+	
+	public HashMap<String, Command> getCommands() {
+		return commands;
+	}
+	
+	public void setCommands(HashMap<String, Command> commands) {
+		this.commands = commands;
+	}
+	
+	//-------------------------Functionality-------------------------//
+
+	
+	@Override
+	public void initCommands(){
+		setCommands(commandManger.getCommandMap());
+	}
+	
+	private void regex(){
+		regxCommands.put("dir", value)
+		
+	}
+	
+	@Override
+	public abstract void update(Observable o, Object args);
+
+
+	
+
+}

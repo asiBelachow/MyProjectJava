@@ -13,6 +13,8 @@ import java.io.Serializable;
  */
 public class State<T> implements Serializable{//implements Comparable<State<T>>{
 
+	//------------------------------Data Members-------------------------//
+	
 	private static final long serialVersionUID = -428403587808162206L;
 
 	private T state;

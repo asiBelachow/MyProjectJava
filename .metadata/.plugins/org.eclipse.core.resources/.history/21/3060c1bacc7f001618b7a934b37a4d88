@@ -1,0 +1,17 @@
+package view.widgets;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Composite;
+
+public class GameCharecter extends Canvas {
+	
+	
+	int xAxis, yAxis;
+
+	GameCharecter(Composite parent,int style) {
+		super(parent,SWT.DOUBLE_BUFFERED);
+		// TODO Auto-generated constructor stub
+	}
+
+}

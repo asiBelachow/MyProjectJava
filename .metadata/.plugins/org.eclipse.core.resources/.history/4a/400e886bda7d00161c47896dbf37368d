@@ -1,0 +1,12 @@
+package view.widgets;
+
+import org.eclipse.swt.widgets.Composite;
+
+public class CommonMazeWidget extends MazeDisplay{
+
+	public CommonMazeWidget(Composite parent, int style) {
+		super(parent, style);
+		
+	}
+
+}

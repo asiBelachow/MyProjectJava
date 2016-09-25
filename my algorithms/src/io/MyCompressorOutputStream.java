@@ -15,6 +15,7 @@ import java.io.OutputStream;
  */
 public class MyCompressorOutputStream  extends OutputStream{
 
+	//------------------------------Data Members-------------------------//
 	
 
 	private OutputStream out;

@@ -1,7 +1,7 @@
 package view;
 
-import java.io.BufferedReader;
-import java.io.PrintWriter;
+
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -11,27 +11,41 @@ import algorithms.search.Solution;
 
 public abstract class AbstractObservableView extends Observable implements View, Observer {
 
-	protected BufferedReader in;
-	protected PrintWriter out;
+	//------------------------------Data Members-------------------------//
 	
+	protected CLI cli;
+	
+	HashMap<String, Object> data;
 	
 	//------------------------------Constructors-------------------------//
 	
-	public AbstractObservableView(BufferedReader in, PrintWriter out) {
-		this.in = in;
-		this.out = out;
-		
-		
-	
+	public AbstractObservableView() {
+		data = new HashMap<String, Object>();
+
 	}
 	
 	//-----------------------------setters and getters-------------------//
-	
+
+	public CLI getCli() {
+		return cli;
+	}
+
+	public void setCli(CLI cli) {
+		this.cli = cli;
+	}
 	
 	//-------------------------Functionality-------------------------//
 	
 
-	
+	protected void setCommandAndNotify(String command, Object args)
+	{
+		if (data!=null)
+			data.put(command, args);
+		setChanged();
+		notifyObservers(command);
+		
+		
+	}
 	
 
 	@Override
@@ -46,9 +60,11 @@ public abstract class AbstractObservableView extends Observable implements View,
 	
 	@Override
 	public abstract void displaySolution(Solution<Position> solution);
-	
 	@Override
-	public abstract void generateMaze(Maze3D maze);
+	public abstract void notifySolutionIsReady(String name);
+	
+
+	
 	
 	
 	

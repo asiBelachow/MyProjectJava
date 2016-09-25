@@ -1,0 +1,23 @@
+package view;
+
+import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Composite;
+
+public class MazeDisplay extends Canvas implements GameBoardDisplayAdapter {
+
+	
+	//------------------------------Constructors-------------------------//
+	
+	public MazeDisplay(Composite parent, int style) {
+		super(parent, style);
+		
+	}
+	
+	
+	
+
+	
+	
+	
+	
+}

@@ -13,7 +13,8 @@ import java.util.Random;
 public abstract class CommonMaze3DGenerator implements Maze3DGenerator {
 	
 	
-
+	//------------------------------Data Members-------------------------//
+	
 	protected Maze3D myMaze;
 	
 	protected Random r = new Random();

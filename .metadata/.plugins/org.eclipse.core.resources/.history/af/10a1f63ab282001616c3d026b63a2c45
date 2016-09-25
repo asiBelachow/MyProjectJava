@@ -1,0 +1,42 @@
+package boot;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
+
+public class ArrowButtonExample {
+  Display d;
+
+  Shell s;
+
+   ArrowButtonExample() {
+    d = new Display();
+    s = new Shell(d);
+    s.setSize(250, 250);
+    
+    s.setText("A Button Example");
+    final Button b1 = new Button(s, SWT.ARROW | SWT.UP);
+    b1.setBounds(100, 70, 35, 40);
+    final Button b2 = new Button(s, SWT.ARROW | SWT.DOWN);
+    b2.setBounds(100, 100, 40, 35);
+  
+    final Button b3 = new Button(s, SWT.ARROW | SWT.LEFT);
+    b3.setBounds(140, 70, 35, 40);
+    
+    s.open();
+    while (!s.isDisposed()) {
+      if (!d.readAndDispatch())
+        d.sleep();
+    }
+    d.dispose();
+  }
+
+  public static void main(String[] argv) {
+    new ArrowButtonExample();
+  }
+
+}

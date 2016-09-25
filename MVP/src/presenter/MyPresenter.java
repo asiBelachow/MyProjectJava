@@ -2,13 +2,12 @@ package presenter;
 
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Observable;
-import algorithms.maze3DGenerators.Maze3D;
-import algorithms.maze3DGenerators.Position;
-import algorithms.search.Solution;
+import commands.Command;
 import model.Model;
 import view.View;
+
+
 
 public class MyPresenter extends AbstractPresenter {
 
@@ -19,19 +18,79 @@ public class MyPresenter extends AbstractPresenter {
 		
 	}
 
-	@Override
-	public void setSolution(String solution){
-		
-		
-	}
+	
 
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public void update(Observable o, Object args) {
-		String temp = (String) args;
-		if( o == view ){
+		String commandLine = (String) args;
+		System.out.println(commandLine);
+		String arr[] = commandLine.split(" ");
+		String command = arr[0];
+	
+		if( o== view){
+			if(!regexCommands.containsKey(command))
+			{
+				String msg = "You entered unrecognized command (\"" + command+"\") for help enter \"menu\"";
+				view.displayMessage(msg);
+			}
+			else{
+
+				if(!checkRegexCommand(command,commandLine)){
+					String msg = "You entered in valid parameters (\"" + commandLine+"\") for help enter \"menu\"";
+					view.displayMessage(msg);
+					return;
+				}
+				else{
+					String c = regexCommands.get(command);
+					Command cmd = commands.get(c);
+					System.out.println(cmd.toString());
+					try {
+						cmd.doCommmand(arr);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+
+			}
+		}
+		if (o==model){
+			if(regexCommands.containsKey(command))
+			{
+				String[] arg = null;
+				if (arr.length > 1) {
+					String commandArgs = commandLine.substring(commandLine.indexOf(" ") + 1);
+					arg = commandArgs.split(" ");
+					arg[0]=commandArgs;
+				}
+				
+				
+				String c = regexCommands.get(command);
+				Command cmd = commands.get(c);
+				System.out.println(cmd.toString());
+				try {
+					cmd.doCommmand(arg);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			else{
+				
+			}
+			
+		}
+	
+	}
+			
+
+		
+	/*	if( o == view ){
 			
 			Command command = getCommandByInput(temp);
+			
 			if(command != null){
 				try {
 					command.doCommmand(temp.split(" "));
@@ -46,6 +105,10 @@ public class MyPresenter extends AbstractPresenter {
 		}
 		else if(o == model){
 			
+			
+			
+			
+			
 			if(temp.equals("dir"))
 				view.displayMessage((String)model.getCommand(temp));
 			
@@ -58,25 +121,31 @@ public class MyPresenter extends AbstractPresenter {
 				view.displayMaze((Maze3D)model.getCommand(temp));
 			else if(temp.equals("display solution"))
 				view.displaySolution((Solution<Position>)model.getCommand(temp));
-		}
+			else if(temp.equals("generate maze")){
+				System.out.println((String)model.getCommand(temp));
+				view.notifyMazeIsReady((String)model.getCommand(temp));
+				
+			}
+		}*/
 		
-	}
 	
-	private Command getCommandByInput(String input) {
-		boolean commandOk = false;
-		String command = null;
-
+	
+	private boolean checkRegexCommand(String command,String commandLine) {
+	
 		// matching all regular expressions with the given user command
-		Iterator<String> iter = commands.keySet().iterator();
+		String regex = regexCommands.get(command);
+		return commandLine.matches(regex);
+		
+		
+		
+		
+	/*	Iterator<String> iter = regexCommands.keySet().iterator();
 		while (iter.hasNext() && !commandOk) {
 			command = iter.next();
-			commandOk = input.matches(command);
+			String s = regexCommands.get(command);
+			commandOk = commandLine.matches(s);
 		}
-		if (commandOk)
-			return commands.get(command);
-		else
-			return null;
-
+		return commandOk*/
 	}
 	
 

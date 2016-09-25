@@ -12,6 +12,8 @@ import java.io.Serializable;
  */
 public class Position implements Serializable {
 	
+	//------------------------------Data Members-------------------------//
+	
 	private static final long serialVersionUID = 3118754725894045017L;
 
 	/** The Constant UP. */
@@ -51,6 +53,14 @@ public class Position implements Serializable {
 	 */
 	public Position() {
 		
+	}
+	
+	public Position(String position) {
+		
+		String[] s = position.substring(1, position.length()-1).split(",");
+		this.z = Integer.parseInt(s[0]);
+		this.x = Integer.parseInt(s[1]);
+		this.y = Integer.parseInt(s[2]);
 	}
 	
 	/**

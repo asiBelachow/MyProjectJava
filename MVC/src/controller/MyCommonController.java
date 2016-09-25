@@ -38,6 +38,8 @@ import view.View;
  */
 public abstract class MyCommonController implements Controller {
 	
+	//------------------------------Data Members-------------------------//
+	
 	protected View v;
 	
 	protected Model m;

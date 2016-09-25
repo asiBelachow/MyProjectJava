@@ -15,8 +15,8 @@
 		<item value="666" key="DIALOG_WIDTH"/>
 		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 		<item value="458" key="DIALOG_HEIGHT"/>
-		<item value="457" key="DIALOG_X_ORIGIN"/>
-		<item value="125" key="DIALOG_Y_ORIGIN"/>
+		<item value="458" key="DIALOG_X_ORIGIN"/>
+		<item value="126" key="DIALOG_Y_ORIGIN"/>
 		<list key="sashWeights">
 			<item value="600"/>
 			<item value="400"/>
@@ -26,6 +26,9 @@
 		<list key="C:\Users\Asi\git\Maze3DProject\.git">
 			<item value="empty"/>
 		</list>
+	</section>
+	<section name="GitCommitSearchPage">
+		<item value="0" key="HISTORY_SIZE"/>
 	</section>
 	<section name="org.eclipse.egit.ui.internal.staging.StagingView">
 		<item value="511,488" key="STAGING_SASH_FORM_WEIGHT"/>

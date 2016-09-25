@@ -3,9 +3,9 @@ package view;
 
 
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.PrintWriter;
+
 import java.util.Observable;
 
 import algorithms.maze3DGenerators.Maze3D;
@@ -15,28 +15,20 @@ import algorithms.search.Solution;
 
 public class ObservableCLIView extends AbstractObservableView {
 	
+	//------------------------------Data Members-------------------------//
 	
-	private CLI cli;
+	
 	
 	//------------------------------Constructors-------------------------//
 	
-	public ObservableCLIView(BufferedReader in, PrintWriter out) {
-		super(in, out);
-		cli = new CLI(in, out);
-		cli.addObserver(this);
+	public ObservableCLIView() {
+	
 	}
 
 
 	//-----------------------------setters and getters-------------------//
 
-	public CLI getCli() {
-		return cli;
-	}
-
-
-	public void setCli(CLI cli) {
-		this.cli = cli;
-	}
+	
 
 	
 	
@@ -45,7 +37,7 @@ public class ObservableCLIView extends AbstractObservableView {
 
 	
 	@Override
-	public void start(){
+	public void run(){
 		cli.start();
 	}
 	
@@ -79,7 +71,7 @@ public class ObservableCLIView extends AbstractObservableView {
 
 	@Override
 	public void notifyMazeIsReady(String name) {
-		// TODO Auto-generated method stub
+		System.out.println("maze "+ name+" ready");
 		
 	}
 
@@ -119,11 +111,17 @@ public class ObservableCLIView extends AbstractObservableView {
 		
 	}
 	
+	
 	@Override
-	public void generateMaze(Maze3D maze) {
-		
+	public void notifySolutionIsReady(String name) {
+		System.out.println("Solution for \"" + name + "\" is ready");
 		
 	}
+
+
+
+
+	
 
 	
 	

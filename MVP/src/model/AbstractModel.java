@@ -30,6 +30,8 @@ import algorithms.search.Solution;
  */
 public abstract class AbstractModel extends Observable implements Model {
 	
+	//------------------------------Data Members-------------------------//
+	
 	protected ExecutorService pool;
 	
 	protected ConcurrentHashMap<String,Maze3D> mapMaze3D;
@@ -76,7 +78,7 @@ public abstract class AbstractModel extends Observable implements Model {
 	 * @see model.Model#dirPath(java.lang.String)
 	 */
 	@Override
-	public abstract void dirPath(String path);
+	public abstract void getDirPath(String path);
 
 
 	/* (non-Javadoc)
@@ -91,7 +93,7 @@ public abstract class AbstractModel extends Observable implements Model {
 	 * @see model.Model#CrossSectionByDimention(int, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public abstract void CrossSectionByDimention(int index, String crossSection,  String mazeName);
+	public abstract int[][] CrossSectionByDimention(int index, String crossSection,  String mazeName);
 
 
 
@@ -99,14 +101,14 @@ public abstract class AbstractModel extends Observable implements Model {
 	 * @see model.Model#saveMaze(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public abstract void saveMaze(String mazeName, String path) throws IOException;
+	public abstract String saveMaze(String mazeName, String path) throws IOException;
 	
 
 	/* (non-Javadoc)
 	 * @see model.Model#loadMaze(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public abstract void loadMaze(String file, String mazeName) throws IOException;
+	public abstract Maze3D loadMaze(String file, String mazeName) throws IOException;
 
 
 
@@ -120,27 +122,27 @@ public abstract class AbstractModel extends Observable implements Model {
 	 * @see model.Model#displayMaze(java.lang.String)
 	 */
 	@Override
-	public abstract void displayMaze(String name);
+	public abstract Maze3D displayMaze(String name);
 	
 
 	/* (non-Javadoc)
 	 * @see model.Model#displaySolution(java.lang.String)
 	 */
 	@Override
-	public abstract void displaySolution(String mazeName);
+	public abstract Solution<Position> displaySolution(String mazeName);
 
 
 	/* (non-Javadoc)
 	 * @see model.Model#displayListOfAllMaze()
 	 */
 	@Override
-	public abstract void displayListOfAllMaze();
+	public abstract String displayListOfAllMaze();
 	
 	/* (non-Javadoc)
 	 * @see model.Model#displayMenu()
 	 */
 	@Override
-	public abstract void displayMenu();
+	public abstract String displayMenu();
 	
 	@Override
 	public Object getCommand(String command) {
@@ -162,6 +164,9 @@ public abstract class AbstractModel extends Observable implements Model {
 		setChanged();
 		notifyObservers(command);
 	}
+	
+	
+	
 	
 
 	

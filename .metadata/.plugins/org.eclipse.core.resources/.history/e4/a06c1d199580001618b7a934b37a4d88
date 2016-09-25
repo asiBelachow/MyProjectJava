@@ -1,0 +1,102 @@
+package view.widgets;
+
+
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Composite;
+
+import algorithms.maze3DGenerators.Maze3D;
+import algorithms.maze3DGenerators.Position;
+import view.MazeWinEventHandler;
+
+public abstract class CommonMazeWidget extends Canvas implements GameBoardDisplayAdapter {
+
+	
+	protected Maze3D maze;
+	
+
+	protected GameCharacter character;
+	protected MazeWinEventHandler winEvent;
+	
+	// Just a stub..
+	int[][] mazeData={
+			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+			{1,0,0,0,0,0,0,0,1,1,0,1,0,0,1},
+			{0,0,1,1,1,1,1,0,0,1,0,1,0,1,1},
+			{1,1,1,0,0,0,1,0,1,1,0,1,0,0,1},
+			{1,0,1,0,1,1,1,0,0,0,0,1,1,0,1},
+			{1,1,0,0,0,1,0,0,1,1,1,1,0,0,1},
+			{1,0,0,1,0,0,1,0,0,0,0,1,0,1,1},
+			{1,0,1,1,0,1,1,0,1,1,0,0,0,1,1},
+			{1,0,0,0,0,0,0,0,0,1,0,1,0,0,1},
+			{1,1,1,1,1,1,1,1,1,1,1,1,0,1,1},
+			};
+	
+	
+	//------------------------------Constructors-------------------------//
+	
+	public CommonMazeWidget(Composite parent, int style,Maze3D maze) {
+		super(parent, style);
+		setMaze(maze);
+		
+		addDisposeListener(new DisposeListener() {
+			
+			@Override
+			public void widgetDisposed(DisposeEvent arg0) {
+				character.dispose();
+				
+			}
+		});
+	}
+
+	
+	//------------------------------Getters and Setters-------------------------//
+	public Maze3D getMaze() {
+		return maze;
+	}
+
+
+	public void setMaze(Maze3D maze) {
+		this.maze = maze;
+	}
+
+
+	public GameCharacter getCharacter() {
+		return character;
+	}
+
+
+	public void setCharacter(GameCharacter character) {
+		this.character = character;
+	}
+	
+	public MazeWinEventHandler getWinEvent() {
+		return winEvent;
+	}
+
+
+	public void setWinEvent(MazeWinEventHandler winEvent) {
+		this.winEvent = winEvent;
+	}
+	
+	public abstract boolean moveUp();
+
+	public abstract boolean moveDown();
+
+	public abstract boolean moveLeft();
+
+	public abstract boolean moveRight();
+
+	public abstract boolean moveFront();
+
+	public abstract boolean moveBack();
+	
+	public abstract void setCharacterPosition(Position p);
+	
+	
+
+	
+	
+}

@@ -1,0 +1,328 @@
+package model;
+
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.util.Iterator;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.zip.GZIPOutputStream;
+import algorithms.demo.SearchableMaze3D;
+import algorithms.maze3DGenerators.GrowingTreeGenerator;
+import algorithms.maze3DGenerators.GrowingTreeRandom;
+import algorithms.maze3DGenerators.Maze3D;
+import algorithms.maze3DGenerators.Position;
+import algorithms.search.BestFirstSearch;
+import algorithms.search.DepthFirstSearch;
+import algorithms.search.Solution;
+import io.MyCompressorOutputStream;
+import io.MyDecompressorInputStream;
+
+
+public class MyModel extends AbstractModel {
+	
+
+
+	//-------------------------Functionality-------------------------//
+	
+	@Override
+	public void getDirPath(String path) {
+		//Checks if the file empty
+		if(path.length()==0){
+			setChanged();
+			notifyObservers("dir_path Please enter a directory");
+			return;
+			//return "dir_path Please enter a directory";
+		}
+			
+		//Open the file
+		File dir = new File(path);
+		//Checks if the path is directory if not, return a message to the presenter
+		if(!dir.isDirectory()){
+			setChanged();
+			notifyObservers("dir_path Please enter a valid directory");
+			return;
+		}
+			//return "Please enter a valid directory";
+			
+		//Get list of  all files and folders in the given path and  forward to the controller
+		String[] temp = dir.list();
+		StringBuilder sb = new StringBuilder();
+		sb.append("\nThe files in "+ path + " are: \n");
+		for (String s : temp){
+			sb.append(s+"\n");
+		}
+		setChanged();
+		notifyObservers(sb.toString());
+		
+	}
+
+	@Override
+	public void generateMaze3D(String mazeName, int z, int x, int y) {
+		
+		pool.submit(new Callable<Maze3D>() {
+
+			@Override
+			public Maze3D call() throws Exception {
+				Maze3D maze = (new GrowingTreeGenerator(new GrowingTreeRandom())).generate(z, x, y);
+				mapMaze3D.put(mazeName, maze);
+				
+				return maze;
+			}
+		});
+		
+		
+		
+		
+		futureMaze3D = this.pool.submit(new Callable<Maze3D>() {
+
+			@Override
+			public Maze3D call() throws Exception {
+				try{
+					if ( !mapMaze3D.containsKey(mazeName)){
+						//Generate new maze
+						Maze3D maze = (new GrowingTreeGenerator(new GrowingTreeRandom())).generate(z, x, y);
+						mapMaze3D.put(mazeName, maze);
+						ObjectOutputStream out = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(new File("mapMaze3D" + ".zip"))));
+						out.writeObject(mapMaze3D);
+						out.close();
+						setCommandAndNotify("message","The maze \""+ mazeName + "\" is ready" );
+						//setCommandAndNotify("message", "\nThe maze \""+ mazeName + "\" is ready");
+
+					}else{
+						//setCommandAndNotify("generate maze", mapMaze3D.get(mazeName));
+						throw new RuntimeException("The maze \""+ mazeName +"\" is already in database");
+					}
+
+				}catch (Exception e){
+					setCommandAndNotify("message", e.toString().substring(27));
+				}
+				
+				pool.submit(new Runnable() {
+					
+					@Override
+					public void run() {
+						try {
+							futureMaze3D.get();
+						} catch (InterruptedException | ExecutionException e) {
+							e.printStackTrace();
+						}
+				
+					}
+				});
+				return null;
+			}
+			
+		});
+		
+		
+	}
+
+	@Override
+	public void CrossSectionByDimention(int index, String dimension,  String mazeName) {
+		
+		//Check is the maze in database
+		if (mapMaze3D.containsKey(mazeName)){
+			//If found get the maze
+			Maze3D maze = mapMaze3D.get(mazeName);
+			//if the index that the user entered invalid an IndexOutOfBoundsException will Thrown out
+			try{
+				//Find the dimension
+				if(dimension.equals("z")){
+					setCommandAndNotify("cross section", maze.getCrossSectionByZ(index));
+					return;
+				}
+				if(dimension.equals("x")){
+					setCommandAndNotify("cross section", maze.getCrossSectionByX(index));
+					return;
+				}
+				if(dimension.equals("y")){
+					setCommandAndNotify("cross section", maze.getCrossSectionByY(index));
+					return;
+				}
+			}catch (IndexOutOfBoundsException e){
+				setCommandAndNotify("message", e.toString().substring(37));
+				return;
+			}
+		}
+		//If the maze not found return a message to the CLI
+		setCommandAndNotify("message", "Maze: \"" + mazeName + "\" not found");
+	}
+
+	@Override
+	public void saveMaze(String mazeName, String path) throws IOException  {
+		
+		//Check if the maze in database
+		if(mapMaze3D.containsKey(mazeName)){
+			//Trying to write the to a file, an Exception will Thrown out if is error while
+			//trying to open the file
+			try{
+				OutputStream out = new MyCompressorOutputStream(new FileOutputStream(path+".maz"));
+				out.write(mapMaze3D.get(mazeName).toByteArray());
+				out.flush();
+				out.close();
+			}catch (Exception e) {
+				setCommandAndNotify("message", "Error while trying to save the maze, please try again");
+			}
+			setCommandAndNotify("message", "The maze: \""+ mazeName+ "\" successfully saved");
+			
+		}else
+			setCommandAndNotify("message", "The maze: \"" + mazeName + "\" not exits");
+	}
+
+	@Override
+	public void loadMaze(String file, String mazeName) throws IOException {
+		
+		boolean flag = false;
+		//Trying to open a file, IF the file not found FileNotFoundException will Thrown out
+		try {
+			File f = new File(file+".maz");
+			@SuppressWarnings("resource")
+			InputStream in=new MyDecompressorInputStream( new FileInputStream(f));
+			byte b[] = new byte[(int) f.length()];
+			in.read(b);
+			Maze3D maze = new Maze3D(b);//Load the maze
+			mapMaze3D.put(mazeName, maze);//Saving the maze to the database
+			
+		} catch (FileNotFoundException e) {
+			flag=true;
+			setCommandAndNotify("message", "The file: \""+ file + "\" not found");
+		}
+		if(flag == false){
+			setCommandAndNotify("message","Maze: \""+mazeName+ "\" loaded sucssefuly");
+		}
+	}
+
+	@Override
+	public void solveMaze(String mazeName, String alg) {
+		
+		
+		futureSolution = pool.submit(new Callable<Solution<Position>>() {
+
+			@Override
+			public Solution<Position> call() throws Exception {
+				boolean flag=false;
+				Solution<Position> solution = null;
+				if(!mapSolution.contains(mazeName)){
+					Maze3D maze = mapMaze3D.get(mazeName);
+					if(alg.equals("bfs") || alg.equals("BFS")){
+						solution = new BestFirstSearch<Position>().search(new SearchableMaze3D<>(maze));
+						flag =true;
+					}
+					else if(alg.equals("dfs") || alg.equals("DFS")){
+						solution = new DepthFirstSearch<Position>().search(new SearchableMaze3D<>(maze));
+						flag =true;
+					}else
+						setCommandAndNotify("message", "You entered unrecognized search algorithm \"" + alg+"\" for help enter \"menu\"");
+					if(flag){
+						mapSolution.put(mazeName, solution);
+						ObjectOutputStream out = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(new File("mapSolution" + ".zip"))));
+						out.writeObject(mapSolution);
+						out.close();
+						setCommandAndNotify("generate maze", "Solution for maze \"" + mazeName + "\" is ready");
+						
+						//return solution;
+					}else{
+						setCommandAndNotify("message", "You entered unrecognized search algorithm \"" + alg+"\" for help enter \"menu\"");
+					}
+
+				}else{
+					setCommandAndNotify("message", "Solution for maze \"" + mazeName + "\" already ÷xists");
+				}
+				return null;
+			}
+
+		});
+		
+		try {
+			futureSolution.get();
+		} catch (InterruptedException | ExecutionException e) {
+			
+			e.printStackTrace();
+		}
+	}
+
+
+	@Override
+	public void displayMaze(String name) {
+		
+		if(mapMaze3D.containsKey(name))
+			setCommandAndNotify("display maze", mapMaze3D.get(name));
+		else
+			setCommandAndNotify("message", "Maze: \""+name+ "\" not found");
+	}
+	
+	
+	@Override
+	public void displaySolution(String mazeName) {
+		//Check if the maze in database, if exists get the solution
+		if(mapSolution.containsKey(mazeName))
+			setCommandAndNotify("display solution", mapSolution.get(mazeName));
+		//If not exits, return message to hte CLI
+		else
+			setCommandAndNotify("message", "The maze: \""+ mazeName+"\" not found");
+	
+	}
+	
+	@Override
+	public void displayListOfAllMaze() {
+		//Check if there is maze in database
+		if(mapMaze3D.isEmpty())
+			setCommandAndNotify("message", "The database empty");
+		else {
+			//Get list of all maze's name in database
+			StringBuilder sb = new StringBuilder();
+			Iterator<String> iter = mapMaze3D.keySet().iterator();
+			int i=1;
+			sb.append("\nList of all maze:\n");
+			while (iter.hasNext())
+				sb.append(i+") "+iter.next()+"\n");
+			setCommandAndNotify("message", sb.toString());
+		}
+	}
+	
+	public void displayMenu(){
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("\n*********************************************************************\n");
+		sb.append("*                               CLI Menu                            *\n");
+		sb.append("*********************************************************************\n");
+		sb.append("1) To view file in directory enter: dir <path>\n");
+		sb.append("2) To generate new Maze3D enter: generate_maze <name> <other params>\n");
+		sb.append("3) To display a Maze3d enter: display <name>\n");
+		sb.append("4) To dispaly cross section of the Maze3D enter: display_cross_section <index{xz,x,y} <name>\n");
+		sb.append("5) To display a Maze3d enter: display <name>\n");
+		sb.append("6) To save a Maze3D enter: save_maze <name> <file name>\n");
+		sb.append("7) To load saved Maze3D enter: load_maze <file name> <name>\n");
+		sb.append("8) To solve a Maze3D enter: solve <name> <algorithm(BFS,DFS)>\n");
+		sb.append("9) To display the solution path of the maze enter: display_solution <name>\n");
+		sb.append("10) To display the menu enter: menu\n");
+		sb.append("11) To exit enter: exit\n");
+		
+		setCommandAndNotify("message", sb.toString());
+	}
+
+	public void exit(){
+		setCommandAndNotify("message", "CLI closing...");
+		//presenter.setSolution("CLI closing...");
+		pool.shutdown();
+		setCommandAndNotify("message", "CLI closed.");
+		//presenter.setSolution("CLI closed...");
+	}
+	
+	public void saveMazes(){
+		ObjectOutputStream oos = null;
+		
+		
+		
+	}
+	
+
+
+}

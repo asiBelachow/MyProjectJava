@@ -13,6 +13,8 @@ import java.util.Iterator;
  */
 public class GrowingTreeGenerator extends CommonMaze3DGenerator {
 	
+	//------------------------------Data Members-------------------------//
+	
 	GrowingTree gt;
 	
 	

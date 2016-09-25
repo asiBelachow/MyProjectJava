@@ -26,6 +26,7 @@ import java.util.Random;
  */
 public class Maze3D implements Serializable {
 	
+	//------------------------------Data Members-------------------------//
 	
 	private static final long serialVersionUID = 4206592954611528780L;
 
@@ -38,7 +39,6 @@ public class Maze3D implements Serializable {
 	/*The Constant CASING - define the casing of the maze*/
 	public static final int CASING = 2;
 	
-
 	/*The z axis - represent the floors*/
 	private int zAxis;   
 	
@@ -106,7 +106,11 @@ public class Maze3D implements Serializable {
 	
 	}
 	
-	
+	/**
+	 *<h1>Maze3D</h1><p>
+ 	 * <i> <ul>Maze3D(byte[] array)<i><p>
+	 * Initialize a new 3D maze from a given byte array
+	 */
 	public Maze3D(byte[] array) throws IOException {
 		
 		ByteArrayInputStream bIn= new ByteArrayInputStream(array);

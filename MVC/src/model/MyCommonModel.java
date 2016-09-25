@@ -29,6 +29,8 @@ import controller.Controller;
  */
 public abstract class MyCommonModel implements Model {
 	
+	//------------------------------Data Members-------------------------//
+	
 	protected ExecutorService pool;
 	
 	protected ConcurrentHashMap<String,Maze3D> mapMaze3D;

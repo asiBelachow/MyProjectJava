@@ -21,6 +21,8 @@ import java.util.HashSet;
  */
 public abstract class CommonSearcher<T> implements Searcher<T> {
 	
+	//------------------------------Data Members-------------------------//
+	
 	private int evaluatedNodes;
 	protected  Solution<T> solution;
 	protected HashSet<State<T>> close;

@@ -3,6 +3,8 @@ package algorithms.search;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import algorithms.maze3DGenerators.Position;
+
 /**
  * <h1>Solution</h1><p>
  * Solution Class calculate the solution for any searchable  domain-independent problems <br>
@@ -13,11 +15,11 @@ import java.util.ArrayList;
  */
 public class Solution<T> implements Serializable {
 	
+	//------------------------------Data Members-------------------------//
 	
 	private static final long serialVersionUID = -2104334895564894181L;
 	
 	private ArrayList<State<T>> solution;
-	
 	
 	//------------------------------Constructors-------------------------//
 
@@ -55,6 +57,15 @@ public class Solution<T> implements Serializable {
 		
 	}
 	
+	public ArrayList<Position> getArraySolution(){
+		ArrayList<Position> array = new ArrayList<Position>();
+		
+		for(int i=0;i<solution.size();i++){
+			array.add((Position) solution.get(i).getState());
+		}
+		return array;
+	}
+	
 	
 	@Override
 	public String toString(){
@@ -69,5 +80,7 @@ public class Solution<T> implements Serializable {
 		
 		return str.toString();
 	}
+	
+	
 	
 }

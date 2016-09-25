@@ -16,7 +16,8 @@ import java.util.Stack;
  */
 public class DepthFirstSearch<T> extends CommonSearcher<T> {
 
-
+	//------------------------------Data Members-------------------------//
+	
 	Stack<State<T>> white;
 
 

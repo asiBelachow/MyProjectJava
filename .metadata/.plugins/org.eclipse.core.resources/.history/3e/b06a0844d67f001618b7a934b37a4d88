@@ -1,0 +1,125 @@
+package view.widgets;
+
+
+import java.util.ArrayList;
+import java.util.Random;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.widgets.Composite;
+
+import algorithms.maze3DGenerators.Maze3D;
+import algorithms.maze3DGenerators.Position;
+
+public class Maze3DWidget extends CommonMazeWidget{
+	
+	Position position;
+	
+	private Font font;
+	private Color black,black2, green, red;
+	
+	private ArrayList<Color> floorColors;
+	
+	private double a, d;
+	private int w, h;
+	
+	private int[] A,B,C,D,E,F,G;
+
+	public Maze3DWidget(Composite parent, int style,Maze3D maze) {
+		super(parent, style,maze);
+		position = new Position();
+		
+		black = new Color(getDisplay(), 0, 0, 0);
+		black2 = new Color(getDisplay(), 64, 64, 64);
+		green = new Color(getDisplay(), 0, 255, 0);
+		red = new Color(getDisplay(), 255, 0, 0);
+		
+		floorColors = initDistinctFloorColors(maze.getzAxis());
+		
+		font = new Font(getDisplay(), "Arial",12,SWT.BOLD );
+		//cube coordinations (for better performance is constructed here)
+		A = new int[2];
+		B = new int[2];
+		C = new int[2];
+		D = new int[2];
+		E = new int[2];
+		F = new int[2];
+		G = new int[2];
+		
+		addPaintListener(new PaintListener() {
+			
+			@Override
+			public void paintControl(PaintEvent e) {
+				int width = getSize().x;
+				int height = getSize().y;
+				
+				e.gc.setAntialias(SWT.ON);
+				e.gc.setFont(font);
+
+				a = 0.2;
+				int straightW = width / getMaze().getxAxis();
+				w = (int) ((width - ((a * (getMaze().getyAxish() - 1)) * straightW)) / getMaze().getxAxis());
+
+				h = height / getMaze().getyAxis();
+
+				character.setWidth(w);
+				character.setHeight(h);
+
+				paintMaze(w, h, a, e);
+				
+			}
+		});
+		
+		
+	}
+
+	@Override
+	public boolean moveUp() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean moveDown() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean moveLeft() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean moveRight() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean moveFront() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean moveBack() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	private ArrayList<Color> initDistinctFloorColors(int numOfFloors) {
+		ArrayList<Color> colors = new ArrayList<Color>();
+
+		Random rnd = new Random();
+		for (int i = 0; i < numOfFloors; i++)
+			colors.add(new Color(getDisplay(), rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)));
+
+		return colors;
+	}
+
+}

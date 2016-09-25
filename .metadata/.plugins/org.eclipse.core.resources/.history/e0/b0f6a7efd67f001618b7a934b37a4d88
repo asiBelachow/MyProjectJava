@@ -1,0 +1,97 @@
+package view.widgets;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Composite;
+
+public abstract class GameCharacter extends Canvas {
+	
+	
+	protected int xAxis1, xAxis2, width, height;
+	protected int oldxAxis1, oldAxis2;
+
+
+
+
+	GameCharacter(Composite parent,int style) {
+		super(parent,SWT.DOUBLE_BUFFERED);
+
+		parent.addPaintListener(new PaintListener() {
+
+			@Override
+			public void paintControl(PaintEvent e) {
+				e.gc.setAntialias(SWT.ON);
+				e.gc.setInterpolation(SWT.PUSH);
+				
+				drawCharacter(e.gc, getxAxis1(), getxAxis2(), getWidth(), getHeight());
+			}
+		});
+	}
+	
+	
+	public int getxAxis1() {
+		return xAxis1;
+	}
+
+
+	public void setxAxis1(int xAxis1) {
+		this.xAxis1 = xAxis1;
+	}
+
+
+	public int getxAxis2() {
+		return xAxis2;
+	}
+
+
+	public void setxAxis2(int xAxis2) {
+		this.xAxis2 = xAxis2;
+	}
+
+
+	public int getWidth() {
+		return width;
+	}
+
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+
+	public int getHeight() {
+		return height;
+	}
+
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+
+	public int getOldxAxis1() {
+		return oldxAxis1;
+	}
+
+
+	public void setOldxAxis1(int oldxAxis1) {
+		this.oldxAxis1 = oldxAxis1;
+	}
+
+
+	public int getOldAxis2() {
+		return oldAxis2;
+	}
+
+
+	public void setOldAxis2(int oldAxis2) {
+		this.oldAxis2 = oldAxis2;
+	}
+	
+	
+	public abstract void drawCharacter(GC gc, int axis1, int axis2, int width, int height);
+
+}

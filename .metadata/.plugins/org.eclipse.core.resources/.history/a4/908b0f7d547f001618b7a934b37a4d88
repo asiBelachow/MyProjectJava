@@ -1,0 +1,9 @@
+package presenter;
+
+public class CommandManger {
+	
+	Model model;
+	View view;
+	
+
+}

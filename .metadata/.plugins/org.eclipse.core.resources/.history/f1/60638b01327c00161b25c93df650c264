@@ -1,0 +1,50 @@
+package view;
+
+import java.util.Observable;
+
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+
+/**
+ * The Class BasicWindow.
+ */
+public abstract class BasicWindow extends Observable implements Runnable{
+	
+	//------------------------------Data Members-------------------------//
+
+	protected Display display;
+	protected Shell shell;
+	
+	//------------------------------Constructors-------------------------//
+	
+	public BasicWindow(String title, int width, int height) {
+		
+		display = new Display();
+		shell = new Shell(display);
+		shell.setSize(width, height);
+		shell.setText(title);
+	}
+	
+	
+	/**
+	 * Inits the widgets.
+	 */
+	protected abstract void initWidgets();
+	
+	@Override
+	public void run() {
+		initWidgets();
+		shell.open();
+
+		while(!shell.isDisposed()){ 
+			if(!display.readAndDispatch()){ 	
+				display.sleep(); 			
+			}
+		} 
+
+		display.dispose();
+	}
+	
+	
+	
+}

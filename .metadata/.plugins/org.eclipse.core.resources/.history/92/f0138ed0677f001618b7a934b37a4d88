@@ -1,0 +1,99 @@
+package presenter;
+
+import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
+
+import commands.Command;
+import commands.CommandManger;
+
+import model.Model;
+import view.View;
+
+public abstract class AbstractPresenter implements Observer,Presenter {
+	
+	//------------------------------Data Members-------------------------//
+	
+	Model model;
+	View view;
+	CommandManger commandManger;
+	protected HashMap<String, Command> commands;
+	protected HashMap<String, String> regexCommands;
+
+	
+	//------------------------------Constructors-------------------------//
+	
+
+
+	public AbstractPresenter(Model model, View view) {
+		this.model = model;
+		this.view = view;
+		this.commandManger = new CommandManger(model, view);
+		initCommands();
+	}
+	
+	//-----------------------------setters and getters-------------------//
+	
+	/**
+	 * <h1>Set model</h1><p>
+	 * <i><ul>void setModel(Model m)<i><p>
+	 * Set the data member {@link Model} m
+	 * @param m - the  model
+	 */
+	public void setModel(Model model){
+		this.model = model;
+	}
+	
+	
+	/**
+	 * <h1>Set view</h1><p>
+	 * <i><ul>void setView(View v)<i><p>
+	 * Set the data member {@link View} v
+	 * @param v - the view 
+	 */
+	public void setView(View view){
+		this.view = view;
+		
+	}
+	
+	public HashMap<String, Command> getCommands() {
+		return commands;
+	}
+	
+	public void setCommands(HashMap<String, Command> commands) {
+		this.commands = commands;
+	}
+	
+	//-------------------------Functionality-------------------------//
+
+	
+	@Override
+	public void initCommands(){
+		setCommands(commandManger.getCommandMap());
+	}
+	
+	private void regex(){
+		regexCommands.put("dir", "dir [^\n]+");
+		regexCommands.put("generate_maze", "generate_maze [A-Za-z0-9]+ [0-9]{1,2} [0-9]{1,2} [0-9]{1,2}");
+		regexCommands.put("display", "display [A-Za-z0-9]+");
+		regexCommands.put("display_cross_section", "display_cross_section [0-9]{1,2} [A-Za-z0-9]+ [A-Za-z0-9]+");
+		regexCommands.put("save_maze", "save_maze [A-Za-z0-9]+ [^\n]+");
+		regexCommands.put("load_maz", "load_maze [^\n]+ [A-Za-z0-9]+");
+		regexCommands.put("solve", "solve [A-Za-z0-9]+ [A-Za-z0-9]+");
+		regexCommands.put("display_solution", "display_solution [A-Za-z0-9]+");
+		regexCommands.put("display_menu", "display_menu");
+		regexCommands.put("list_maze","list_maze");
+		regexCommands.put("menu", "menu");
+		regexCommands.put("maze_ready", "maze_ready");
+		regexCommands.put("solution_ready", "solution_ready");
+		regexCommands.put("dir_path", "dir_path");
+		regexCommands.put("exit", "exit");
+	}
+	
+	@Override
+	public abstract void update(Observable o, Object args);
+
+
+	
+
+}

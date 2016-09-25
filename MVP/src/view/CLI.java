@@ -15,6 +15,8 @@ import java.util.Observable;
  */
 public class CLI extends Observable implements Closeable {
 	
+	//------------------------------Data Members-------------------------//
+	
 	private static final String EXIT_COMMAND = "exit";
 	
 	BufferedReader in;
@@ -81,6 +83,7 @@ public class CLI extends Observable implements Closeable {
 						out.printf("\nPlease enter command: ");
 						out.flush();
 					}
+					setChanged();
 					notifyObservers(input);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -92,11 +95,7 @@ public class CLI extends Observable implements Closeable {
 		thread.start();
 			
 	}
-	
-	
-	
-	
-	
+		
 
 	@Override
 	public void close() throws IOException {
@@ -104,6 +103,7 @@ public class CLI extends Observable implements Closeable {
 			out.close();
 		if (in != null)
 			in.close();
+		System.out.println("CLI Closed!!!!!!");
 		
 	}
 	

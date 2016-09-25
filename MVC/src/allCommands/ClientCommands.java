@@ -19,6 +19,8 @@ import model.Model;
 
 public abstract class ClientCommands implements Command {
 	
+	//------------------------------Data Members-------------------------//
+	
 	Model m;
 	
 	

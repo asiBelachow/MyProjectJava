@@ -1,0 +1,14 @@
+package presenter;
+
+public class CommandManger {
+	
+	Model model;
+	View view;
+	
+	public CommandManger(Model model, View view) {
+		this.model = model
+		this.view =view;
+	}
+	
+
+}

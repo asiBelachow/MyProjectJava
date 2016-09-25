@@ -1,0 +1,21 @@
+package view.dialogLoader;
+
+public class Maze3DFormDetailes {
+	
+	private String name;
+	private Integer levels;
+	private Integer rows;
+	private Integer columns;
+
+	public Maze3DFormDetailes(String name, Integer levels, Integer rows, Integer columns) {
+		this.name = name;
+		this.levels = levels;
+		this.rows = rows;
+		this.column = column;
+	}
+
+	r
+
+
+
+}

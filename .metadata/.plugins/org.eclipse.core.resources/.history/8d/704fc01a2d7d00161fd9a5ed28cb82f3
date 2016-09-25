@@ -1,0 +1,75 @@
+package view;
+
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.util.Observable;
+import java.util.Observer;
+
+import algorithms.maze3DGenerators.Maze3D;
+import algorithms.maze3DGenerators.Position;
+import algorithms.search.Solution;
+
+public abstract class AbstractObservableView extends Observable implements View, Observer {
+
+	//------------------------------Data Members-------------------------//
+	
+	protected BufferedReader in;
+	
+
+	protected PrintWriter out;
+	
+	
+	//------------------------------Constructors-------------------------//
+	
+	public AbstractObservableView(BufferedReader in, PrintWriter out) {
+		this.in = in;
+		this.out = out;
+		
+		
+	
+	}
+	
+	//-----------------------------setters and getters-------------------//
+	
+	public BufferedReader getIn() {
+		return in;
+	}
+
+	public void setIn(BufferedReader in) {
+		this.in = in;
+	}
+
+	public PrintWriter getOut() {
+		return out;
+	}
+
+	public void setOut(PrintWriter out) {
+		this.out = out;
+	}
+	
+	//-------------------------Functionality-------------------------//
+	
+
+	
+	
+
+	@Override
+	public abstract void close();
+	
+	public abstract void getCrossSection(int[][] section);
+	
+	public abstract void showDirPath(String str);
+	
+	@Override
+	public abstract void displayMaze(Maze3D maze);
+	
+	@Override
+	public abstract void displaySolution(Solution<Position> solution);
+	
+	@Override
+	public abstract void generateMaze(Maze3D maze);
+	
+	
+	
+
+}
