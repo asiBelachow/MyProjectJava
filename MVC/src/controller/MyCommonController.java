@@ -24,7 +24,7 @@ import view.View;
 
 /**
  * <h1>class MyCommonController</h1><p>
- * This class defines the common functionality of in order to</br>
+ * This class defines the common functionality  in order to</br>
  *  connect between the {@link Model} and the {@link View} </p>
  *   <b>Data members :</br>
  *   <li>{@link View}</br>
