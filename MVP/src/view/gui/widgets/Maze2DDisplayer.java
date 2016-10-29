@@ -1,70 +1,88 @@
-package view.widgets;
+package view.gui.widgets;
 
 import java.util.ArrayList;
-
 import org.eclipse.swt.widgets.Composite;
+import position.position2d.*;
+import position.position3d.*;
 
-import algorithms.maze3DGenerators.Position;
+public class Maze2DDisplayer extends MazeDisplayer {
 
-public class Maze2DWidget extends MazeDisplayer {
-
-	public Maze2DWidget(Composite parent, int style) {
+	public Maze2DDisplayer(Composite parent, int style) {
 		super(parent, style);
 	
 	}
 
 	@Override
-	public boolean moveUp() {
+	public void moveUp() {
+		
+		
+	}
+
+	@Override
+	public void moveDown() {
+		
+		
+	}
+
+	@Override
+	public void moveLeft() {
+		
+		
+	}
+
+	@Override
+	public void moveRight() {
+	
+		
+	}
+
+	@Override
+	public void moveFront() {
+		
+	
+	}
+
+	@Override
+	public void moveBack() {
+		
+		
+	}
+
+
+	public void setCharacterPosition(Position2D p) {
+		// TODO Auto-generated method stub
+
+	}
+
+
+	public boolean moveCharacter(Position2D p) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
-	public boolean moveDown() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
-	@Override
-	public boolean moveLeft() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean moveRight() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean moveFront() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean moveBack() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void setCharacterPosition(Position p) {
+	public void showSoution1(ArrayList<Position2D> sol) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public boolean moveCharacter(Position p) {
+	public void setCharacterPosition(Position3D p) {
 		// TODO Auto-generated method stub
-		return false;
+		
 	}
 
 	@Override
-	public void showSoution(ArrayList<Position> sol) {
+	public void moveCharacter(Position3D p) {
 		// TODO Auto-generated method stub
-
+		
 	}
+
+	@Override
+	public void showSoution(ArrayList<Position3D> sol) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 
 }

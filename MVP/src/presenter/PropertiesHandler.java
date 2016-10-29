@@ -14,15 +14,14 @@ import java.io.FileOutputStream;
  * This class handles the properties XML file using</br> the Properties class as the
  * object holder
  * 
- * @author BarDavid
+ * @author Asi Belachow
  *
  */
 public class PropertiesHandler {
 	
 	private static Properties properties;
 	
-	
-	
+
 	private PropertiesHandler(){
 
 	}
@@ -31,7 +30,7 @@ public class PropertiesHandler {
 	public static Properties getInstance() throws FileNotFoundException{
 		
 		if( properties == null)
-			properties = readProperties("data/properties/properties.xml");
+			properties = readProperties("resources/properties/properties.xml");
 		return properties;
 	}
 	

@@ -12,44 +12,17 @@ import model.MyModel;
 import presenter.MyPresenter;
 import presenter.Properties;
 import presenter.PropertiesHandler;
-import view.AbstractObservableView;
-import view.CLI;
-import view.GameWindow;
-import view.ObservableCLIView;
+import view.cli.CLI;
+import view.cli.ObservableCLIView;
+import view.gui.GameWindow;
 
 
-public class Run2 {
+
+public class Run {
 
 	public static void main(String[] args) {
 		initStart();
-/*
-		Properties prop;
-		try{
-			prop = PropertiesHandler.getInstance();
-		}catch (FileNotFoundException e) {
-			prop = new Properties();
-		}
-		
-		CLI client = new CLI(new BufferedReader(new InputStreamReader(System.in)),new PrintWriter(System.out,true));
-		MyModel model = new MyModel();
-		
-		AbstractObservableView view;
-		
-		if( prop.getGui())
-			view = new GameWindow(prop);
-		else
-			view = new ObservableCLIView();
-		
-		MyPresenter p = new MyPresenter(model, view);
-		view.setCli(client);
-		client.addObserver(view);
-		view.addObserver(p);
-		model.addObserver(p);
-		view.run();*/
-		 
-		 
-		 
-	
+
 	}
 	
 	private static void initStart(){
@@ -57,12 +30,11 @@ public class Run2 {
 		Shell shell = new Shell(display);
 		Properties prop=null;
 		MyModel model = new MyModel();;
-		AbstractObservableView view = null;
 		CLI client = new CLI(new BufferedReader(new InputStreamReader(System.in)),new PrintWriter(System.out,true));;
 		MyPresenter presenter = null;
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO  );
 		messageBox.setText("GUI/CLI");
-		messageBox.setMessage("Start The game with GUI/CLI?\nFor GUI press Yes\nFor CLI press No ");
+		messageBox.setMessage("Start The program with GUI/CLI?\nFor GUI press Yes.\nFor CLI press No.");
 		int buttonID = messageBox.open();
 		switch (buttonID) {
 		case SWT.YES:
@@ -73,25 +45,22 @@ public class Run2 {
 			}catch (FileNotFoundException e) {
 				prop = new Properties();
 			}
-			view =  new GameWindow(prop);
-			presenter = new MyPresenter(model, view);
-			view.setCli(client);
-			client.addObserver(view);
-			view.addObserver(presenter);
+			GameWindow guiView =  new GameWindow(prop);
+			presenter = new MyPresenter(model, guiView);
+			guiView.addObserver(presenter);
 			model.addObserver(presenter);
-			view.run();
+			guiView.run();
+			
 			break;
 		case SWT.NO:
-			System.out.println("hjkhjk");
 			shell.dispose();
 			display.dispose();
-			view =  new ObservableCLIView();
-			presenter = new MyPresenter(model, view);
-			view.setCli(client);
-			client.addObserver(view);
-			view.addObserver(presenter);
+			ObservableCLIView cliView=  new ObservableCLIView(client);
+			presenter = new MyPresenter(model, cliView);
+			client.addObserver(cliView);
+			cliView.addObserver(presenter);
 			model.addObserver(presenter);
-			view.run();
+			cliView.run();
 			break;
 			/*	default:
 				shell.dispose();

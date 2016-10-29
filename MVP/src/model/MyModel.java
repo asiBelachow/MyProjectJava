@@ -7,27 +7,49 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-import algorithms.demo.SearchableMaze3D;
 import algorithms.maze3DGenerators.GrowingTreeGenerator;
 import algorithms.maze3DGenerators.GrowingTreeRandom;
-import algorithms.maze3DGenerators.Maze3D;
-import algorithms.maze3DGenerators.Position;
+import algorithms.search.adapters.*;
+import maze.maze3d.*;
+import position.position3d.*;
+import commands.CommandManger;
+import presenter.MyPresenter;
+import algorithms.search.AStar;
+import algorithms.search.AirDistance;
 import algorithms.search.BestFirstSearch;
 import algorithms.search.DepthFirstSearch;
+import algorithms.search.ManhattanDistance;
 import algorithms.search.Solution;
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
 
 
+
+/**
+ * <h1>class MyModel</h1><p>
+ * This class execute the commands that initialized in {@link CommandManger}  </br>
+ * and notify the {@link MyPresenter} about the execution </p>
+ * @author Asi Belachow
+ * @version 1.0
+ * @since 2016-20-09
+ */
 public class MyModel extends AbstractModel {
 	
-
+	
+	public MyModel()  {
+		loadMazes();
+		loadSolution();
+	}
+	
 
 	//-------------------------Functionality-------------------------//
 	
@@ -70,12 +92,33 @@ public class MyModel extends AbstractModel {
 
 			@Override
 			public Maze3D call() throws Exception {
-				Maze3D maze = (new GrowingTreeGenerator(new GrowingTreeRandom())).generate(z, x, y);
-				mapMaze3D.put(mazeName, maze);
-				saveMazes();
-				setChanged();
-				notifyObservers("maze_ready "+mazeName);
-				return maze;
+				//Check if the maze already exists in the map .. if not
+				if(!mapMaze3D.containsKey(mazeName)){
+					//generate the maze
+					Maze3D maze = (new GrowingTreeGenerator(new GrowingTreeRandom())).generate(z, x, y);
+					//Save the maze to the map
+					mapMaze3D.put(mazeName, maze);
+					System.out.println("saved");
+					saveMazes();
+					setChanged();
+					notifyObservers("maze_ready "+mazeName);
+					return maze;
+				}
+				else {
+					Maze3D maze = mapMaze3D.get(mazeName);
+					if(((maze.getzAxis()-1)/2==z) &&( (maze.getxAxis()-1)/2==x) && ((maze.getyAxis()-1)/2==y)){
+						setChanged();
+						notifyObservers("message A maze with the name: \""+ mazeName+ "\" already exists please choose another name");
+						return null;
+						
+					}else{
+						setChanged();
+						notifyObservers("maze_ready "+mazeName);
+						return maze;
+					}
+				}
+				
+				
 			}
 		});		
 	}
@@ -115,13 +158,13 @@ public class MyModel extends AbstractModel {
 			//Trying to write the to a file, an Exception will Thrown out if is error while
 			//trying to open the file
 			try{
-				System.out.println("data/saved_generated_maze/"+path+".maz");
 				OutputStream out = new MyCompressorOutputStream(new FileOutputStream(path));
 				out.write(mapMaze3D.get(mazeName).toByteArray());
 				out.flush();
 				out.close();
 			}catch (Exception e) {
-				return "Error while trying to save the maze, please try again";
+				
+				return "message Error while trying to save the maze, please try again";
 			}
 			return "The maze: \""+ mazeName+ "\" successfully saved";
 			
@@ -136,7 +179,6 @@ public class MyModel extends AbstractModel {
 		//Trying to open a file, IF the file not found FileNotFoundException will Thrown out
 		try {
 			File f = new File(file);
-			System.out.println("ddasfsdfsdf"+file);
 			@SuppressWarnings("resource")
 			InputStream in=new MyDecompressorInputStream( new FileInputStream(f));
 			byte b[] = new byte[(int) f.length()];
@@ -144,7 +186,7 @@ public class MyModel extends AbstractModel {
 			maze = new Maze3D(b);//Load the maze
 			mapMaze3D.put(mazeName, maze);//Saving the maze to the database
 		} catch (FileNotFoundException e) {
-			//flag=true;
+			System.out.println("file not found ");
 			return null;
 		}
 		
@@ -155,22 +197,31 @@ public class MyModel extends AbstractModel {
 	@Override
 	public void solveMaze(String mazeName, String alg) {
 		
-		pool.submit(new Callable<Solution<Position>>() {
+		pool.submit(new Callable<Solution<Position3D>>() {
 
 			@Override
-			public Solution<Position> call() throws Exception {
+			public Solution<Position3D> call() throws Exception {
 				boolean flag=false;
-				Solution<Position> solution = null;
+				Solution<Position3D> solution = null;
 				
-				
+				//Check if the solution already exits
 				if(!mapSolution.contains(mazeName)){
+					//Solve the maze
 					Maze3D maze = mapMaze3D.get(mazeName);
-					if(alg.equals("bfs") || alg.equals("BFS")){
-						solution = new BestFirstSearch<Position>().search(new SearchableMaze3D<>(maze));
+					if(alg.matches("[Bb][Ff][Ss]")){
+						solution = new BestFirstSearch<Position3D>().search(new SearchableMaze3D<>(maze));
 						flag =true;
 					}
-					else if(alg.equals("dfs") || alg.equals("DFS")){
-						solution = new DepthFirstSearch<Position>().search(new SearchableMaze3D<>(maze));
+					else if(alg.matches("[Dd][Ff][Ss]")){
+						solution = new DepthFirstSearch<Position3D>().search(new SearchableMaze3D<>(maze));
+						flag =true;
+					}
+					else if(alg.matches("[Aa][Ss][Tt][Aa][Rr][Mm][Dd]")){
+						solution = new AStar<Position3D>(new ManhattanDistance()).search(new SearchableMaze3D<>(maze));
+						flag =true;
+					}
+					else if(alg.matches("[Aa][Ss][Tt][Aa][Rr][Aa][Dd]")){
+						solution = new AStar<Position3D>(new AirDistance()).search(new SearchableMaze3D<>(maze));
 						flag =true;
 					}
 
@@ -182,14 +233,12 @@ public class MyModel extends AbstractModel {
 					notifyObservers("solution_ready "+ mazeName);
 					return solution;
 				}
-			
+				//if the solution already exits return it
 				setChanged();
 				notifyObservers("solution_ready "+ mazeName);
 				return mapSolution.get(mazeName);
 			}
-			
 		});
-
 	}
 
 
@@ -201,16 +250,11 @@ public class MyModel extends AbstractModel {
 	
 	
 	@Override
-	public Solution<Position> displaySolution(String mazeName) {
-		/*//Check if the maze in database, if exists get the solution
-		if(mapSolution.containsKey(mazeName))
-			setCommandAndNotify("display solution", mapSolution.get(mazeName));
-		//If not exits, return message to hte CLI
-		else
-			setCommandAndNotify("message", "The maze: \""+ mazeName+"\" not found");*/
-		System.out.println("return nsolution");
-		return mapSolution.get(mazeName);
-	
+	public Solution<Position3D> displaySolution(String mazeName) {
+		Solution<Position3D> s = mapSolution.get(mazeName);
+		if(s !=null)
+			return s;
+		return null;
 	}
 	
 	@Override
@@ -243,7 +287,7 @@ public class MyModel extends AbstractModel {
 		sb.append("5) To display a Maze3d enter: display <name>\n");
 		sb.append("6) To save a Maze3D enter: save_maze <name> <file name>\n");
 		sb.append("7) To load saved Maze3D enter: load_maze <file name> <name>\n");
-		sb.append("8) To solve a Maze3D enter: solve <name> <algorithm(BFS,DFS)>\n");
+		sb.append("8) To solve a Maze3D enter: solve <name> <algorithm(BFS,DFS,AStarMD,AstartAD)>\n");
 		sb.append("9) To display the solution path of the maze enter: display_solution <name>\n");
 		sb.append("10) To display the menu enter: menu\n");
 		sb.append("11) To exit enter: exit\n");
@@ -269,7 +313,7 @@ public class MyModel extends AbstractModel {
 		ObjectOutputStream oos = null;
 		
 		try {
-			oos= new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream("data/database/mapMazes.dat")));
+			oos= new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream("resources/database/mapMazes" + ".zip")));
 			oos.writeObject(mapMaze3D);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -287,11 +331,13 @@ public class MyModel extends AbstractModel {
 		}
 
 	}
+	
+	
 	public void saveSolution(){
 		ObjectOutputStream oos = null;
 		
 		try {
-			oos= new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream("data/database/mapSolutions.dat")));
+			oos= new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream("resources/database/mapSolutions" + ".zip")));
 			oos.writeObject(mapSolution);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -307,8 +353,53 @@ public class MyModel extends AbstractModel {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public void loadSolution() {
+		try {
+			File solution = new File("resources/database/mapSolutions" + ".zip");
+
+			if (solution.exists()) {
+				ObjectInputStream in = new ObjectInputStream(new GZIPInputStream(new FileInputStream(solution))); ;
+				Object o = in.readObject();
+
+				if (o instanceof ConcurrentHashMap<?, ?>) {
+					mapSolution= (ConcurrentHashMap<String,Solution<Position3D>>) o;
+				}
+					in.close();
+			}
+			
+			} catch (IOException | ClassNotFoundException e) {
+					e.printStackTrace();
+			}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void loadMazes() {
+		
+		try {
+			File maze = new File("resources/database/mapMazes" + ".zip");
+			if (maze.exists()) {
+				ObjectInputStream in = new ObjectInputStream(new GZIPInputStream(new FileInputStream(maze)));
+				Object o = in.readObject();
+
+				if (o instanceof ConcurrentHashMap<?, ?>) {
+					mapMaze3D =  (ConcurrentHashMap<String, Maze3D>) o;
+				}
+
+
+				in.close();
+			}
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+
 
 	}
 
+	
 
 }

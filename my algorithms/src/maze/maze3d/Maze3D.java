@@ -1,4 +1,4 @@
-package algorithms.maze3DGenerators;
+package maze.maze3d;
 
 
 import java.io.ByteArrayInputStream;
@@ -6,9 +6,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
+
+import position.position3d.Position3D;
 
 
 
@@ -24,18 +25,16 @@ import java.util.Random;
  * @version 1.0
  * @since 2016-30-07
  */
-public class Maze3D implements Serializable {
+public class Maze3D extends AbstractMaze3D  {
 	
 	//------------------------------Data Members-------------------------//
 	
-	private static final long serialVersionUID = 4206592954611528780L;
 
-	/* The Constant WALL - define a wall in the maze*/
-	public static final int WALL = 1;
-	
-	/* The Constant PASS - define a pass in the maze */
-	public static final int PASS = 0;
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2449909436689543232L;
+
 	/*The Constant CASING - define the casing of the maze*/
 	public static final int CASING = 2;
 	
@@ -52,12 +51,16 @@ public class Maze3D implements Serializable {
 	private int [][][] array;
 	
 	/*The maze entrance {@link Position} */
-	private Position start;
+	private Position3D start;
 	
 	/*The maze exit. {@link Position} */
-	private Position end;
+	private Position3D end;
 	
+	private String mazeName = null;
+
 	
+
+
 	Random r;
 	
 	
@@ -89,6 +92,27 @@ public class Maze3D implements Serializable {
 		array = new int[getzAxis()][getxAxis()][getyAxis()];
 		start = null;
 		end = null;
+		mazeName = null;
+	}
+	
+	/**
+	 * <h1>Maze3D</h1><p>
+	 * <i><ul>Maze3D(int z , int x , int y)<i><p>
+	 * Initialize a new 3D maze.
+	 *
+	 * @param mazeName -  the name of the maze 
+	 * @param z - the zAxis damnation
+	 * @param x - the xAxis damnation
+	 * @param y - the yAxis damnation
+	 */
+	public Maze3D(String mazeName ,int z , int x , int y) {
+		setzAxis(z*2+1);
+		setxAxis(x*2+1);
+		setyAxis(y*2+1);
+		array = new int[getzAxis()][getxAxis()][getyAxis()];
+		start = null;
+		end = null;
+		this.mazeName = mazeName;
 	}
 	
 	/**
@@ -100,11 +124,37 @@ public class Maze3D implements Serializable {
 		setzAxis(maze.getzAxis());
 		setxAxis(maze.getxAxis());
 		setyAxis(maze.getyAxis());
-		setStart(maze.getStart());
-		setEnd(maze.getEnd());
+		setStart(new Position3D(maze.getStart()));
+		setEnd(new Position3D(maze.getEnd()));
+		array = new int[getzAxis()][getxAxis()][getyAxis()];
 		setArray(maze.getArray());
+		setMazeName(maze.getMazeName());
 	
 	}
+	
+	
+	/**
+	 * <h1>Maze3D</h1><p>
+	 * <i><ul>Maze3D(int zAxis, int xAxis, int yAxis , Position3D start,Position3D end )<i><p>
+	 * Initialize a new 3D maze.
+	 * @param zAxis the z axis
+	 * @param xAxis the x axis
+	 * @param yAxis the y axis
+	 * @param start - the start position
+	 * @param end - the end position
+	 */
+	public Maze3D(int zAxis, int xAxis, int yAxis , Position3D start,Position3D end ){
+		setzAxis(zAxis*2+1);
+		setxAxis(xAxis*2+1);
+		setyAxis(yAxis*2+1);
+		setStart(new Position3D(start));
+		setEnd(new Position3D(end));
+		array = new int[getzAxis()][getxAxis()][getyAxis()];
+	
+	}
+	
+
+	
 	
 	/**
 	 *<h1>Maze3D</h1><p>
@@ -115,11 +165,16 @@ public class Maze3D implements Serializable {
 		
 		ByteArrayInputStream bIn= new ByteArrayInputStream(array);
 		DataInputStream data = new DataInputStream(bIn);
+		int length = data.readInt();
+		byte[] b = new byte[length];
+		data.read(b, 0,length);
+		String s = new String(b);
+		this.setMazeName(s);
 		this.setzAxis(data.readInt());
 		this.setxAxis(data.readInt());
 		this.setyAxis(data.readInt());
-		this.setStart(new Position(data.readInt(), data.readInt(), data.readInt()));
-		this.setEnd(new Position(data.readInt(), data.readInt(), data.readInt()));
+		this.setStart(new Position3D(data.readInt(), data.readInt(), data.readInt()));
+		this.setEnd(new Position3D(data.readInt(), data.readInt(), data.readInt()));
 		this.array = new int[getzAxis()][getxAxis()][getyAxis()];
 		
 		for (int i=0;i<getzAxis();i++)
@@ -170,20 +225,29 @@ public class Maze3D implements Serializable {
 					this.array[i][j][k]=array[i][j][k];
 	}
 
-	public Position getStart() {
+	public Position3D getStart() {
 		return start;
 	}
 
-	public void setStart(Position start) {
+	public void setStart(Position3D start) {
 		this.start = start;
 	}
 	
-	public Position getEnd() {
+
+	public Position3D getEnd() {
 		return end;
 	}
 
-	public void setEnd(Position end) {
+	public void setEnd(Position3D end) {
 		this.end = end;
+	}
+	
+	public String getMazeName() {
+		return mazeName;
+	}
+
+	public void setMazeName(String mazeName) {
+		this.mazeName = mazeName;
 	}
 	
 	
@@ -192,11 +256,11 @@ public class Maze3D implements Serializable {
 	
 	
 	/**
-	 *<h1>To Byte Array</h1><p>
+	 *<h1>toByteArray</h1><p>
 	 * <i><ul>byte[] toByteArray()<i><p>
 	 *
 	 *This method convert the Maze3D to a ByteArray
-	 *@see algorithms.maze3DGenerators.Maze3D @link #Maze3D(Maze3D)
+	 *@see maze.maze3d.Maze3D @link #Maze3D(Maze3D)
 	 * @return ByteArray - the converted Maze3D
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
@@ -205,6 +269,9 @@ public class Maze3D implements Serializable {
 		ByteArrayOutputStream array = new ByteArrayOutputStream();
 		DataOutputStream data = new DataOutputStream(array);
 		
+		data.writeInt(getMazeName().length());
+		byte[] b = getMazeName().getBytes();
+		data.write(b);
 		data.writeInt(getzAxis());
 		data.writeInt(getxAxis());
 		data.writeInt(getyAxis());
@@ -229,8 +296,8 @@ public class Maze3D implements Serializable {
 	
 	
 	/**
-	 *<h1>Get value by index</h1><p>
-	 * <i> <ul>getValueByIndex(int z, int x, int y)<i><p>
+	 *<h1>getValueByIndex</h1><p>
+	 * <i> <ul>int getValueByIndex(int z, int x, int y)<i><p>
 	 * Gets the value by given index.
 	 * @param z - the zAxis damnation
 	 * @param x - the xAxis damnation
@@ -238,6 +305,7 @@ public class Maze3D implements Serializable {
 	 * @return the value by index
 	 * @throws IndexOutOfBoundsException the index out of bounds exception
 	 */
+	@Override
 	public int getValueByIndex(int z, int x, int y) throws IndexOutOfBoundsException{
 		if (checkPositionBounds(z, x, y))
 			return array[z][x][y];
@@ -247,15 +315,16 @@ public class Maze3D implements Serializable {
 	
 	
 	/**
-	 * <h1>Get value by position</h1><p>
-	 * <i> <ul>getValueByIndex(Position p)<i><p>
+	 * <h1>getValueByIndex</h1><p>
+	 * <i> <ul>int getValueByIndex(Position3D p)<i><p>
 	 * Gets the value by given position.
 	 *
 	 * @param position p
 	 * @return the value by index
 	 * @throws IndexOutOfBoundsException the index out of bounds exception
 	 */
-	public int getValueByIndex(Position p) throws IndexOutOfBoundsException{
+	@Override
+	public int getValueByIndex(Position3D p) throws IndexOutOfBoundsException{
 		if (checkPositionBounds(p))
 			return array[p.getZ()][p.getX()][p.getY()];
 		else
@@ -265,8 +334,8 @@ public class Maze3D implements Serializable {
 	
 	
 	/**
-	 * <h1>Set wall</h1><p>
-	 * <i> <ul>setWall(int z, int x ,int y)<i><p>
+	 * <h1>setWall</h1><p>
+	 * <i> <ul>void setWall(int z, int x ,int y)<i><p>
 	 * Set a wall in the maze in given index
 	 * @param z - the zAxis damnation
 	 * @param x - the xAxis damnation
@@ -277,14 +346,14 @@ public class Maze3D implements Serializable {
 		if(checkPositionBounds(z, x, y))
 			array[z][x][y] = WALL;
 		else
-			throw new IndexOutOfBoundsException(" Position out of bound "+new Position(z, x, y));
+			throw new IndexOutOfBoundsException(" Position out of bound "+new Position3D(z, x, y));
 			
 	}
 	
 	
 	/**
-	 * <h1>Set pass</h1><p>
-	 * <i> <ul>setPass(int z, int x ,int y)<i><p>
+	 * <h1> setPass</h1><p>
+	 * <i> <ul>void setPass(int z, int x ,int y)<i><p>
 	 * Set a passage in the maze in given index
 	 * @param z - the zAxis damnation
 	 * @param x - the xAxis damnation
@@ -295,12 +364,16 @@ public class Maze3D implements Serializable {
 		if(checkPositionBounds(z, x, y))
 			array[z][x][y] = PASS;
 		else
-			throw new IndexOutOfBoundsException(" Position out of bound "+new Position(z, x, y));
+			throw new IndexOutOfBoundsException(" Position out of bound "+new Position3D(z, x, y));
 	}
 	
 	@Override
 	public boolean equals(Object other) {
 		Maze3D m = (Maze3D) other;
+		
+		if( !getMazeName().equals(m.getMazeName()))
+			return false;
+		
 		if (getzAxis() == m.getzAxis() && getxAxis() == m.getxAxis()
 				&& getyAxis() == m.getyAxis()) {
 			if (start.equals(m.getStart())
@@ -326,13 +399,13 @@ public class Maze3D implements Serializable {
 
 
 	/**
-	 * <h1>Set pass</h1><p>
-	 * <i> <ul>setPass(Position p)<i><p>
+	 * <h1>setPass</h1><p>
+	 * <i> <ul>void setPass(Position3D p)<i><p>
 	 * Set a passage in the maze in given position
 	 * @param Positon  - the index
 	 * @throws IndexOutOfBoundsException the index out of bounds exception
 	 */
-	public void setPass(Position p)throws IndexOutOfBoundsException{
+	public void setPass(Position3D p)throws IndexOutOfBoundsException{
 		if(checkPositionBounds(p))
 			array[p.getZ()][p.getX()][p.getY()] = PASS;
 		else
@@ -342,8 +415,8 @@ public class Maze3D implements Serializable {
 	
 	
 	/**
-	 * <h1>Set casing</h1><p>
-	 * <i><ul>setCasing(int z, int x ,int y)<i><p>
+	 * <h1>setCasing</h1><p>
+	 * <i><ul>void setCasing(int z, int x ,int y)<i><p>
 	 * Set a casing in the maze in given index
 	 * @param z - the zAxis damnation
 	 * @param x - the xAxis damnation
@@ -354,7 +427,7 @@ public class Maze3D implements Serializable {
 		if(checkPositionBounds(z, x, y))
 			array[z][x][y] = CASING;
 		else
-			throw new IndexOutOfBoundsException(" Position out of bound "+new Position(z,x,y));
+			throw new IndexOutOfBoundsException(" Position out of bound "+new Position3D(z,x,y));
 			
 	}
 	
@@ -362,6 +435,9 @@ public class Maze3D implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder  printMaze= new StringBuilder ();
+		printMaze.append("Maze name: "+getMazeName()+"\n");
+		printMaze.append("Maze entrace: "+ getStart()+"\n");
+		printMaze.append("Maze exit: "+getEnd()+"\n");
 		
 		for(int z=0; z < zAxis; z++){
 			for(int x=0; x < xAxis; x++){
@@ -379,10 +455,9 @@ public class Maze3D implements Serializable {
 	
 	
 	/**
-	 * <h1>Set value by index</h1><p>
-	 * <i><ul>setCasing(int z, int x ,int y)<i><p>
+	 * <h1>setValueByIndex</h1><p>
+	 * <i><ul>void setValueByIndex(int z,int x,int y, int value)<i><p>
 	 * Sets the value by index.
-	 *
 	 * @param z - the zAxis damnation
 	 * @param x - the xAxis damnation
 	 * @param y - the yAxis damnation
@@ -393,19 +468,19 @@ public class Maze3D implements Serializable {
 		if(checkPositionBounds(z, x, y))
 			array[z][x][y] = value;
 		else 
-			throw new IndexOutOfBoundsException(" Position out of bound "+new Position(z,x,y));
+			throw new IndexOutOfBoundsException(" Position out of bound "+new Position3D(z,x,y));
 	}
 	
 	
 	/**
-	 * <h1>Set value by position</h1><p>
-	 * <i><ul>setValueByIndex(Position p,int  value)<i><p>
+	 * <h1>setValueByIndex</h1><p>
+	 * <i><ul>void setValueByIndex(Position3D p,int  value)<i><p>
 	 * Sets the value by index.
-	 * @param Position
+	 * @param Position3D
 	 * @param int value 
 	 * @throws IndexOutOfBoundsException the index out of bounds exception
 	 */
-	public void setValueByIndex(Position p,int  value)throws IndexOutOfBoundsException{
+	public void setValueByIndex(Position3D p,int  value)throws IndexOutOfBoundsException{
 		if(checkPositionBounds(p)) 
 			array[p.getZ()][p.getX()][p.getY()] = value;
 		else 
@@ -415,16 +490,16 @@ public class Maze3D implements Serializable {
 	
 	
 	/**
-	 * <h1>Get all possible moves</h1><p>
-	 * <i><ul>getPossibleMoves(Position pos)<i><p>
-	 * Gets the possible moves of given position
+	 * <h1>getPossibleMovesAsString</h1><p>
+	 * <i><ul>String [] getPossibleMovesAsString(Position3D p)<i><p>
+	 * Gets the possible moves of given position as a string
 	 *
-	 * @param Position pos
+	 * @param Position3D pos
 	 * @return String[] all moves
 	 */
-	public String [] getPossibleMovesAsString(Position p){
+	public String [] getPossibleMovesAsString(Position3D p){
 		
-		ArrayList<Position> pMoves = getPossibleMoves(p);
+		ArrayList<Position3D> pMoves = getPossibleMoves(p);
 		String[] possibleMovesArray = new String[pMoves.size()];
 		// copy from list to array
 		for (int i = 0; i < possibleMovesArray.length; i++) {
@@ -436,46 +511,46 @@ public class Maze3D implements Serializable {
 	
 	
 	/**
-	 * <h1>Get all possible moves</h1><p>
-	 * <i><ul>ArrayList<Position> getPossibleMoves(Position pos)<i><p>
+	 * <h1>getPossibleMoves</h1><p>
+	 * <i><ul>ArrayList<Position3D> getPossibleMoves(Position3D pos)<i><p>
 	 * Get all optional moves of given position by
-	 * using {@link Position#MergePos(Position, Position)} method
-	 * @param Position - pos 
+	 * using {@link Position3D#MergePos(Position3D, Position3D)} method
+	 * @param Position3D - pos 
 	 * @return ArrayList<Position> - list of all optional moves
 	 */
-	public ArrayList<Position> getPossibleMoves(Position pos){
-		ArrayList<Position> pMoves = new ArrayList<Position>();		
-		Position temp = Position.MergePos(pos, Position.UP);
+	public ArrayList<Position3D> getPossibleMoves(Position3D pos){
+		ArrayList<Position3D> pMoves = new ArrayList<Position3D>();		
+		Position3D temp = Position3D.MergePos(pos, Position3D.UP);
 		if(checkPositionBoundsNoException(temp)){
 			if( getValueByIndex(temp.getZ()-1, temp.getX(), temp.getY())==0 && getValueByIndex(temp)==0){
 				pMoves.add(temp);
 			}
 		}
-		temp = Position.MergePos(pos, Position.DOWN);
+		temp = Position3D.MergePos(pos, Position3D.DOWN);
 		if(checkPositionBoundsNoException(temp)){
 			if( getValueByIndex(temp.getZ()+1, temp.getX(), temp.getY())==0 && getValueByIndex(temp)==0){
 				pMoves.add(temp);
 			}
 		}
-		temp = Position.MergePos(pos, Position.RIGHT);
+		temp = Position3D.MergePos(pos, Position3D.RIGHT);
 		if(checkPositionBoundsNoException(temp)){
 			if( getValueByIndex(temp.getZ(), temp.getX(), temp.getY()-1)==0 && getValueByIndex(temp)==0){
 				pMoves.add(temp);
 			}
 		}
-		temp = Position.MergePos(pos, Position.LEFT);
+		temp = Position3D.MergePos(pos, Position3D.LEFT);
 		if(checkPositionBoundsNoException(temp)){
 			if( getValueByIndex(temp.getZ(), temp.getX(), temp.getY()+1)==0 && getValueByIndex(temp)==0){
 				pMoves.add(temp);
 			}
 		}
-		temp = Position.MergePos(pos, Position.BACKWARD);
+		temp = Position3D.MergePos(pos, Position3D.BACKWARD);
 		if(checkPositionBoundsNoException(temp)){
 			if( getValueByIndex(temp.getZ(), temp.getX()-1, temp.getY())==0 && getValueByIndex(temp)==0){
 				pMoves.add(temp);
 			}
 		}
-		temp = Position.MergePos(pos, Position.FORWARD);
+		temp = Position3D.MergePos(pos, Position3D.FORWARD);
 		if(checkPositionBoundsNoException(temp)){
 			if( getValueByIndex(temp.getZ(), temp.getX()+1, temp.getY())==0 && getValueByIndex(temp)==0){
 				pMoves.add(temp);
@@ -489,31 +564,31 @@ public class Maze3D implements Serializable {
 	
 	
 	/**
-	 * <h1>Get all moves</h1><p>
-	 * <i><ul>ArrayList<Position> getAllMoves(Position pos)<i><p>
+	 * <h1>getAllMoves</h1><p>
+	 * <i><ul>ArrayList<Position3D> getAllMoves(Position3D pos)<i><p>
 	 *	Calculate all the moves of given position
-	 *	using {@link Position#MergePos(Position, Position)} method
+	 *	using {@link Position3D#MergePos(Position3D, Position3D)} method
 	 * @param pos the pos
 	 * @return ArrayList - All moves
 	 */
-	public ArrayList<Position> getAllMoves(Position pos){
-		ArrayList<Position> aMoves = new ArrayList<Position>();
+	public ArrayList<Position3D> getAllMoves(Position3D pos){
+		ArrayList<Position3D> aMoves = new ArrayList<Position3D>();
 		
-		aMoves.add(Position.MergePos(pos, Position.UP));
-		aMoves.add(Position.MergePos(pos, Position.DOWN));
-		aMoves.add(Position.MergePos(pos, Position.RIGHT));
-		aMoves.add(Position.MergePos(pos, Position.LEFT));
-		aMoves.add(Position.MergePos(pos, Position.BACKWARD));
-		aMoves.add(Position.MergePos(pos, Position.FORWARD));
+		aMoves.add(Position3D.MergePos(pos, Position3D.UP));
+		aMoves.add(Position3D.MergePos(pos, Position3D.DOWN));
+		aMoves.add(Position3D.MergePos(pos, Position3D.RIGHT));
+		aMoves.add(Position3D.MergePos(pos, Position3D.LEFT));
+		aMoves.add(Position3D.MergePos(pos, Position3D.BACKWARD));
+		aMoves.add(Position3D.MergePos(pos, Position3D.FORWARD));
 		return aMoves;
 		
 	}
 
 
 	/**
-	 * <h1>Check position bounds</h1><p>
-	 * <i><ul>checkPositionBounds(int z, int x, int y)<i><p>
-	 * Check if the given index valid
+	 * <h1>checkPositionBounds</h1><p>
+	 * <i><ul>boolean checkPositionBounds(int z, int x, int y)<i><p>
+	 * Check if the given index is valid
 	 *
 	 * @param z - the zAxis damnation
 	 * @param x - the xAxis damnation
@@ -525,18 +600,25 @@ public class Maze3D implements Serializable {
 	}
 	
 	/**
-	 * <h1>Check position bounds</h1><p>
-	 * <i><ul>checkPositionBounds(Position p)<i><p>
+	 * <h1>checkPositionBounds</h1><p>
+	 * <i><ul>boolean checkPositionBounds(Position3D p)<i><p>
 	 * Check if the given фнгпапно valid
 	 *
-	 * @param Position p
+	 * @param p - the position
 	 * @return true, if valid, else  false
 	 */
-	public boolean checkPositionBounds(Position p) {
+	public boolean checkPositionBounds(Position3D p) {
 		return checkPositionBounds(p.getZ(), p.getX(), p.getY());
 	}
 	
-	public boolean checkPositionBoundsNoException(Position p) {
+	/**
+	 * <h1>checkPositionBoundsNoException</h1><p>
+	 * <i><ul>boolean checkPositionBoundsNoException(Position3D p)<i><p>
+	 * Check if the given position valid without throwing exception
+	 * @param  p - the position
+	 * @return true, if valid, else  false
+	 */
+	public boolean checkPositionBoundsNoException(Position3D p) {
 		return ((p.getZ()>=0 && p.getZ()<getzAxis())&&(p.getX() >= 0 &&p.getX()<getxAxis())&&(p.getY()>=0&&p.getY()<getyAxis()));
 
 	}
@@ -544,11 +626,10 @@ public class Maze3D implements Serializable {
 	
 	
 	/**
-	 * <h1>Gets the cross section by Y.</h1><p>
-	 * <i><ul>getCrossSectionByY(int y)<i><p>
-	 *
+	 * <h1>getCrossSectionByY</h1><p>
+	 * <i><ul>int[][] getCrossSectionByY(int y)<i><p>
 	 * @param y - the yAxis damnation
-	 * @return imt[][] the cross section by Y
+	 * @return int[][] the cross section by Y
 	 * @throws IndexOutOfBoundsException the section is out of bounds exception
 	 */
 	public int[][] getCrossSectionByY(int y) throws IndexOutOfBoundsException{
@@ -565,10 +646,10 @@ public class Maze3D implements Serializable {
 	}
 	
 	/**
-	 * <h1>Gets the cross section by Z.</h1><p>
-	 * <i><ul>getCrossSectionByZ(int z)<i><p>
+	 * <h1>getCrossSectionByZ</h1><p>
+	 * <i><ul>int[][] getCrossSectionByZ(int z)<i><p>
 	 * @param z - the zAxis damnation
-	 * @return imt[][] the cross section by Z
+	 * @return int[][] the cross section by Z
 	 * @throws IndexOutOfBoundsException the section is out of bounds exception
 	 */
 	public int[][] getCrossSectionByZ(int z)throws IndexOutOfBoundsException{
@@ -589,8 +670,8 @@ public class Maze3D implements Serializable {
 	}
 	
 	/**
-	 * <h1>Gets the cross section by X.</h1><p>
-	 * <i><ul>getCrossSectionByZ(int x)<i><p>
+	 * <h1>getCrossSectionByX</h1><p>
+	 * <i><ul>int[][] getCrossSectionByX(int x)<i><p>
 	 * @param x - the xAxis damnation
 	 * @return imt[][] the cross section by X
 	 * @throws IndexOutOfBoundsException the section is out of bounds exception
@@ -613,11 +694,11 @@ public class Maze3D implements Serializable {
 	
 	
 	/**
-	 * <h1>Print cross by Axis</h1><p>
-	 * <i><ul>printCrossByAxis(int [][] arr)<i><p>
+	 * <h1>printCrossByAxis</h1><p>
+	 * <i><ul>String printCrossByAxis(int [][] arr)<i><p>
 	 * Prints the cross section
 	 *
-	 * @param arr the section
+	 * @param arr - the section
 	 */
 	public String printCrossByAxis(int [][] arr){
 
@@ -633,12 +714,12 @@ public class Maze3D implements Serializable {
 	
 	
 	/**
-	 * <h1>Creates  random position.</h1><p>
-	 * <i><ul>Position createRandomPosition()<i><p>
+	 * <h1>createRandomPosition</h1><p>
+	 * <i><ul>Position3D createRandomPosition()<i><p>
 	 *
 	 * @return Position - random position
 	 */
-	public Position createRandomPosition(){
+	public Position3D createRandomPosition(){
 
 		r = new Random();
 		int wall = r.nextInt(6);
@@ -693,12 +774,17 @@ public class Maze3D implements Serializable {
 			break;
 		}
 		
-		return new Position(z,x,y);
+		return new Position3D(z,x,y);
 	}
 	
-	
-	public Position carvePosition(Position p){
-		Position temp = new Position(p);
+	/**
+	 * <h1>carvePosition</h1><p>
+	 * <i><ul>Position3D carvePosition(Position3D p)<i><p>
+	 * carve the position from the edge of the maze
+	 * @return Position - the position to carve
+	 */
+	public Position3D carvePosition(Position3D p){
+		Position3D temp = new Position3D(p);
 		if(temp.getZ()==0){  //Check if start position at the floor
 			temp.setZ(1);
 			setPass(temp);
@@ -726,6 +812,16 @@ public class Maze3D implements Serializable {
 		
 		return temp;
 	}
+
+
+
+	
+
+
+
+	
+
+	
 	
 
 

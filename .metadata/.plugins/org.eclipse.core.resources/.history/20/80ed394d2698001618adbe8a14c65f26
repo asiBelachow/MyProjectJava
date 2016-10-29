@@ -1,0 +1,23 @@
+package view.gui;
+
+
+import view.AbstractObservableView;
+
+public abstract class ObservableCommonGUIView extends AbstractObservableView {
+
+
+	
+	/**
+	 * <h1>ObservableCommonCLIView</h1><p>
+	 * <i><ul>ObservableCommonCLIView()<i><p>
+	 * Initialize a new Observable CommonCLI View.
+	 */
+	public ObservableCommonGUIView() {
+		
+		
+	}
+
+
+
+	
+}

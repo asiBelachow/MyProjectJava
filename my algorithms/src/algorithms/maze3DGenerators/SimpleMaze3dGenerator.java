@@ -1,7 +1,7 @@
 package algorithms.maze3DGenerators;
 
-
-
+import maze.maze3d.Maze3D;
+import position.position3d.Position3D;
 
 /**
  * This class SimpleMaze3dGenerator define a simple algorithm to build 3d maze 
@@ -49,8 +49,8 @@ public class SimpleMaze3dGenerator extends CommonMaze3DGenerator {
 	 *<p>
 	 */
 	public void createPathFromStartToEnd(){
-		Position start = new Position(myMaze.getStart());
-		Position end = new Position(myMaze.getEnd());
+		Position3D start = new Position3D(myMaze.getStart());
+		Position3D end = new Position3D(myMaze.getEnd());
 
 		//while(!start.equals(end)){
 

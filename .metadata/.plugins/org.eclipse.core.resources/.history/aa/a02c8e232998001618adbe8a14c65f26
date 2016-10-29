@@ -1,0 +1,78 @@
+package presenter;
+
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
+/**
+ * This class handles the adminProperties XML file using the AdminProperties class as the
+ * object holder
+ * 
+ * @author Asi Belachow
+ * @version 1.0
+ * @since 2016-10-19
+ */
+public class PropertiesHandler {
+
+	//-------------------------Data Members-------------------------//
+	
+	private static Properties properties;
+
+	//------------------------------Constructors-------------------------//
+	
+	/**
+	 * <h1>getInstance()</h1><p>
+	 * <i><ul>static Properties getInstance()<i><p>
+	 * Method to create a properties using singleton architecture
+	 */
+	private PropertiesHandler() {
+		
+	}
+
+	//-------------------------Functionality-------------------------//
+	
+	public static Properties getInstance() throws FileNotFoundException {
+		if (properties == null)
+			properties = readProperties("resources/properties/properties.xml");
+		return properties;
+	}
+
+	/**
+	 * Writes an instance of adminProperties to the XML
+	 * 
+	 * @param adminProperties - adminProperties instance to write to the XML
+	 * @param filename - path to XML
+	 * @throws FileNotFoundException
+	 *             if the file exists but is a directory rather than a regular
+	 *             file, does not exist but cannot be created, or cannot be
+	 *             opened for any other reason
+	 */
+	public static void writeProperties(Properties adminProperties, String filename) throws FileNotFoundException {
+
+		XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(filename)));
+
+		encoder.writeObject(adminProperties);
+		encoder.flush();
+		encoder.close();
+	}
+
+	/**
+	 * 
+	 * @param filename - path to XML
+	 * @return instance of adminProperties
+	 * @throws FileNotFoundException
+	 *             if the file exists but is a directory rather than a regular
+	 *             file, does not exist but cannot be created, or cannot be
+	 *             opened for any other reason
+	 */
+	private static Properties readProperties(String filename) throws FileNotFoundException {
+		XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(filename)));
+		Properties o = (Properties) decoder.readObject();
+		decoder.close();
+		return o;
+	}
+}

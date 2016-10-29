@@ -6,18 +6,16 @@ import java.util.Observable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-import algorithms.maze3DGenerators.Maze3D;
-import algorithms.maze3DGenerators.Position;
+import maze.maze3d.*;
+import position.position3d.*;
 import algorithms.search.Solution;
 
 
 
 /**
- * <h1>class MyCommonModel</h1><p>
- * This class defines the common functionality of the model in MVC architectural pattern</br>
- * Manages the data, logic and rules of the </p>
+ * <h1>class AbstractModel</h1><p>
+ * This class defines the common functionality of the model in MVP architectural pattern</br>
+ * Manages the data, logic and rules of the MVP architectural pattern </p>
  * <b>Data structure :</b>
  * <li><b>mapMaze3D</b> - hold the {@link Maze3D} with name</br>
  * <li><b>mapSolution</b> - hold the {@link Solution} of the Maze3D with name</br></br>
@@ -26,7 +24,7 @@ import algorithms.search.Solution;
  * <li><b>ExecutorService</b> - manage the threads
  * @author Asi Belachow
  * @version 1.0
- * @since 2016-05-09
+ * @since 2016-20-09
  */
 public abstract class AbstractModel extends Observable implements Model {
 	
@@ -36,13 +34,12 @@ public abstract class AbstractModel extends Observable implements Model {
 	
 	protected ConcurrentHashMap<String,Maze3D> mapMaze3D;
 	
-	protected ConcurrentHashMap<String,Solution<Position>> mapSolution;
+	protected ConcurrentHashMap<String,Solution<Position3D>> mapSolution;
+	
+	protected Solution<Position3D> hint;
 	
 	HashMap<String, Object> data;
 	
-	protected Future<Maze3D> futureMaze3D;
-	
-	protected Future<Solution<Position>> futureSolution;
 	
 	//------------------------------Constructors-------------------------//
 	
@@ -55,7 +52,7 @@ public abstract class AbstractModel extends Observable implements Model {
 	 */
 	public AbstractModel() {
 		mapMaze3D = new ConcurrentHashMap<String,Maze3D>();
-		mapSolution = new ConcurrentHashMap<String,Solution<Position>>();
+		mapSolution = new ConcurrentHashMap<String,Solution<Position3D>>();
 		this.pool = Executors.newCachedThreadPool();
 		data = new HashMap<String, Object>();
 
@@ -129,7 +126,8 @@ public abstract class AbstractModel extends Observable implements Model {
 	 * @see model.Model#displaySolution(java.lang.String)
 	 */
 	@Override
-	public abstract Solution<Position> displaySolution(String mazeName);
+	public abstract Solution<Position3D> displaySolution(String mazeName);
+
 
 
 	/* (non-Javadoc)
@@ -144,10 +142,7 @@ public abstract class AbstractModel extends Observable implements Model {
 	@Override
 	public abstract String displayMenu();
 	
-	@Override
-	public Object getCommand(String command) {
-		return data.get(command);
-	}
+	
 	
 	public abstract void exit();
 
@@ -166,6 +161,7 @@ public abstract class AbstractModel extends Observable implements Model {
 	}
 	
 	
+		
 	
 	
 

@@ -1,5 +1,11 @@
 package view.dialogLoader;
 
+//For generating generate windows automatically
+
+/**
+ * The Class Maze3DFormDetailes.
+ */
+
 public class Maze3DFormDetailes {
 	
 	private String name;

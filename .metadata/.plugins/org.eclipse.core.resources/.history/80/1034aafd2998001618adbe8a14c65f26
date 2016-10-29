@@ -1,0 +1,53 @@
+package view;
+
+import java.io.IOException;
+
+/**
+ * <h1>The Interface View</h1><p>
+ * This interface is the view part of the MVP</br> architecture, used for different
+ * implementations of UI
+
+ * @author Asi Belachow
+ * @version 1.0
+ * @since 2016-10-09
+ *
+ */
+public interface View {
+
+
+	public void close();
+	
+	public void start();
+	
+	/**
+	* <h1>Do commmand.</h1><p>
+	* <i><ul>void doCommmand(String[] param)<i><p>
+	* Adds a client to the view
+	* @param param - the parameters that the client entered
+	* @throws IOException Signals that an I/O exception has occurred.
+	*/
+	
+	
+	/**
+	 * Adds a client to the view
+	 * 
+	 * @param client
+	 *            array in format:
+	 *            "client id,ip,current status,last requested command,command parameters,total number of commands"
+	 */
+	public void addClient(String[] client);
+	
+	public void removeClient(String clientId);
+	
+	public void displayInConsole(String str);
+	
+	public void updateClient(String[] fields);
+	
+	public Object getCommandData(String command);
+
+	
+	
+	
+	
+	
+}

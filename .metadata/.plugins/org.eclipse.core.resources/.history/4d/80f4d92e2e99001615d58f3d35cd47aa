@@ -1,0 +1,324 @@
+package model;
+
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import maze.maze3d.*;
+import presenter.MyPresenter;
+import presenter.Properties;
+import protocol.CommandProtocol;
+import io.MyCompressorOutputStream;
+import io.MyDecompressorInputStream;
+
+/**
+ * <h1>MyModel</h1><p>
+ * This class execute the commands that initialized in {@link MyPresenter}  </br>
+ * and notify the {@link MyPresenter} about the execution </p>
+ * @author Asi Belachow
+ * @version 1.0
+ * @since 2016-20-09
+ */
+public class MyModel extends AbstractModel {
+	
+	//------------------------------Data Members-------------------------//
+	
+	
+	/** socket data member to communicate with the sever */
+	private Socket myServer;
+	
+	/** ObjectOutputStream data member to open the stream into the server */
+	private ObjectOutputStream outToServer;
+	
+	/** ObjectInputStream data member to open the stream into the client */
+	private ObjectInputStream inFromServer;
+
+	/** the thread that run the communication with the server */
+	private Thread thread;
+	
+	/**Object to send data to server */
+	private CommandProtocol toServer;
+	
+	/** Object to receive data to server */
+	private CommandProtocol fromServer;
+	/** boolean to indicate if  connected to server */
+	private  boolean closed = false;
+	
+	private Maze3D currentMaze = null;
+	
+	private Properties properties;
+	
+	//------------------------------Constructors-------------------------//
+	
+	/**
+	 * <h1>MyModel</h1><p>
+	 * <i>MyModel(Properties properties) <i><p>
+	 * Instantiates a new model
+	 * @param properties - properties from xml file 
+	 */
+	public MyModel(Properties properties)  {
+		this.properties = properties;
+		toServer = new CommandProtocol();
+		
+	}
+	
+	/**
+	 * <h1>MyModel</h1><p>
+	 * <i>MyModel() <i><p>
+	 * Instantiates a new model
+	 */
+	public MyModel() {
+		this.properties = new Properties();
+		toServer = new CommandProtocol();
+	}
+	
+	
+	//-------------------------Getters And Setters-------------------//
+	
+	@Override
+	public Maze3D getCurrentMaze() {
+		return currentMaze;
+	}
+	@Override
+	public void setCurrentMaze(Maze3D currentMaze) {
+		this.currentMaze = currentMaze;
+	}
+
+
+	//-------------------------Functionality-------------------------//
+	
+	
+	
+	@Override
+	public void start() {
+
+		try {
+			//Connect to the server
+			myServer = new Socket(InetAddress.getByName(properties.getServerIp()),properties.getServerPort());
+			myServer.setTcpNoDelay(true);
+			inFromServer = new ObjectInputStream(myServer.getInputStream());
+			outToServer = new ObjectOutputStream(myServer.getOutputStream());
+			//Run the thread to listen to server messages
+			thread = new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					try {
+						do {
+							fromServer = (CommandProtocol) inFromServer.readObject();
+							setCommandAndNotify(fromServer.getCommand(), fromServer.getData());
+
+						} while( fromServer!=null && !fromServer.getCommand().equals("exit"));
+
+					} catch (IOException e) {
+						
+						setCommandAndNotify("server closed", "You are disconnected from server!!!");
+					
+					} catch (ClassNotFoundException e) {
+						System.out.println("222222");
+					}
+					close();
+				}
+			});
+			thread.setName("Server Thread");
+			thread.start();
+
+
+		} catch (IOException e2) {
+			setCommandAndNotify("console", "A problem occured communicating with the server");
+			setCommandAndNotify("message", "A problem occured communicating with the server");
+		}
+	}
+	
+	
+	
+	@Override
+	public void getDirPath(String path) {
+		//Checks if the file empty
+		if(path.length()==0){
+			setCommandAndNotify("console", "Please enter a directory");
+			return;
+		}
+			
+		//Open the file
+		File dir = new File(path);
+		//Checks if the path is directory if not, return a message to the presenter
+		if(!dir.isDirectory()){
+			setCommandAndNotify("console", "Please enter a valid directory");
+			return;
+		}
+			
+		//Get list of  all files and folders in the given path and  forward to the controller
+		String[] temp = dir.list();
+		StringBuilder sb = new StringBuilder();
+		sb.append("\nThe files in "+ path + " are: \n");
+		for (String s : temp){
+			sb.append(s+"\n");
+		}
+		setCommandAndNotify("console", sb.toString());	
+	}
+
+	@Override
+	public void generateMaze3D(String mazeName, int z, int x, int y) {
+		String param[] = new String[] {mazeName,"" +z,"" +x,"" +y};
+		writeToServer("generate maze 3D", param);
+	}
+	
+	
+	@Override
+	public void notifyMazeIsready() {
+		setCommandAndNotify("maze_ready", null);
+		
+	}
+	
+	@Override
+	public void crossSectionByDimention(int index, String dimension,  String mazeName) {
+		writeToServer("display cross section", new String[] { ""+index,dimension,mazeName});
+
+	}
+
+	@Override
+	public void saveMaze(String path) {
+
+		try{
+			//Create the file
+			OutputStream out = new MyCompressorOutputStream(new FileOutputStream(path));
+			//Write the maze to the file
+			out.write(getCurrentMaze().toByteArray());
+			out.flush();
+			out.close();
+			setCommandAndNotify("console", "The maze: \""+ currentMaze.getMazeName()+ "\" successfully saved to file "+ path);
+			setCommandAndNotify("message", "The maze: \""+ currentMaze.getMazeName()+ "\" successfully saved to file "+ path);
+		}catch (Exception e) {
+			setCommandAndNotify("console", "There was error while trying to save the maze, please try again");
+			setCommandAndNotify("message", "There was error while trying to save the maze, please try again");
+		}
+	}
+
+	@Override
+	public void loadMaze(String path)  {
+		Maze3D maze = null;
+		try {
+			//Open the file
+			File f = new File(path);
+			@SuppressWarnings("resource")
+			InputStream in=new MyDecompressorInputStream( new FileInputStream(f));
+			//Reads the file
+			byte b[] = new byte[(int) f.length()];
+			in.read(b);
+			//Create the maze from the file
+			maze = new Maze3D(b);//Load the maze
+			setCurrentMaze(maze);
+			setCommandAndNotify("display", maze);
+		} catch (IOException e) {
+			setCommandAndNotify("console", "There was error while trying to load the maze, please try again");
+			setCommandAndNotify("message", "There was error while trying to load the maze, please try again");
+			
+		}
+			
+	}
+
+	@Override
+	public void solveMaze(String mazeName, String alg) {
+		writeToServer("solve maze",new String[] {mazeName ,alg });
+	}
+
+	@Override
+	public void displayMaze(String mazeName) {
+		writeToServer("display",new String[] { mazeName});
+		
+	}
+	
+	@Override
+	public void displaySolution(String mazeName) {
+		writeToServer("display solution",new String[] { mazeName });
+	}
+	
+	@Override
+	public void displayMenu(){
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("\n*********************************************************************\n");
+		sb.append("*                               CLI Menu                            *\n");
+		sb.append("*********************************************************************\n");
+		sb.append("1) To connect to server enter: connect to server");
+		sb.append("1) To view file in directory enter: dir <the directory>\n");
+		sb.append("2) To generate new Maze3D enter: generate maze 3D <name of the maze> <zAxis dimention,xAxis dimention,yAxis dimention>\n");
+		sb.append("3) To display a Maze3D enter: display <name of the maze>\n");
+		sb.append("8) To solve a Maze3D enter: solve <name> <algorithm(BFS,DFS,AStarMD,AstartAD)>\n");
+		sb.append("9) To display the solution path of the maze enter: display solution <name>\n");
+		sb.append("4) To dispaly cross section of the Maze3D enter: display cross section <index> <dimention{z,x,y}> <name of the maze>\n");
+		sb.append("6) To save a Maze3D enter: save maze  <directory + name of the file>\n");
+		sb.append("7) To load saved Maze3D enter: load maze <path to the file> <name>\n");
+		sb.append("10) To display the menu enter: menu\n");
+		sb.append("11) To exit enter: exit\n");
+		setCommandAndNotify("menu", sb.toString());
+
+	}
+
+	@Override
+	public void exit(){
+		
+		if( myServer != null && myServer.isConnected() && !myServer.isClosed()){
+			close();
+		}
+		else{
+			System.out.println("************************************************************");
+			System.out.println("*            Command Line Interface Closed                 *");
+			System.out.println("************************************************************");
+			
+		}
+			
+	}
+	
+	@Override
+	public void close() {
+		//Check if connected to server
+		if (!closed) {
+			if (myServer != null && myServer.isConnected() && !myServer.isClosed())
+				try {
+					inFromServer.close();
+					outToServer.close();
+					myServer.close();
+					//setCommandAndNotify("exit", null);
+					closed = true;
+				} catch (Exception e) {
+					setCommandAndNotify("console", "There was error while trying disconnecting from server. Please restart application");
+					setCommandAndNotify("message", "There was error while trying disconnecting from server. Please restart application");
+				}
+		}
+		
+		
+	}
+
+	@Override
+	public void writeToServer(String command, Object data) {
+		//Check if connected to the server before sending
+		if (myServer != null && myServer.isConnected() && !myServer.isClosed())
+			try {
+				toServer.setCommand(command);
+				toServer.setData(data);
+				outToServer.writeObject(toServer);
+				outToServer.flush();
+				outToServer.reset();
+			} catch (IOException e) {
+				setCommandAndNotify("console", "There was error while trying executing command" + command);
+			}
+		else
+			setCommandAndNotify("console",
+					"Lost connection to the server\nYou were either kicked/timed out/server was closed manually");
+		
+	}
+	
+
+	
+
+
+}

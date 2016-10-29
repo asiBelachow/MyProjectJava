@@ -1,5 +1,0 @@
-package view.widgets;
-
-public class CommonMazeWidget extends MazeDisplay{
-
-}

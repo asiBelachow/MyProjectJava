@@ -1,0 +1,280 @@
+package model;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import clienthandler.AbstractClientHandler;
+import clienthandler.MyClientHandler;
+import presenter.Properties;
+import presenter.PropertiesHandler;
+import protocol.CommandProtocol;
+
+
+/**
+ *  <h1>MyServer </h1><p>
+ *  This class extends {@link Observable} and implements {@link Observer},{@link ServerModel}<br>
+ *  and accept client connection
+ */
+public class MyServer extends Observable implements Observer,ServerModel{
+
+	//------------------------------Data Members-------------------------//
+	
+	Model model;
+	volatile boolean stop, started;
+	HashMap<String, Socket> connectedClients;
+	ServerSocket server;
+	Thread mainServerThread;
+	ExecutorService threadPool;
+	Properties properties;
+	volatile HashMap<String, Object> data;
+	
+	//------------------------------Constructors-------------------------//
+	
+	/**
+	 *<h1>MyServer</h1><p>
+	 * <i><ul>MyServer()<i><p>
+	 * Initialize a new MyServer
+	 */
+	public MyServer() {
+		this.stop = false;
+		this.started = false;
+		data = new HashMap<String, Object>();
+		try {
+			properties = PropertiesHandler.getInstance();
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found");
+		}
+		model = new MyModel(properties);
+		
+	}
+
+	@Override
+	public void start() throws Exception{
+
+		if(!started){
+
+			started = true;
+			threadPool = Executors.newFixedThreadPool(properties.getNumOfAllowedClients());
+			connectedClients = new HashMap<String, Socket>();
+			server = new ServerSocket(properties.getServerPort());
+			server.setSoTimeout(10 * 1000);
+			mainServerThread = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					
+					Thread.currentThread().setName("Main Server Thread");
+
+					setCommandAndNotify("console","Server started waiting for connection...");
+					while (!stop) {
+						try {
+							
+							Socket client = server.accept();
+
+							if (client != null)
+								threadPool.execute(new Runnable() {
+
+									@Override
+									public void run() {
+
+										// calculates clientId
+										String clientId = ""
+												+ (Thread.currentThread().getId() % properties.getNumOfAllowedClients()
+														+ 1);
+
+										// puts the client-socket in the map
+										// based on his threadId
+										connectedClients.put(clientId, client);
+										
+
+										// Update clients table about new connection
+										setCommandAndNotify("add client",new String[] { clientId, client.getRemoteSocketAddress().toString(),"Connected", "None", "None", "0" });
+
+										setCommandAndNotify("console", "Handling client " + clientId);
+
+										//Create the handler
+										AbstractClientHandler clientHandler = new MyClientHandler(client, clientId,model);
+									
+										clientHandler.addObserver(MyServer.this);
+										
+										// Start handling client request
+										clientHandler.handleClient();
+
+										
+										setCommandAndNotify("console", "Done handling client " + clientId);
+
+										
+										try {
+											clientHandler.close();
+										} catch (IOException e) {
+											
+											e.printStackTrace();
+										}
+										
+										//remove the client from client table
+										if (connectedClients.containsKey(clientId)) {
+											connectedClients.remove(clientId);
+											setCommandAndNotify("remove client", clientId);
+										}
+
+									}
+								});
+						} catch (SocketTimeoutException e) {
+							
+						} catch (IOException e) {
+						}
+					}
+				
+				}
+			});
+			mainServerThread.start();
+		}
+	}
+	
+	@Override
+	public void disconnectClient(String clientId) {
+		Socket client = connectedClients.get(clientId);
+		try {
+			if (client != null){
+				writeToClient("exit", null, client);
+				client.close();
+				
+			}
+		} catch (IOException e) {
+			setCommandAndNotify("console", "failed to disconnect client" + clientId);
+		}
+	}
+
+
+	@Override
+	public void stop() throws Exception {
+		if(started){
+			stop = true;
+			setCommandAndNotify("console", "Stop accepting new connection");
+			setCommandAndNotify("console", "\n****************************************\n"
+					                      +"*   Shutdown server process started:  *\n"
+					                      +"****************************************");
+
+			// close all connected sockets clients
+			Iterator<Entry<String, Socket>> it = connectedClients.entrySet().iterator();
+			while (it.hasNext()) {
+				Socket s = it.next().getValue();
+				//writeToClient("server closed", "Server closed", s);
+				writeToClient("server closed",null, s);
+				
+				s.close();
+				//it.next().getValue().close();
+				
+				
+			}
+
+			// shutdown client threads, although supposed to already be shut down
+			threadPool.shutdown();
+
+			setCommandAndNotify("console", "Finishing remaining tasks");
+
+			// wait for all clients to complete their tasks
+			if (!threadPool.awaitTermination(5, TimeUnit.SECONDS))
+				threadPool.shutdownNow();
+
+			mainServerThread.join();
+			server.close();
+			connectedClients.clear();
+			
+			setCommandAndNotify("console", "Finished handling all clients");
+
+			// reset state
+			started = false;
+			stop = false;
+
+			setCommandAndNotify("Server stopped", null);
+		}
+	}
+	
+
+	@Override
+	public void update(Observable o, Object arg) {
+		
+		if (o instanceof AbstractClientHandler){
+			String command = (String) arg;
+			Object commandData = ((AbstractClientHandler) o).getCommandData(command);
+			
+			setCommandAndNotify(command, commandData);
+			
+			/*switch (command) {
+			case "client input":
+				setCommandAndNotify(command, commandData);
+				break;
+			case "stop server" :
+				try {
+					stop();
+				} catch (Exception e) {
+					
+					e.printStackTrace();
+				}
+				break;
+			case "console":
+				
+			default:*/
+				
+				//break;
+			//}
+		}
+	}
+	
+	/**
+	 * <h1>setCommandAndNotify</h1><p>
+	 * <i><ul>void setCommandAndNotify(String command, Object data)<i><p>
+	 * Insert the command and the parameters/Object to the HashMap
+	 * and notify the Observers about the changes
+	 * @param command - the command
+	 * @param data - the parameters/object to pass
+	 */
+	protected void setCommandAndNotify(String command, Object args) {
+		if (args != null)
+			data.put(command, args);
+		setChanged();
+		notifyObservers(command);
+	}
+
+	@Override
+	public Object getCommandData(String command) {
+		return data.get(command);
+	}
+	
+	/**
+	 * <h1>writeToClient</h1><p>
+	 * <i>synchronized void writeToClient(String command, Object data)<i><p>
+	 * Used for sending messages to the client using {@link CommandProtocol}
+	 * @param command - to send
+	 * @param data - to send
+	 */
+	private synchronized void writeToClient(String command, Object data,Socket client) {
+		CommandProtocol toClient = new CommandProtocol();
+		if (client != null && !client.isOutputShutdown()){
+			try {
+				toClient.setCommand(command);
+				toClient.setData(data);
+				ObjectOutputStream outToClient;
+				outToClient = new ObjectOutputStream(client.getOutputStream());
+				outToClient.writeObject(toClient);
+				outToClient.flush();
+				outToClient.reset();
+				} catch (IOException e) {
+				}
+			}
+	}
+
+
+
+}

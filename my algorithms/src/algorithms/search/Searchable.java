@@ -49,4 +49,6 @@ public interface Searchable<T> {
 	 * @return ArrayList of states - the possible moves
 	 */
 	public double getCostValue();
+
+	public ArrayList<Integer> calcAirdis(State<T> currentState);
 }

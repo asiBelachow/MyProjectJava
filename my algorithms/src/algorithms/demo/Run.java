@@ -1,17 +1,15 @@
-package run;
+package algorithms.demo;
 
 import algorithms.maze3DGenerators.Maze3DGenerator;
-import algorithms.maze3DGenerators.Position;
 import algorithms.maze3DGenerators.SimpleMaze3dGenerator;
+import maze.maze3d.Maze3D;
+import position.position3d.Position3D;
 
 import java.io.IOException;
 
-
-import algorithms.demo.Demo;
 import algorithms.maze3DGenerators.GrowingTreeGenerator;
 import algorithms.maze3DGenerators.GrowingTreeLast;
 import algorithms.maze3DGenerators.GrowingTreeRandom;
-import algorithms.maze3DGenerators.Maze3D;
 
 
 public class Run {
@@ -36,7 +34,7 @@ public class Run {
 		//Generate another 3d maze
 		Maze3D maze=mg.generate(3,3,3);
 		//Get the maze entrance
-		Position p=maze.getStart();
+		Position3D p=maze.getStart();
 		System.out.println("\nEntrance "+p);
 		System.out.println("\nThe maze\n***********************\n"+maze.toString());
 		

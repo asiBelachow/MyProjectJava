@@ -1,36 +1,29 @@
 
-package view;
-
-
-
+package view.cli;
 
 import java.io.IOException;
-
 import java.util.Observable;
-
-import algorithms.maze3DGenerators.Maze3D;
-import algorithms.maze3DGenerators.Position;
+import maze.maze3d.*;
+import position.position3d.*;
 import algorithms.search.Solution;
 
 
-public class ObservableCLIView extends AbstractObservableView {
-	
-	//------------------------------Data Members-------------------------//
+public class ObservableCLIView extends ObservableCommonCLIView {
 	
 	
-	
+
 	//------------------------------Constructors-------------------------//
 	
-	public ObservableCLIView() {
-	
+	/**
+	 * <h1>ObservableCLIView</h1><p>
+	 * <i><ul>ObservableCLIView(CLI client)<i><p>
+	 * Initialize a new Observable CLI View.
+	 * @param client - the class {@link CLI} that handle the user input and display
+	 */
+	public ObservableCLIView(CLI client) {
+		super(client);
 	}
 
-
-	//-----------------------------setters and getters-------------------//
-
-	
-
-	
 	
 	//-------------------------Functionality-------------------------//
 	
@@ -106,7 +99,7 @@ public class ObservableCLIView extends AbstractObservableView {
 	}
 	
 	@Override
-	public void displaySolution(Solution<Position> solution) {
+	public void displaySolution(Solution<Position3D> solution) {
 		System.out.println(solution.toString());
 		
 	}
@@ -117,12 +110,6 @@ public class ObservableCLIView extends AbstractObservableView {
 		System.out.println("Solution for \"" + name + "\" is ready");
 		
 	}
-
-
-
-
-	
-
 	
 	
 }

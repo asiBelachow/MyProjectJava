@@ -3,6 +3,8 @@ package algorithms.maze3DGenerators;
 
 import java.util.ArrayList;
 
+import position.position3d.Position3D;
+
 
 
 
@@ -24,6 +26,6 @@ public interface GrowingTree {
 	 * @param ArrayList<Position> 
 	 * @return  Position
 	 */
-	public Position choosePosition(ArrayList<Position> list);
+	public Position3D choosePosition(ArrayList<Position3D> list);
 
 }

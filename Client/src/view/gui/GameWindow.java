@@ -102,6 +102,8 @@ public class GameWindow extends BasicWindow {
 	private Tray tray;
 	
 	private Text consoleText;
+	
+	private TrayItem tryItem;
 
 	//Hold the listeners of the windows
 	HashMap<String, Listener> listeners;
@@ -198,21 +200,22 @@ public class GameWindow extends BasicWindow {
 
 		initListeners();
 		shell.setLayout(new GridLayout(13, false));
+		getShell().setImage(new Image(getDisplay(),"resources/image/tray/tray.png"));
 		mazeDisplayer = new Maze3DDisplayer(getShell(), SWT.BORDER | SWT.DOUBLE_BUFFERED);
-		mazeDisplayer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 12, 13));
-		mazeDisplayer.setBackgroundImage(new Image(getDisplay(), "resources/image/backgrounds/bg_image.png"));
-
+		mazeDisplayer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 12, 12));
+	
 	
 		tray =  getDisplay().getSystemTray();
 		if( tray != null){
-			TrayItem item = new TrayItem(tray, SWT.NONE);
-			item.setToolTipText("Maze Game");
-			item.setImage(new Image(getDisplay(), "resources/image/tray/tray.png"));
+			tryItem = new TrayItem(tray, SWT.NONE);
+			tryItem.setToolTipText("Maze Game");
+			tryItem.setImage(new Image(getDisplay(), "resources/image/tray/tray.png"));
 			Menu menu = new Menu(getShell(), SWT.POP_UP);
 			generateMazeTray = new MenuItem(menu, SWT.PUSH);
 			generateMazeTray.setText("Start Game");
 			generateMazeTray.addListener(SWT.Selection, listeners.get("generate_maze"));
 			generateMazeTray.setImage(new Image(getDisplay(),"resources/image/button/start_game.png"));
+			new MenuItem(menu, SWT.SEPARATOR);
 			loadMazeTray = new MenuItem(menu, SWT.PUSH);
 			loadMazeTray.setText("Load Maze");
 			loadMazeTray.setImage(new Image(getDisplay(), "resources/image/button/load.png"));
@@ -221,10 +224,12 @@ public class GameWindow extends BasicWindow {
 			saveMazeTray.setText("Save Maze");
 			saveMazeTray.setImage(new Image(getDisplay(), "resources/image/button/save.png"));
 			saveMazeTray.addListener(SWT.Selection, listeners.get("save_maze"));
+			new MenuItem(menu, SWT.SEPARATOR);
 			solveMazeTray = new MenuItem(menu, SWT.PUSH);
 			solveMazeTray.setText("Solve Maze");
 			solveMazeTray.setImage(new Image(getDisplay(), "resources/image/button/solve.png"));
 			solveMazeTray.addListener(SWT.Selection, listeners.get("solve_maze"));
+			new MenuItem(menu, SWT.SEPARATOR);
 			instructionsTray = new MenuItem(menu, SWT.PUSH);
 			instructionsTray.setText("Instructions");
 			instructionsTray.setImage(new Image(getDisplay(),"resources/image/button/instructions.png"));
@@ -233,20 +238,21 @@ public class GameWindow extends BasicWindow {
 			aboutTray.setText("about");
 			aboutTray.addListener(SWT.Selection, listeners.get("about"));
 			aboutTray.setImage(new Image(getDisplay(),"resources/image/button/about.png"));
+			new MenuItem(menu, SWT.SEPARATOR);
 			exitMazeTray = new MenuItem(menu, SWT.PUSH);
 			exitMazeTray.setText("Exit Game");
 			exitMazeTray.setImage(new Image(getDisplay(),"resources/image/button/exit.png"));
 			exitMazeTray.addListener(SWT.Selection, listeners.get("exit"));
 
-			item.addListener(SWT.MenuDetect, new Listener() {
+			tryItem.addListener(SWT.MenuDetect, new Listener() {
 				public void handleEvent(Event event) {
 					menu.setVisible(true);
 				}
 			});
-			item.setToolTipText("Maze Game");
-			item.setImage(new Image(getDisplay(), "resources/image/tray/tray.png"));
+			tryItem.setToolTipText("Maze Game");
+			tryItem.setImage(new Image(getDisplay(), "resources/image/tray/tray.png"));
 			
-			item.addListener(SWT.Selection,new Listener() {
+			tryItem.addListener(SWT.Selection,new Listener() {
 				
 				@Override
 				public void handleEvent(Event arg0) {
@@ -282,20 +288,21 @@ public class GameWindow extends BasicWindow {
 		/*----Add element properties to File menu----*/
 		propertiesItem = new MenuItem(fileMenu, SWT.PUSH);
 		propertiesItem.setText("Settings"); // Listener for load maze
-
+		propertiesItem.setImage(new Image(getDisplay(), "resources/image/button/settings.png"));
+		new MenuItem(fileMenu, SWT.SEPARATOR);
 		//****************************************************************************	
 
 		/*----Add element Load maze to File menu----*/
 		loadMazeItem = new MenuItem(fileMenu, SWT.PUSH);
-		loadMazeItem.setText("Load maze");
+		loadMazeItem.setText("Load Maze");
 		loadMazeItem.setImage(new Image(getDisplay(), "resources/image/button/load.png"));
-
+		
 		//****************************************************************************
 		/*----Add element Save maze to File menu----*/
 		saveMazeItem = new MenuItem(fileMenu, SWT.PUSH);
-		saveMazeItem.setText("Save maze");
+		saveMazeItem.setText("Save Maze");
 		saveMazeItem.setImage(new Image(getDisplay(), "resources/image/button/save.png"));
-
+		new MenuItem(fileMenu, SWT.SEPARATOR);
 		//****************************************************************************
 		/*----Add element Exit maze to File menu----*/
 		exitItem = new MenuItem(fileMenu, SWT.PUSH);
@@ -321,13 +328,14 @@ public class GameWindow extends BasicWindow {
 		generateItem.setText("Start Game");
 		generateItem.setEnabled(false);
 		generateItem.setImage(new Image(getDisplay(),"resources/image/button/start_game.png"));
+		new MenuItem(gameMenu, SWT.SEPARATOR);
 		//****************************************************************************
 
 		/*----Add element cascade----*/
 		subMenuItem = new MenuItem(gameMenu, SWT.CASCADE);
-		subMenuItem.setText("Solve maze by..");
+		subMenuItem.setText("Solve Maze By..");
 		subMenuItem.setImage(new Image(getDisplay(),"resources/image/button/solve.png"));
-
+		new MenuItem(gameMenu, SWT.SEPARATOR);
 		//****************************************************************************
 		/*----Add element drop down---*/
 		Menu subMenu = new Menu(getShell(), SWT.DROP_DOWN);
@@ -336,38 +344,38 @@ public class GameWindow extends BasicWindow {
 		//****************************************************************************
 		/*----Add element Solve by BFS algorithm to solve sub menu ---*/
 		bfsSolve = new MenuItem(subMenu, SWT.PUSH);
-		bfsSolve.setText("Solve by BFS algorithm");
+		bfsSolve.setText("Solve By BFS Algorithm");
 		bfsSolve.setEnabled(false);
 
 		//****************************************************************************
 
 		/*----Add element Solve by DFS algorithm to solve sub menu ---*/
 		dfsSolve = new MenuItem(subMenu, SWT.PUSH);
-		dfsSolve.setText("Solve by DFS algorithm");
+		dfsSolve.setText("Solve By DFS Algorithm");
 		dfsSolve.setEnabled(false);
 
 		//****************************************************************************	
 		
 		aStarAdItem = new MenuItem(subMenu, SWT.PUSH);
-		aStarAdItem.setText("Solve by A*-AirDistance algorithm");
+		aStarAdItem.setText("Solve By A*-AirDistance Algorithm");
 		aStarAdItem.setEnabled(false);
 		
 		//****************************************************************************	
 		
 		aStarMdItem = new MenuItem(subMenu, SWT.PUSH);
-		aStarMdItem.setText("Solve by A*-ManhattanDistance algorithm");
+		aStarMdItem.setText("Solve By A*-ManhattanDistance Algorithm");
 		aStarMdItem.setEnabled(false);
 		
 		
 		/*----Add element Play music to game menu ---*/
 		playMusicItem = new MenuItem(gameMenu, SWT.PUSH);
-		playMusicItem.setText("Play music");
+		playMusicItem.setText("Play Music");
 		playMusicItem.setImage(new Image(getDisplay(), "resources/image/music/playmusic.png"));
 
 		//****************************************************************************	
 		/*----Add element Stop music to game menu ---*/
 		stopMusicItem = new MenuItem(gameMenu, SWT.PUSH);
-		stopMusicItem.setText("Stop music");
+		stopMusicItem.setText("Stop Music");
 		stopMusicItem.setImage(new Image(display, "resources/image/music/stopmusic.png"));
 		stopMusicItem.setEnabled(false);
 
@@ -401,7 +409,7 @@ public class GameWindow extends BasicWindow {
 		
 		//----Connect/Disconnect from server to server Button----//
 		connectToServerButton = new Button(getShell(), SWT.PUSH);
-		connectToServerButton.setText("Connect to server");
+		connectToServerButton.setText("Connect To Server");
 		connectToServerButton.setBackground(new Color(getDisplay(), 210,105,30));
 		connectToServerButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,1, 1));
 		
@@ -426,7 +434,7 @@ public class GameWindow extends BasicWindow {
 		//----Character selection combo box----//
 		characterCombo = new Combo(getShell(), SWT.DROP_DOWN | SWT.READ_ONLY | SWT.CENTER);
 		characterCombo.setText("Choose Character");
-		String items1[] = { "Marco 1","Marco 2","Sonic","Mario","Son Goku 1","Son Goku 2","Hitman"};
+		String items1[] = { "Marco 1","Marco 2","Sonic","Mario","Son Goku 1","Son Goku 2","Hitman","Spiderman"};
 		characterCombo.setItems(items1);
 		characterCombo.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,1, 1));
 		characterCombo.select(0);
@@ -434,7 +442,7 @@ public class GameWindow extends BasicWindow {
 		
 		//----Play Music Button----//
 		playMusicButton =  new Button(shell, SWT.PUSH);
-		playMusicButton.setText("Play music");
+		playMusicButton.setText("Play Music");
 		playMusicButton.setImage(new Image(display, "resources/image/music/playmusic.png"));
 		playMusicButton.setBackground(new Color(getDisplay(), 210,105,30));
 		playMusicButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,1, 1));
@@ -442,7 +450,7 @@ public class GameWindow extends BasicWindow {
 
 		//----Stop Music Button----//
 		stopMusicButton =  new Button(shell, SWT.PUSH | SWT.LEFT);
-		stopMusicButton.setText("Stop music");
+		stopMusicButton.setText("Stop Music");
 		stopMusicButton.setBackground(new Color(getDisplay(), 210,105,30));
 		stopMusicButton.setImage(new Image(display, "resources/image/music/stopmusic.png"));
 		stopMusicButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,1, 1));
@@ -452,7 +460,7 @@ public class GameWindow extends BasicWindow {
 
 		//----Solve Music Button----//
 		solveButton =  new Button(getShell(), SWT.PUSH);
-		solveButton.setText("Solve maze");
+		solveButton.setText("Solve Maze");
 		solveButton.setBackground(new Color(getDisplay(), 210,105,30));
 		solveButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,1, 1));
 		solveButton.setImage(new Image(getDisplay(), "resources/image/button/solve.png"));
@@ -460,9 +468,10 @@ public class GameWindow extends BasicWindow {
 		
 		//----Hint Music Button----//
 		hintButton = new Button(getShell(), SWT.PUSH);
-		hintButton.setText("Show hint");
+		hintButton.setText("Show Hint");
 		hintButton.setBackground(new Color(getDisplay(), 210,105,30));
 		hintButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,1, 1));
+		hintButton.setImage(new Image(getDisplay(), "resources/image/button/hint.png"));
 		//****************************************************************************
 		
 		//----Navigation Panel----//
@@ -560,9 +569,9 @@ public class GameWindow extends BasicWindow {
 		consoleText = new Text(consoleGroup, SWT.READ_ONLY | SWT.MULTI | SWT.BORDER | SWT.V_SCROLL);
 		consoleText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		consoleText.setToolTipText("Here you can see all the actions");
-		consoleText.setBackground(new Color(display, 255, 255, 255));
+		consoleText.setBackground(new Color(display, 0, 128, 255));
 		//****************************************************************************
-
+		
 		
 		assignListenerToWidgets();
 		initButtons();
@@ -691,7 +700,7 @@ public class GameWindow extends BasicWindow {
 		if(getDisplay()!=null && !getDisplay().isDisposed()){
 			setCommandAndNotify(cli.getCommandByInput("exit"), null);
 			closeWidget();
-			//getShell().dispose();
+			getShell().dispose();
 		}
 	
 				
@@ -734,14 +743,14 @@ public class GameWindow extends BasicWindow {
 						t.setFont(new Font(getDisplay(), "Ravie", 15 , SWT.BOLD |SWT.COLOR_BLACK));
 						t.setEnabled(true);
 						win.open();
-						solveMazeButtonInit();
-						//restart();
+						solveMazeButtonEventHandler();
+						
 					}
 				});
 				shell.layout();
 				startTime = System.currentTimeMillis();
 				shell.addKeyListener(keyListener);
-				displayMazeButtoninit();
+				displayMazeButtonEventHandler();
 				if(properties.getSound())
 					try {
 						playMusic(new File("resources/music/maze_generate.wav"),  sound);
@@ -762,22 +771,27 @@ public class GameWindow extends BasicWindow {
 
 	
 	/**
-	 * <h1>restart</h1><p>
-	 * <i><ul>void restart()<i><p>
-	 * Reset the widget after solving the maze
-	 *//*
-	public void restart(){
-	
-	}*/
-
-
-	/**
 	 * <h1>Init Listeners</h1><p>
 	 * <i><ul>void initListeners()<i><p>
 	 * Initialize all the listeners
 	 */
 	public void initListeners(){
 
+		listeners.put("connect", new Listener() {
+			
+			@Override
+			public void handleEvent(Event arg0) {
+				if(connectToServerButton.getText().equals("Connect To Server")){
+					setCommandAndNotify(cli.getCommandByInput("connect to server"), null);
+				}
+				else if(connectToServerButton.getText().equals("Disconnect From Server")){
+					setCommandAndNotify(cli.getCommandByInput("disconnect from server"), null);
+					
+				}
+				
+			}
+		});
+		
 		//Add lister for playing background music
 		listeners.put("play_music", new Listener() {
 
@@ -885,12 +899,12 @@ public class GameWindow extends BasicWindow {
 				MessageBox messageBox=null;
 
 				boolean flag = false;
-				if(hintButton.getText().equals("Show hint")){
+				if(hintButton.getText().equals("Show Hint")){
 					messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO );
 					messageBox.setMessage("Try Harder!!!\nAre you sure you want to show the hint?");
 					flag=true;
 				}
-				else{
+				else if(hintButton.getText().equals("Hide Hint")) {
 					messageBox = new MessageBox(shell, SWT.ICON_INFORMATION | SWT.OK );
 					messageBox.setMessage("Smartass!!! Now you can solve the maze easly");
 					flag=false;
@@ -902,14 +916,17 @@ public class GameWindow extends BasicWindow {
 					writeToConsole("Showing the hint...");
 					if(flag==true){
 						((Maze3DDisplayer) mazeDisplayer).setHintFlag(true);
-						hintButton.setText("Hide hint");
+						hintButton.setText("Hide Hint");
 					}
 					break;
 				case SWT.OK:
 					writeToConsole("Hiding the hint...");
 					System.out.println("User clicked no");
 					((Maze3DDisplayer) mazeDisplayer).setHintFlag(false);
-					hintButton.setText("Show hint");
+					hintButton.setText("Show Hint");
+					break;
+				case SWT.NO:
+					
 					break;
 				case SWT.CANCEL:
 					// does nothing ...
@@ -1183,6 +1200,7 @@ public class GameWindow extends BasicWindow {
 	public void assignListenerToWidgets(){
 		
 		//----Add listeners for all buttons and items----//
+		connectToServerButton.addListener(SWT.Selection, listeners.get("connect"));
 		generateButton.addListener(SWT.Selection, listeners.get("generate_maze"));
 		generateItem.addListener(SWT.Selection, listeners.get("generate_maze"));
 		playMusicItem.addListener(SWT.Selection,listeners.get("play_music") );
@@ -1209,29 +1227,6 @@ public class GameWindow extends BasicWindow {
 		getShell().addMouseWheelListener(mouseWheelListener);
 		getShell().addListener(SWT.Close, listeners.get("exit"));
 		
-		//----Add listener for Connect To Server Button----//
-		connectToServerButton.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				if(connectToServerButton.getText().equals("Connect to server")){
-					setCommandAndNotify(cli.getCommandByInput("connect to server"), null);
-				
-
-				}
-				else if(connectToServerButton.getText().equals("Disconnect from server")){
-					setCommandAndNotify(cli.getCommandByInput("disconnect from server"), null);
-					connectToServerButton.setText("Connect to server");
-				}
-
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-
-
-			}
-		});
 
 
 		//----Add listener for background selection----//
@@ -1282,6 +1277,8 @@ public class GameWindow extends BasicWindow {
 					break;
 					
 				}
+				
+				mazeDisplayer.redraw();
 			}
 
 			@Override
@@ -1318,6 +1315,9 @@ public class GameWindow extends BasicWindow {
 				case "Hitman":
 					mazeDisplayer.setCharacter(mazeDisplayer.getCharacters().get("hitman"));
 					break;
+				case "Spiderman":
+					mazeDisplayer.setCharacter(mazeDisplayer.getCharacters().get("spiderman"));
+					break;
 				default:
 					mazeDisplayer.setCharacter(mazeDisplayer.getCharacters().get("marco 1"));
 					break;
@@ -1342,20 +1342,17 @@ public class GameWindow extends BasicWindow {
 						Properties newProperties = (Properties) dialog.getInstance();
 						try{
 							PropertiesHandler.writeProperties(newProperties, "resources/properties/properties.xml");
+							msgInfo.showMessage(getDisplay(), "Attention", "please restart the game for the applied changes to take effect");
 						}catch (Exception e) {
 							msgError.showMessage(getDisplay(), "Error","Couldn't write new properties");
-							//new MyMessageBox(getShell(), SWT.ERROR).showMessage(display, "Error", "Couldn't write new properties");
 							return;
 						}
 
-						msgInfo.showMessage(getDisplay(), "Attention", "please restart the game for the applied changes to take effect");
-						//new MyMessageBox(getShell(), SWT.ICON_INFORMATION).showMessage(getDisplay(), "attention", "please restart the game for the applied changes to take effect");
+						
 					}
 
 					@Override
 					public void widgetDefaultSelected(SelectionEvent arg0) {
-						// TODO Auto-generated method stub
-
 					}
 				});
 				dialog.showDialog();
@@ -1363,117 +1360,8 @@ public class GameWindow extends BasicWindow {
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
-
 			}
 		});
-
-		/*//----Add listener for load maze item----//
-		loadMazeItem.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				FileDialog fd = new FileDialog(getShell(),SWT.OPEN);
-				fd.setFilterPath(" ");
-				fd.setText("Load Maze File");
-				fd.setFilterExtensions("*.maz".split(" "));
-				String selectedMaze = fd.open();
-				if (selectedMaze != null) {
-					String mazeName = selectedMaze.substring(selectedMaze.lastIndexOf("\\") + 1,
-							selectedMaze.lastIndexOf("."));
-					System.out.println(mazeName);
-					String command = "load maze"+" "+ selectedMaze;
-					setCommandAndNotify(cli.getCommandByInput(command), command.split(" "));
-
-				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-			}
-		});*/
-
-		//Add listener for save maze item
-		/*saveMazeItem.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				FileDialog fd = new FileDialog(getShell(),SWT.SAVE);
-				fd.setFilterPath(" ");
-				fd.setText("Save Maze File");
-				fd.setFilterExtensions("*.maz *.xml *.java .*".split(" "));
-				String selectedMaze = fd.open();
-				if(selectedMaze != null){
-					String command = "save maze " + selectedMaze;
-					setCommandAndNotify(cli.getCommandByInput(command), command.split(" "));
-				}
-
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {	
-			}
-		});*/
-
-	/*	//Add listener for instruction item
-		instructionItem.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				StringBuilder sb = new StringBuilder();
-				try {
-					BufferedReader br = new BufferedReader(new FileReader("resources/properties/instruction.txt")) ;
-					String line = br.readLine();
-					while (line != null) {
-						sb.append(line);
-						sb.append(System.lineSeparator());
-						line = br.readLine();
-					}
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				new MyMessageBox(getShell(), SWT.OK).showMessage(getDisplay(), "Instrucation", sb.toString());
-
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-			}
-		});*/
-
-		//Add listener for about item
-	/*	aboutItem.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				StringBuilder sb = new StringBuilder();
-				try {
-					BufferedReader br = new BufferedReader(new FileReader("resources/properties/about.txt")) ;
-					String line = br.readLine();
-					while (line != null) {
-						sb.append(line);
-						sb.append(System.lineSeparator());
-						line = br.readLine();
-					}
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				new MyMessageBox(getShell(), SWT.OK).showMessage(getDisplay(), "About", sb.toString());
-			}
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-
-			}
-		});*/
-		
-		
 	}
 	
 	/**
@@ -1482,7 +1370,7 @@ public class GameWindow extends BasicWindow {
 	 * Dispose all the widget
 	 */
 	void closeWidget(){
-	/*	System.out.println("Close all widget");
+	System.out.println("Close all widget");
 		if (playMusicButton!=null && !playMusicButton.isDisposed())
 			playMusicButton.dispose();
 		if (stopMusicButton!=null && !stopMusicButton.isDisposed())
@@ -1540,7 +1428,7 @@ public class GameWindow extends BasicWindow {
 		if (backGroundMusic!=null && !backGroundMusic.isOpen()){
 			backGroundMusic.stop();
 			backGroundMusic.close();
-		}*/
+		}
 		if( sound != null && sound.isOpen()){
 			sound.stop();
 			sound.close();
@@ -1555,6 +1443,9 @@ public class GameWindow extends BasicWindow {
 			getShell().removeMouseWheelListener(mouseWheelListener);
 		if(mazeDisplayer!=null && !mazeDisplayer.isDisposed())
 			mazeDisplayer.dispose();
+		
+		if(tryItem !=null)
+			tryItem.dispose();
 		
 	}
 	
@@ -1575,7 +1466,7 @@ public class GameWindow extends BasicWindow {
 			
 			@Override
 			public void run() {
-				connectToServerButton.setText("Connect to server");
+				connectToServerButton.setText("Connect To Server");
 				getShell().removeKeyListener(keyListener);
 				generateButton.setEnabled(false);
 				generateItem.setEnabled(false);
@@ -1591,17 +1482,13 @@ public class GameWindow extends BasicWindow {
 				groupLeftRight.setEnabled(false);
 				groupUpDown.setEnabled(false);
 				characterCombo.setEnabled(true);
-				
-				
 			}
-		});
-		
-		
+		});	
 	}
 	
 	
 	@Override
-	public void connectToServerButtonInit() {
+	public void connectToServerEventHandler() {
 
 		Display.getDefault().syncExec(new Runnable() {
 			
@@ -1610,12 +1497,46 @@ public class GameWindow extends BasicWindow {
 				generateButton.setEnabled(true);
 				generateItem.setEnabled(true);
 				generateMazeTray.setEnabled(true);
-				connectToServerButton.setText("Disconnect from server");
-				
+				connectToServerButton.setText("Disconnect From Server");	
+			}
+		});
+	}
+	
+	@Override
+	public void disconnectFromServerEventHandler() {
+		Display.getDefault().syncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				generateButton.setEnabled(false);
+				generateItem.setEnabled(false);
+				generateMazeTray.setEnabled(false);
+				solveButton.setEnabled(false);
+				dfsSolve.setEnabled(false);
+				bfsSolve.setEnabled(false);
+				aStarAdItem.setEnabled(false);
+				aStarMdItem.setEnabled(false);
+				solveMazeTray.setEnabled(false);
+				generateButton.setEnabled(false);
+				generateMazeTray.setEnabled(false);
+				generateItem.setEnabled(false);
+				loadMazeItem.setEnabled(false);
+				loadMazeTray.setEnabled(false);
+				saveMazeItem.setEnabled(false);
+				saveMazeTray.setEnabled(false);
+				connectToServerButton.setText("Connect To Server");
+				((Maze3DDisplayer) mazeDisplayer).setHintFlag(false);
+				hintButton.setText("Show Hint");
+				hintButton.setEnabled(false);
+				getShell().removeKeyListener(keyListener);
+				groupBackFor.setEnabled(false);
+				groupLeftRight.setEnabled(false);
+				groupUpDown.setEnabled(false);
+				characterCombo.setEnabled(false);
+
 			}
 		});
 		
-
 	}
 	
 	/**
@@ -1665,14 +1586,17 @@ public class GameWindow extends BasicWindow {
 			stopMusicButton.setEnabled(false);
 			stopMusicItem.setEnabled(false);
 		}
+		groupBackFor.setEnabled(false);
+		groupLeftRight.setEnabled(false);
+		groupUpDown.setEnabled(false);
 	}
 	
 	/**
-	 * <h1>solveMazeButtonInit</h1><p>
-	 * <i><ul>void solveMazeButtonInit()<i><p>
+	 * <h1>solveMazeButtonEventHandler</h1><p>
+	 * <i><ul>void solveMazeButtonEventHandler()<i><p>
 	 * Reset the widget after solving the maze
 	 */
-	public void solveMazeButtonInit(){
+	public void solveMazeButtonEventHandler(){
 		getShell().removeKeyListener(keyListener);
 		getShell().removeMouseWheelListener(mouseWheelListener);
 		generateButton.setEnabled(true);
@@ -1694,15 +1618,20 @@ public class GameWindow extends BasicWindow {
 		groupLeftRight.setEnabled(false);
 		groupUpDown.setEnabled(false);
 		characterCombo.setEnabled(true);
+		((Maze3DDisplayer) mazeDisplayer).setHintFlag(false);
+		hintButton.setText("Show Hint");
+		groupBackFor.setEnabled(false);
+		groupLeftRight.setEnabled(false);
+		groupUpDown.setEnabled(false);
 	}
 	
 	
 	/**
-	 * <h1>sdisplayMazeButtoninit</h1><p>
-	 * <i><ul>void displayMazeButtoninit()<i><p>
+	 * <h1>displayMazeButtonEventHandler</h1><p>
+	 * <i><ul>void displayMazeButtonEventHandler()<i><p>
 	 * Reset the widget after displaying the maze
 	 */
-	public void displayMazeButtoninit(){
+	public void displayMazeButtonEventHandler(){
 		
 		generateItem.setEnabled(false);
 		generateButton.setEnabled(false);
@@ -1722,6 +1651,9 @@ public class GameWindow extends BasicWindow {
 		characterCombo.setEnabled(true);
 		aStarAdItem.setEnabled(true);
 		aStarMdItem.setEnabled(true);
+		groupBackFor.setEnabled(true);
+		groupLeftRight.setEnabled(true);
+		groupUpDown.setEnabled(true);
 	}
 
 

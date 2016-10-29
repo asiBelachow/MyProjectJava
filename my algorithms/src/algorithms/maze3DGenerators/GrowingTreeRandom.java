@@ -3,6 +3,8 @@ package algorithms.maze3DGenerators;
 import java.util.ArrayList;
 import java.util.Random;
 
+import position.position3d.Position3D;
+
 
 
 /**
@@ -19,7 +21,7 @@ public class GrowingTreeRandom implements GrowingTree {
 	 * @see algorithms.maze3DGenerators.GrowingTree#choosePosition(java.util.ArrayList)
 	 */
 	@Override
-	public Position choosePosition(ArrayList<Position> list) {
+	public Position3D choosePosition(ArrayList<Position3D> list) {
 	
 		Random r = new Random();
 		return list.get(r.nextInt(list.size()));

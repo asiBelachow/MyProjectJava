@@ -1,0 +1,61 @@
+package presenter;
+
+import java.util.Observer;
+import model.Model;
+import model.MyServer;
+import model.ServerModel;
+import view.View;
+
+
+
+/**
+ *  <h1>class Abstract Presenter</h1><p>
+ *  This class defines the common functionality in order to</br>
+ *  connect between the {@link Model} and the {@link View} </p>
+ *  <b>Data members :</br></p>
+ *  <li>{@link View}</br>
+ *  <li>{@link Model}</br>
+ * @author Asi Belachow
+ * @version 1.0
+ * @since 2016-08-10
+ */
+public abstract class AbstractPresenter  implements Presenter,Observer {
+	
+	//-------------------------Data Members-------------------------//
+	
+	
+	protected ServerModel model;
+	protected View view;
+	
+	
+	public AbstractPresenter(ServerModel model,View view) {
+		this.view = view;
+		this.model = model;	
+	}
+	
+	//-----------------------------setters and getters-------------------//
+	
+	
+	/**
+	 * <h1>Set model</h1><p>
+	 * <i><ul>void setModel(Model m)<i><p>
+	 * Set the data member {@link Model} m
+	 * @param m - the  model
+	 */
+	public void setModel(MyServer model){
+		this.model = model;
+	}
+	
+	
+	/**
+	 * <h1>Set view</h1><p>
+	 * <i><ul>void setView(View v)<i><p>
+	 * Set the data member {@link View} v
+	 * @param v - the view 
+	 */
+	public void setView(View view){
+		this.view = view;
+		
+	}
+
+}

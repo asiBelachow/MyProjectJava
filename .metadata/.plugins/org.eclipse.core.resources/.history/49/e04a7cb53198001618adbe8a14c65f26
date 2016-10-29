@@ -1,0 +1,116 @@
+package presenter;
+
+
+import java.util.Observable;
+import model.MyModel;
+import model.ServerModel;
+import view.View;
+
+
+/**
+ * <h1>MyPresenter</h1><p>
+ * A presenter class in our MVP system, communicates with<br>
+ * the view using command interface (with added regex check for flexibility),<br>
+ * and with the model using string commands(because flexibility is not needed<br
+ *  between model and presenter).
+ */
+public class MyPresenter extends AbstractPresenter {
+	
+
+	//------------------------------Constructors-------------------------//
+	
+	/**
+	 * <h1>My Presenter</h1><p>
+	 * <i>MyPresenter(Model model, View view)<i><p>
+	 * Instantiates a new  Presenter
+	 * @param model the {@link MyModel}
+	 * @param view the view
+	 */
+	public MyPresenter( ServerModel model,View view) {
+		super(model, view);
+
+	}
+	
+	//-------------------------Functionality-------------------------//
+	
+	@Override
+	public void update(Observable o, Object arg) {
+
+		String command = (String) arg;
+		
+
+		if ( o ==view ){
+			
+			switch (command) {
+			case "start server":
+				try {
+					model.start();
+				} catch (Exception e) {
+					view.displayInConsole("Could not start server");
+				}
+				break;
+			case "stop server":
+				try {
+					model.stop();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+				
+			case "disconnect client":
+				model.disconnectClient((String) view.getCommandData(command));
+				break;
+			default:
+				break;
+			}
+			
+			/*if(command.equals("start server")){
+				try {
+					model.start();
+				} catch (Exception e) {
+					view.displayInConsole("Could not start server");
+				}
+			}
+			
+			if( command.equals("stop server")){
+				try {
+					model.stop();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}*/
+			
+			if(command.equals("disconnect client")){
+				model.disconnectClient((String) view.getCommandData(command));
+				
+			}
+		}
+		
+		
+		else if ( o == model )
+		{
+			
+			Object commandData = model.getCommandData(command);
+			
+			if(command.equals("add client"))
+				view.addClient(((String[])model.getCommandData(command)));
+			
+			if(command.equals("client input")){
+				String[] clientFields = (String[]) commandData;
+				view.updateClient(clientFields);
+				
+			}
+			
+			if(command.equals("console"))
+				view.displayInConsole((String) model.getCommandData(command));
+			
+			if ( command.equals("remove client")){
+				view.removeClient((String) model.getCommandData(command));
+			}
+		}
+
+	}
+
+}

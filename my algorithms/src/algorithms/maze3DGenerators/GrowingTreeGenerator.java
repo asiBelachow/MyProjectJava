@@ -3,6 +3,9 @@ package algorithms.maze3DGenerators;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import maze.maze3d.Maze3D;
+import position.position3d.Position3D;
+
 
 /**
  * This class GrowingTreeGenerator define the growing tree algorithm to build 3d maze 
@@ -32,10 +35,10 @@ public class GrowingTreeGenerator extends CommonMaze3DGenerator {
 		
 		initMaze();//Initialization of the maze
 		
-		ArrayList<Position> C = new ArrayList<Position>();  //Define the list 
+		ArrayList<Position3D> C = new ArrayList<Position3D>();  //Define the list 
 		                                                    //that will hold the positions
 		 //Get random start position(not on the shell)
-		Position randPos = chooseRandomPosition();
+		Position3D randPos = chooseRandomPosition();
 		
 		//Set pass 
 		myMaze.setPass(randPos);
@@ -46,13 +49,13 @@ public class GrowingTreeGenerator extends CommonMaze3DGenerator {
 		//Build the maze as long as C is not empty
 		while(!C.isEmpty()){
 			//Get next position by choosing one of the options <last or random>
-			Position c = gt.choosePosition(C); 
+			Position3D c = gt.choosePosition(C); 
 			//Get unvisited neighbors of the position that chosen
-			ArrayList<Position> neighbors = findUnvisitedNeighbors(c);
+			ArrayList<Position3D> neighbors = findUnvisitedNeighbors(c);
 			
 			if(!neighbors.isEmpty()){//If the position have neighbors
 				
-				Position n = neighbors.get(r.nextInt(neighbors.size())); 
+				Position3D n = neighbors.get(r.nextInt(neighbors.size())); 
 				
 				createPath(c, n);//Create path from c to n and add n to C
 				
@@ -67,7 +70,7 @@ public class GrowingTreeGenerator extends CommonMaze3DGenerator {
 		}
 		//Set random start and end position
 		myMaze.setStart(choosePassPosition());
-		Position p = choosePassPosition();
+		Position3D p = choosePassPosition();
 		while ( Math.abs( myMaze.getStart().getZ() - p.getZ()) <2)
 			p = choosePassPosition();
 		myMaze.setEnd(p);
@@ -110,14 +113,14 @@ public class GrowingTreeGenerator extends CommonMaze3DGenerator {
 	 * @param pos the pos
 	 * @return the array list
 	 */
-	private ArrayList<Position> findUnvisitedNeighbors(Position pos){
+	private ArrayList<Position3D> findUnvisitedNeighbors(Position3D pos){
 		
-		ArrayList<Position> neighbors  = myMaze.getAllMoves(pos);
+		ArrayList<Position3D> neighbors  = myMaze.getAllMoves(pos);
 	
-		Iterator<Position> iter = neighbors.iterator();
+		Iterator<Position3D> iter = neighbors.iterator();
 		
 		while ( iter.hasNext()){
-			Position temp = iter.next();
+			Position3D temp = iter.next();
 			if( !(myMaze.checkPositionBoundsNoException(temp))){// && (getValueByIndex(temp) != 0) )
 				iter.remove();
 				continue;
@@ -130,7 +133,7 @@ public class GrowingTreeGenerator extends CommonMaze3DGenerator {
 	
 	
 
-	private void createPath(Position a,Position b){
+	private void createPath(Position3D a,Position3D b){
 		
 		if (a.getX()+2==b.getX()){
 			myMaze.setPass(a.getZ(), a.getX()+1, a.getY());
@@ -164,15 +167,15 @@ public class GrowingTreeGenerator extends CommonMaze3DGenerator {
 	}
 	
 	
-	private Position chooseRandomPosition() {	
+	private Position3D chooseRandomPosition() {	
 		int x = r.nextInt(myMaze.getxAxis()/2)*2+1;
 		int y = r.nextInt(myMaze.getyAxis()/2)*2+1;
 		int z = r.nextInt(myMaze.getzAxis()/2)*2+1;
-		return new Position(z,x, y);
+		return new Position3D(z,x, y);
 	}
 	
-	private Position choosePassPosition(){
-		Position p = chooseRandomPosition();
+	private Position3D choosePassPosition(){
+		Position3D p = chooseRandomPosition();
 		while ( myMaze.getValueByIndex(p)!=0)
 			p = chooseRandomPosition();
 		

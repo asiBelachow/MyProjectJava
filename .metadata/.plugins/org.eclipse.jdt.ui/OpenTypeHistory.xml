@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <typeInfoHistroy>
-<typeInfo handle="=MVC/src&lt;allCommands{ClientCommands.java[ClientCommands" modifiers="1025" timestamp="1474040396605"/>
-<typeInfo handle="=MVP/src&lt;presenter{Presenter.java[Presenter" modifiers="513" timestamp="1474100898548"/>
-<typeInfo handle="=MVP/src&lt;view{BasicWindow.java[BasicWindow" modifiers="1025" timestamp="1474297387491"/>
-<typeInfo handle="=MVP/lib\/swt.jar&lt;org.eclipse.swt.widgets(Canvas.class[Canvas" modifiers="33" timestamp="1474015888141"/>
+<typeInfo handle="=Server/src&lt;commands{Command.java[Command" modifiers="513" timestamp="1477115103923"/>
+<typeInfo handle="=Server/src&lt;presenter{Presenter.java[Presenter" modifiers="513" timestamp="1477121148743"/>
+<typeInfo handle="=Server/src&lt;presenter{AbstractPresenter.java[AbstractPresenter" modifiers="1025" timestamp="1477121111459"/>
 </typeInfoHistroy>

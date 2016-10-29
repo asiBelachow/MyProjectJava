@@ -1,4 +1,4 @@
-package view.widgets;
+package view.gui.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Canvas;
@@ -7,22 +7,11 @@ import org.eclipse.swt.widgets.Composite;
 public abstract class GameCharacter extends Canvas {
 	
 	
-	int z , x ,y ,w ,h;
+	protected int z , x ,y ,w ,h;
 
 	GameCharacter(Composite parent,int style) {
 		super(parent,SWT.DOUBLE_BUFFERED);
 
-	/*	parent.addPaintListener(new PaintListener() {
-
-			@Override
-			public void paintControl(PaintEvent e) {
-				e.gc.setAntialias(SWT.ON);
-				e.gc.setInterpolation(SWT.HIGH);
-				
-				drawCharacter(e, x, y, getWidth(), getHeight());
-				redraw();
-			}
-		});*/
 	}
 	
 	public int getZ() {

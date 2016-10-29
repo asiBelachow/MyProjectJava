@@ -1,0 +1,286 @@
+package clienthandler;
+
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.Arrays;
+import algorithms.search.Solution;
+import maze.maze3d.Maze3D;
+import model.Model;
+import position.position3d.Position3D;
+import protocol.CommandProtocol;
+
+/**<h1>MyClientHandler</h1>
+ * This class extends {@link AbstractClientHandler} and handle all client requests
+ * @author Asi Belachow
+ * @version 1.0
+ * @since 2016-10-17
+ */
+public class MyClientHandler extends AbstractClientHandler {
+
+	//------------------------------Data Members-------------------------//
+	
+	private Model model;
+	private ObjectInputStream inFromClient;
+	private ObjectOutputStream outToClient;
+	private volatile CommandProtocol toClient;
+	private boolean closed = false;
+
+	//------------------------------Constructors-------------------------//
+	
+	/**
+	 * <h1>MyClientHandler</h1><p>
+	 * <i>MyClientHandler(Socket client,String clientId,Model model)<i><p>
+	 * Instantiates a new MyClientHandler.
+	 * @param client - socket connection
+	 * @param clientId - unique for every client 
+	 * @param model - execute user commands
+	 */
+	public MyClientHandler(Socket client,String clientId,Model model) {
+		super(client, clientId);
+		toClient = new CommandProtocol();
+		this.model = model;
+	}
+	
+	
+	//-------------------------Functionality-------------------------//
+
+	@Override
+	public void handleClient() {
+		int totalNumOfRequestedCommands = 0;
+		try {
+			client.setTcpNoDelay(true);
+			// server writing first
+			outToClient = new ObjectOutputStream(client.getOutputStream());
+			inFromClient = new ObjectInputStream(client.getInputStream());
+
+			writeToClient("connected", "You are connected to the server!!!");
+			CommandProtocol fromClient = null;
+
+			do {
+				fromClient = (CommandProtocol) inFromClient.readObject();
+				String command = fromClient.getCommand();
+			
+				String[] param = (String[]) fromClient.getData();
+
+				switch (command) {
+				case "generate maze 3D":
+					handleGenerateMaze(param[0], Integer.parseInt(param[1]), Integer.parseInt(param[2]), Integer.parseInt(param[3]));
+					break;
+					
+				case "display":
+					handleDisplayMaze(param[0]);
+					break;
+					
+				case "solve maze":
+					handleSolveMaze(param[0],param[1]);
+					break;
+					
+				case "display solution":
+					handleDisplaySolution(param[0]);
+					break;
+					
+				case "disconnect":
+					close();
+					break;
+					
+				case "display cross section":
+					handleDisplayCrossSectionByDimention(Integer.parseInt(param[0]), param[1], param[2]);
+					break;
+					
+				case "exit":
+					setCommandAndNotify("console", "Client "+clientId + " disconnected");
+					break;
+					
+				default:
+					break;
+				}
+				
+				setCommandAndNotify("client input", new String[] { clientId, client.getRemoteSocketAddress().toString(),
+						"Handling", command, Arrays.toString(param), "" + (++totalNumOfRequestedCommands) });
+
+			} while (fromClient!=null && !fromClient.getCommand().equals("exit"));
+		} catch (Exception e) {
+			System.out.println("excpetin");
+		}
+		close();
+	}
+	
+	@Override
+	public void handleGenerateMaze(String name, int z, int x, int y) {
+
+		Maze3D temp = model.getMaze(name);
+		if( temp==null){
+
+			if ( (z < 100 && z >2 ) && (x < 100 && x >2 )  && (y < 100 && y >2 ) ){
+				setCommandAndNotify("console", "Start generating maze: \""+ name+ "\" for client: "+clientId);
+				model.generateMaze3D(name, z, x, y);
+				
+				Maze3D maze = model.getMaze(name);
+				if(maze!=null){
+					writeToClient("maze ready", "Server done generating the maze: \""+name+"\"");
+					setCommandAndNotify("console", "Done generate maze for client" + " "+clientId);
+				}
+				else{
+					writeToClient("console", "There was error while trying generating maze: \""+name+ "\nPlease try again");
+					writeToClient("message", "There was error while trying generating maze: \""+name+ "\nPlease try again");
+					setCommandAndNotify("console", "There was error while trying generating maze: \""+name+ " for client" + " "+clientId);
+				}
+			}
+			else{
+				writeToClient("console","Please enter valid demintions");
+				writeToClient("message","Please enter valid demintions");
+			}
+		}
+		else{
+			writeToClient("console", "A maze with the name: \""+ name+ "\" already exists. please choose another name");
+			writeToClient("message", "A maze with the name: \""+ name+ "\" already exists. please choose another name");
+			
+
+		}
+	}
+
+	
+	@Override
+	public void handleSolveMaze(String name, String algorithm) {
+	
+		Maze3D maze = model.getMaze(name);
+		if(maze == null){
+			writeToClient("console", "The maze"+ " \""+name+"\" not found");
+			writeToClient("message", "The maze"+ " \""+name+"\" not found");
+			setCommandAndNotify("console", "The request of solving maze \""+name+"\" for "+clientId + " not performed, maze not found ");
+			return;
+		}
+
+		Solution<Position3D> solution = model.getSolution(name);
+		if(solution==null){
+			setCommandAndNotify("console", "Start solving maze: \""+name+"\" for client:" + " "+clientId);
+			model.solveMaze3D(name, algorithm);
+			solution = model.getSolution(name);
+			if(solution!=null){
+				setCommandAndNotify("console", "Done solve maze: \""+name+" \" for client:" + " "+clientId + " the solution is: "+solution.toString());
+				writeToClient("console", "Server done solving the maze \""+name+"\"");
+				writeToClient("solution ready", name);
+			}
+			else{
+				writeToClient("console", "There was error while trying solving maze \""+name+".\nThe maze not found or unknown solve algorithm");
+				writeToClient("message", "There was error while trying solving maze \""+name+".\nThe maze not found or unknown solve algorithm");
+			}
+		}else{
+			setCommandAndNotify("console", "Done solve maze: \""+name+" for client:" + " "+clientId);
+			writeToClient("console", "Server done solving the maze: \""+name+"\"");
+			writeToClient("solution ready", name);
+		}
+
+
+	}
+	
+	@Override
+	public void handleDisplayMaze(String name) {
+		
+		Maze3D maze = model.getMaze(name);
+		if(maze != null){
+			setCommandAndNotify("console", "Send generated maze for client" + " "+clientId);
+			writeToClient("display", maze);
+		}
+		else
+			writeToClient("console", "The maze:"+ " \""+name+"\" not found in the database");
+	}
+	
+	@Override
+	public void handleDisplaySolution(String name) {
+		
+		Solution<Position3D> sol = model.getSolution(name);
+		if(sol!=null){
+			setCommandAndNotify("console", "Send maze solution for client" + " "+clientId);
+			writeToClient("display solution", sol);
+		}
+		else
+			writeToClient("console", "The maze:"+ " \""+name+"\" not found in the database");
+		
+	}
+	
+	
+	/**
+	 * <h1>writeToClient</h1><p>
+	 * <i>synchronized void writeToClient(String command, Object data)<i><p>
+	 * Used for sending messages to the client using {@link CommandProtocol}
+	 * @param command - to send
+	 * @param data - to send
+	 */
+	private synchronized void writeToClient(String command, Object data) {
+		if (client != null && !client.isOutputShutdown())
+			try {
+				toClient.setCommand(command);
+				toClient.setData(data);
+				outToClient.writeObject(toClient);
+				outToClient.flush();
+				outToClient.reset();
+
+			} catch (IOException e) {
+				setCommandAndNotify("console", "Troubles sending client " + clientId + " command " + command);
+			}
+	}
+	
+	@Override
+	public void handleDisconnect(String ClientId) {
+		close();
+	}
+	
+	@Override
+	public void handleDisplayCrossSectionByDimention(int index, String dimention, String name) {
+		Maze3D temp = model.getMaze(name);
+		//If found get the maze
+		if (temp!=null){
+			//if the index that the user entered invalid an IndexOutOfBoundsException will Thrown out
+			try{
+				//Find the dimension
+				if(dimention.matches("[Zz]"))
+					writeToClient("cross section", temp.printCrossByAxis(temp.getCrossSectionByZ(index)));
+				if(dimention.matches("[Xx]"))
+					writeToClient("cross section", temp.printCrossByAxis(temp.getCrossSectionByX(index)));
+				if(dimention.matches("[Yy]"))
+					writeToClient("cross section", temp.printCrossByAxis(temp.getCrossSectionByY(index)));
+			}catch (IndexOutOfBoundsException e) {
+				writeToClient("console", "Please enter valid index");
+			}		
+		}
+		else
+			writeToClient("console", "The maze: \""+name+"\" not found in the database");
+
+	}
+	
+	
+
+
+	@Override
+	public void close() {
+		if (!closed) {
+			if (client != null && client.isConnected() && !client.isClosed())
+				setCommandAndNotify("console", "Closing connection to client " + clientId);
+				setCommandAndNotify("remove client", clientId);
+			try {
+				client.close();
+			} catch (IOException e) {
+			}
+			closed = true;
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+
+}

@@ -3,8 +3,8 @@ package commands;
 import java.io.IOException;
 
 /**
- * <h1>The Interface Maze3dGenerator.</h1><p>
- * The interface Command define the 
+ * <h1>The Interface Command.</h1><p>
+ * The interface Command define the required methods in order to execute command
  * @author Asi Belachow
  * @version 1.0
  * @since 2016-09-05

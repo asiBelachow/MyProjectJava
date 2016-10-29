@@ -1,0 +1,256 @@
+package presenter;
+
+import java.util.HashMap;
+import java.util.Observable;
+import algorithms.search.Solution;
+import commands.Command;
+import maze.maze3d.Maze3D;
+import model.Model;
+import model.MyModel;
+import position.position3d.Position3D;
+import view.View;
+import view.cli.ObservableCLIView;
+import view.gui.GameWindow;
+
+
+
+
+/**
+ * <h1>MyPresenter</h1><p>
+ * A presenter class in our MVP system, communicates with<br>
+ * the {@link View} using command interface (with added regular expression check for flexibility),<br>
+ * and with the {@link MyModel} using string commands (because flexibility is not needed between model and presenter).
+ */
+public class MyPresenter extends AbstractPresenter {
+
+	
+	//------------------------------Data Members-------------------------//
+	
+	/** hold all the commands */
+	private HashMap<String, Command> commands;
+	
+	
+	//------------------------------Constructors-------------------------//
+	
+	/**
+	 * <h1>MyPresenter</h1><p>
+	 * <i><ul>MyPresenter(Model model, View view)<i><p>
+	 * Instantiates a new  Presenter
+	 * @param model the {@link MyModel}
+	 * @param view the {@link ObservableCLIView}/{@link GameWindow}
+	 */
+	public MyPresenter(Model model, View view) {
+		super(model, view);
+		commands = new HashMap<String, Command>();
+		initCommands(commands);	
+	}
+	
+	//-----------------------------setters and getters-------------------//
+	
+	/**
+	 * <h1>getCommands</h1><p>
+	 * <i><ul>HashMap<String, Command> getCommands()<i><p>
+	 * Get the data member commands
+	 * @return HashMap<String, Command> - commands 
+	 */
+	public HashMap<String, Command> getCommands() {
+		return commands;
+	}
+	
+	/**
+	 * <h1>setCommands</h1><p>
+	 * <i><ul>void setCommands(HashMap<String, Command> commands)<i><p>
+	 * Set the data member commands
+	 */
+	public void setCommands(HashMap<String, Command> commands) {
+		this.commands = commands;
+	}
+	
+	//-------------------------Functionality-------------------------//
+
+	@Override
+	public void initCommands(HashMap<String, Command> commands) {
+
+
+		commands.put("menu", new Command() {
+
+			@Override
+			public void doCommmand(String[] param) {
+				model.displayMenu();
+
+			}
+		});
+
+		commands.put("connect to server", new Command() {
+
+			@Override
+			public void doCommmand(String[] param) {
+				model.start();
+
+			}
+		});
+
+		commands.put("generate maze 3D [A-Za-z0-9]+ [0-9]{1,2} [0-9]{1,2} [0-9]{1,2}", new Command() {
+
+			@Override
+			public void doCommmand(String[] param) {
+				model.generateMaze3D(param[3], Integer.parseInt(param[4]), Integer.parseInt(param[5]), Integer.parseInt(param[6]));
+			}
+		});
+
+		commands.put("display [A-Za-z0-9]+", new Command() {
+
+			@Override
+			public void doCommmand(String[] param) {
+				model.displayMaze(param[1]);
+
+			}
+		});
+
+		commands.put("solve maze [A-Za-z0-9]+ [^\n]+", new Command() {
+
+			@Override
+			public void doCommmand(String[] param) {
+				model.solveMaze(param[2], param[3]);
+
+			}
+		});
+
+		commands.put("display solution [A-Za-z0-9]+", new Command() {
+
+			@Override
+			public void doCommmand(String[] param) {
+				model.displaySolution(param[2]);
+
+			}
+		});
+
+
+		commands.put("display cross section [0-9]{1,2} [XxYyZz]+ [A-Za-z0-9]+", new Command() {
+
+			@Override
+			public void doCommmand(String[] param) {
+				model.crossSectionByDimention(Integer.parseInt(param[3]), param[4], param[5]);
+			}
+		});
+
+
+		commands.put("save maze [^\n]+", new Command() {
+
+			@Override
+			public void doCommmand(String[] param) {
+				model.saveMaze(param[2]);
+
+			}
+		});
+
+		commands.put("load maze [^\n]+", new Command() {
+
+			@Override
+			public void doCommmand(String[] param) {
+				model.loadMaze(param[2]);
+
+			}
+		});
+
+
+		commands.put("dir [^\n]+", new Command() {
+
+			@Override
+			public void doCommmand(String[] param) {
+				model.getDirPath(param[1]);
+
+			}
+		});
+
+		commands.put("disconnect from server", new Command() {
+
+			@Override
+			public void doCommmand(String[] param) {
+				model.close();
+
+			}
+		});
+
+		commands.put("exit", new Command() {
+
+			@Override
+			public void doCommmand(String[] param) {
+				model.close();
+			}
+		});	
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void update(Observable o, Object args) {
+		//Check if the view notify 
+		if( o == view){
+			
+			Command cmd = (Command) args;
+				cmd.doCommmand((String[]) view.getCommandData(cmd));
+
+		} 
+		//Check if the model notify 
+		if (o == model){
+			String command = (String) args;
+			
+			switch (command) {
+			case "connected":
+				view.writeToConsole((String) model.getCommandData(command));
+				view.connectToServerButtonInit();
+				break;
+			case "console":
+				view.writeToConsole((String) model.getCommandData(command));
+				break;
+			case "maze ready":
+				String ans = (String)model.getCommandData(command);
+				String name = ans.substring(ans.indexOf("\"")+1, ans.lastIndexOf("\""));
+				view.writeToConsole(ans);
+				view.notifyMazeIsReady(name);
+				break;
+			case "message":
+				view.displayMessage((String) model.getCommandData(command));
+				break;
+			case "display":
+				Maze3D maze = (Maze3D) model.getCommandData(command);
+				view.displayMaze(maze);
+				model.setCurrentMaze(maze);
+				break;
+			case "display solution":
+				view.displaySolution((Solution<Position3D>) model.getCommandData(command));
+				break;
+			case "done solving maze":
+				view.displaySolution((Solution<Position3D>)model.getCommandData(command));
+				break;
+			case "server closed":
+				view.writeToConsole((String) model.getCommandData(command));
+				view.displayMessage((String) model.getCommandData(command));
+				view.resetGameEvetHandler();
+				model.close();
+				break;
+			case "solution ready":
+				view.notifySolutionIsReady((String) model.getCommandData(command));
+			case "cross section":
+				view.writeToConsole((String)model.getCommandData(command));
+				break;
+			case "menu":
+				view.writeToConsole((String) model.getCommandData(command));
+				break;
+			case "disconnect":
+				view.disconnectFromServerButtonInit();
+				break;
+			case "exit":
+				//view.close();
+				model.writeToServer("exit", null);
+				model.close();
+				break;
+			
+			default:
+				break;
+			}
+		}
+	
+	}
+
+}

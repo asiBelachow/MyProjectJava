@@ -1,0 +1,29 @@
+ackage boot;
+
+import java.beans.XMLEncoder;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
+import presenter.Properties;
+
+public class Run {
+	
+	public static void main(String[] args) {
+		XMLEncoder encoder;
+		try {
+			encoder = new XMLEncoder(new FileOutputStream("resources/properties/properties.xml"));
+			Properties properties = new Properties();
+			encoder.writeObject(properties);
+			encoder.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("Error saving exml");
+			e.printStackTrace();
+		}		
+	
+		
+		
+		
+
+}
+
+}

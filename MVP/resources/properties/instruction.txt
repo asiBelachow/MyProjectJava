@@ -1,0 +1,25 @@
+Help Marco to find his mother!!!
+
+Use the arrows in the keyboard to move the character in the maze
+key up - move the character forward.
+key down - move the character backward.
+key left - move the character left.
+key right - move the character right.
+key page Up - move the character one floor up.
+key page Down - move the character one floor down.
+
+You can also use the arrows button in the navigation panel
+to move the character.
+
+If you are unable to solve the maze, you can press on show "hint" button.
+and you will see a hint in the aboce left screen near the position location.
+( you can hide the hint in the same button).
+
+If the maze is to difficult you can use the "solve" button.
+The game will be solved with the default alogrithm that defind in the proprties.
+Or, you can use "Game" menu in the menu bar ->"solve maze by.." -> and choose an alogrithm to solve the maze. DFS/BFS.
+
+
+In addition, you can change the background image if you like through the "combobox" in right panel under generate maze button.
+
+Enjoy play the game!!!

@@ -2,6 +2,8 @@ package algorithms.maze3DGenerators;
 
 import java.util.Random;
 
+import maze.maze3d.Maze3D;
+
 
 /**
  * <h1>class CommonMaze3DGenerator</h1><p>

@@ -2,8 +2,8 @@ package model;
 
 import java.io.IOException;
 
-import algorithms.maze3DGenerators.Maze3D;
-import algorithms.maze3DGenerators.Position;
+import maze.maze3d.*;
+import position.position3d.*;
 import algorithms.search.Solution;
 
 
@@ -14,7 +14,7 @@ import algorithms.search.Solution;
  * used for manages the data, logic and rules of the application</br>
  * @author Asi Belachow
  * @version 1.0
- * @since 2016-10-09
+ * @since 2016-20-09
  */
 public interface Model {
 	
@@ -96,8 +96,9 @@ public interface Model {
 	 * Display the solution path of a given name of maze
 	 * @param mazeName - The name of the maze
 	 */
-	public Solution<Position> displaySolution(String mazeName);
+	public Solution<Position3D> displaySolution(String mazeName);
 	
+
 	
 	/**
 	 * <h1>Display list of all mazes</h1><p>
@@ -115,8 +116,6 @@ public interface Model {
 	 */
 	public String displayMenu();
 	
-	
-	public Object getCommand(String command);
 	
 	
 	/**

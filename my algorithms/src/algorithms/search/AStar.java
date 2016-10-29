@@ -5,8 +5,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 
-import position.position3d.Position3D;
-
 /**
  * The Class Astar_Algorithem.
  *

@@ -22,41 +22,33 @@ public class Properties implements Serializable{
 	private String title;
 	private Integer width;
 	private Integer height;
-	private Integer numOfThreads;
 	private String searchAlg;
-	private Boolean sound;
 	private String serverIp;
 	private Integer serverPort;
-	private Boolean gui;
+	private Boolean sound;
 	
 	
 	
 	public Properties() {
 		
-		this.sound = true;
 		this.title = "Enter windows name";
-		this.width = 600;
-		this.height = 800;
-		this.numOfThreads = 20;
+		this.width = 800;
+		this.height = 600;
 		this.searchAlg = "BFS";
 		this.serverPort = 5555;
 		this.serverIp = "127.0.0.1";
-		this.gui = true;
-		
+		this.sound = true;
 	}
 	
-	public Properties(String title,Integer width,Integer height,Integer numOfThreads,String searchAlg,Boolean sound,String serverIp,Integer serverPort,Boolean gui) {
+	public Properties(String title,Integer width,Integer height,String searchAlg,String serverIp,Integer serverPort,Boolean sound) {
 	
 		this.setTitle(title);
 		this.setWidth(width);
 		this.setHeight(height);
-		this.setNumOfThreads(numOfThreads);
 		this.setSearchAlg(searchAlg);
-		this.setSound(sound);
 		this.setServerIp(serverIp);
 		this.setServerPort(serverPort);
-		this.setGui(gui);
-		
+		this.setSound(sound);
 		
 	}
 	public String getSearchAlg() {
@@ -65,14 +57,6 @@ public class Properties implements Serializable{
 
 	public void setSearchAlg(String searchAlg) {
 		this.searchAlg = searchAlg;
-	}
-
-	public Integer getNumOfThreads() {
-		return numOfThreads;
-	}
-
-	public void setNumOfThreads(Integer numOfThreads) {
-		this.numOfThreads = numOfThreads;
 	}
 
 	public String getTitle() {
@@ -123,13 +107,7 @@ public class Properties implements Serializable{
 		this.serverPort = serverPort;
 	}
 
-	public Boolean getGui() {
-		return gui;
-	}
 
-	public void setGui(Boolean gui) {
-		this.gui = gui;
-	}
 
 	
 	

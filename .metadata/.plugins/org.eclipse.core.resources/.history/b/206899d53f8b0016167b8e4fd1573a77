@@ -1,0 +1,74 @@
+package presenter;
+
+
+
+/**
+ * A simple properties class to represent our XML properties in object oriented
+ * way
+ * 
+ * @author Asi Belachow
+ * @version 1.0
+ * @since 2016-10-06
+ *
+ */
+public class AdminProperties {
+	
+	private String serverIP;
+	private Integer serverPort;
+
+	private Integer windowWidth;
+	private Integer windowHeight;
+
+	public AdminProperties() {
+		serverIP = "127.0.0.1";
+		serverPort = 5000;
+		windowWidth = 800;
+		windowHeight = 600;
+	}
+	
+	public AdminProperties(String serveIP, Integer servePort, Integer windowWidth, Integer windowHeight) {
+	
+		this.serverIP = serveIP;
+		this.serverPort = servePort;
+		this.windowWidth = windowWidth;
+		this.windowHeight = windowHeight;
+	}
+
+	public String getServerIP() {
+		return serverIP;
+	}
+
+	public void setServerIP(String serverIP) {
+		this.serverIP = serverIP;
+	}
+
+	public Integer getServerPort() {
+		return serverPort;
+	}
+
+	public void setServerPort(Integer serverPort) {
+		this.serverPort = serverPort;
+	}
+
+
+
+	
+
+
+	public Integer getWindowWidth() {
+		return windowWidth;
+	}
+
+	public void setWindowWidth(Integer windowWidth) {
+		this.windowWidth = windowWidth;
+	}
+
+	public Integer getWindowHeight() {
+		return windowHeight;
+	}
+
+	public void setWindowHeight(Integer windowHeight) {
+		this.windowHeight = windowHeight;
+	}
+
+}

@@ -1,7 +1,6 @@
 package algorithms.maze3DGenerators;
 
-
-
+import maze.maze3d.Maze3D;
 
 /**
  * The Interface Maze3dGenerator.

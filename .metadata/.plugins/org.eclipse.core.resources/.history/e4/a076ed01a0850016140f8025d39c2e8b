@@ -1,0 +1,138 @@
+package view;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+
+import haganaBk15.Link;
+import haganaBk15.Snake;
+import haganaBk15.SnakesBoard;
+import maze.maze2d.Maze2D;
+import position.Position3D;
+import position.position2d.Position2D;
+
+public class SnakeWindow extends BasicWindow {
+	
+	SnakesBoard sb;
+	Button run;
+	Timer timer;
+	TimerTask timerTask;
+	
+	
+	public SnakeWindow(String title, int width, int height) {
+		super(title, width, height);
+		
+	}
+
+	@Override
+	protected void initWidgets() {
+		
+		getShell().setLayout(new GridLayout(2, false));
+		sb = new SnakesBoard(getShell(),  SWT.DOUBLE_BUFFERED, 30, 30);
+		sb.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		run = new Button(getShell(), SWT.PUSH);
+		run.setText("Run");
+		run.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
+		run.setEnabled(true);
+		Position2D end = new Position2D(sb.getExitCol(),sb.getExitRow());
+		
+		run.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				Position2D start = new Position2D(sb.getCharacterCol(),sb.getCharacterRow());
+				Maze2D maze = new Maze2D(30,30,start,end);
+				maze.initMazeWithPass();
+				for(Snake s :sb.getSnakes()){
+					for( Link l : s.getLinks())
+						maze.setValueByIndex(l.y, l.x, Maze2D.WALL);
+						setChanged();
+						notifyObservers(maze);
+						System.out.println("ghj");
+				}
+				
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+
+	}
+	@Override
+	public void displaySolution(ArrayList<Position2D> solution) {
+		
+	getDisplay().syncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				timer = new Timer();
+				
+				Iterator<Position2D> iter = solution.iterator();
+				
+				timer.scheduleAtFixedRate(new TimerTask() {
+					
+					@Override
+					public void run() {
+						if(iter.hasNext()){
+							getDisplay().syncExec(new Runnable() {
+								
+								@Override
+								public void run() {	
+									moveBackward();
+									
+								}
+							});
+						}else{
+							
+							if(timer!=null)
+								timer.cancel();
+						}
+					}
+				}, 0, 100);
+			}
+		});
+		
+		
+		
+		
+		
+	}
+	
+	
+	@Override
+	public void moveBackward() {
+		sb.moveDown();
+
+	}
+
+	@Override
+	public void moveLeft() {
+		sb.moveLeft();
+
+	}
+
+	@Override
+	public void moveRight() {
+		sb.moveRight();
+
+	}
+
+	@Override
+	public void moveForward() {
+		sb.moveUp();
+
+	}
+	
+
+}

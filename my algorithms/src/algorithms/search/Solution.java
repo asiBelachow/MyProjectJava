@@ -3,7 +3,6 @@ package algorithms.search;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import algorithms.maze3DGenerators.Position;
 
 /**
  * <h1>Solution</h1><p>
@@ -51,17 +50,15 @@ public class Solution<T> implements Serializable {
 			solution.add(start);
 			return ;
 		}
-		
 		getSolution(start, goal.getCameFrom());
-		solution.add(goal);
-		
+		solution.add(goal);	
 	}
 	
-	public ArrayList<Position> getArraySolution(){
-		ArrayList<Position> array = new ArrayList<Position>();
+	public ArrayList<T> getArraySolution(){
+		ArrayList<T> array = new ArrayList<T>();
 		
 		for(int i=0;i<solution.size();i++){
-			array.add((Position) solution.get(i).getState());
+			array.add((T) solution.get(i).getState());
 		}
 		return array;
 	}
@@ -75,12 +72,8 @@ public class Solution<T> implements Serializable {
 			
 			str.append(""+ solution.get(i).getState()+" ");
 		}
-		
 		str.append("\n");
-		
 		return str.toString();
 	}
-	
-	
-	
+
 }

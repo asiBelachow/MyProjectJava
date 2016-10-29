@@ -2,9 +2,6 @@ package algorithms.search;
 
 import java.util.ArrayList;
 
-import algorithms.maze3DGenerators.Maze3D;
-
-
 
 /**
  * The Class CommonSearchable.
@@ -18,38 +15,36 @@ public abstract class CommonSearchable<T> implements Searchable<T> {
 
 	//------------------------------Data Members-------------------------//
 	
-	protected Maze3D myMaze;
 	protected double costValue;
 	
 	//------------------------------Constructors-------------------------//
 	
-	public CommonSearchable(Maze3D myMaze) {
-		this.myMaze = myMaze;
+	public CommonSearchable() {
 		setCostValue(1);
 		
 	}
 	
-	public CommonSearchable(Maze3D myMaze, double cost) {
-		setMyMaze(myMaze);
+
+	public CommonSearchable(double cost) {
 		setCostValue(cost);
 		
 	}
 	
+
 	//-----------------------------setters and getters-------------------//
 	
-	public Maze3D getMyMaze() {
-		return myMaze;
-	}
-
-	public void setMyMaze(Maze3D myMaze) {
-		this.myMaze = myMaze;
-	}
+	
+	
 
 	public void setCostValue(double costValue) {
 		this.costValue = costValue;
 	}
 	
-	
+
+
+	/* (non-Javadoc)
+	 * @see algorithms.search.Searchable#getCostValue()
+	 */
 	@Override
 	public  double getCostValue(){
 		return costValue;

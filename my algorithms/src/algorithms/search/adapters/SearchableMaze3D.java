@@ -1,10 +1,11 @@
-package algorithms.demo;
+package algorithms.search.adapters;
 
 import java.util.ArrayList;
-import algorithms.maze3DGenerators.Maze3D;
-import algorithms.maze3DGenerators.Position;
+
 import algorithms.search.CommonSearchable;
 import algorithms.search.State;
+import maze.maze3d.Maze3D;
+import position.position3d.Position3D;
 
 
 
@@ -14,10 +15,15 @@ import algorithms.search.State;
  * @param <T> the generic type
  * @author Asi Belachow
  * @version 1.0
+ * @param <T>
  * @since 2016-28-08
 
  */
-public class SearchableMaze3D<T> extends CommonSearchable<Position> {
+public class SearchableMaze3D<T> extends CommonSearchable<Position3D> {
+	
+	
+	private Maze3D mayMaze;
+	
 	
 	//------------------------------Constructors-------------------------//
 	
@@ -29,43 +35,74 @@ public class SearchableMaze3D<T> extends CommonSearchable<Position> {
 	 * @param - aMaze3D
 	 */
 	public SearchableMaze3D(Maze3D myMaze) {
-		super(myMaze);
+		setMayMaze(myMaze);
 	}
 	
 	public SearchableMaze3D(Maze3D myMaze,double cost) {
-		super(myMaze,cost);
-		
+		super(cost);
+		setMayMaze(myMaze);
 	}
+	
+	public Maze3D getMayMaze() {
+		return mayMaze;
+	}
+
+	public void setMayMaze(Maze3D mayMaze) {
+		this.mayMaze = mayMaze;
+	}
+
+	
 	
 
 	//-------------------------------Functionality------------------------------//
+
 	@Override
-	public State<Position> getInitialState() {
-		State<Position> start = new State<Position>(myMaze.getStart());
+	public State<Position3D> getInitialState() {
+		State<Position3D> start = new State<Position3D>(getMayMaze().getStart());
 		start.setCost(0);
 		start.setCameFrom(null);
 		return start;
 	}
+	
 
 	@Override
-	public State<Position> getGoalState() {
-		State<Position> end = new State<Position>(myMaze.getEnd());
+	public State<Position3D> getGoalState() {
+		State<Position3D> end = new State<Position3D>(getMayMaze().getEnd());
 		return end;
 	}
 
 	@Override
-	public ArrayList<State<Position>> getAllPossibleStates(State<Position> s) {
-		ArrayList<Position> pMoves = myMaze.getPossibleMoves(s.getState()); 
+	public ArrayList<State<Position3D>> getAllPossibleStates(State<Position3D> s) {
+		ArrayList<Position3D> pMoves = getMayMaze().getPossibleMoves(s.getState()); 
 		
-		ArrayList<State<Position>> stateList = new ArrayList<State<Position>>();
+		ArrayList<State<Position3D>> stateList = new ArrayList<State<Position3D>>();
 
 		for (int i=0;i < pMoves.size(); i++){
-			stateList.add(new State<Position>(pMoves.get(i)));
+			stateList.add(new State<Position3D>(pMoves.get(i)));
 			stateList.get(i).setCameFrom(s);
 			stateList.get(i).setCost(getCostValue());
 		}
 		return stateList;
 	}
+
+
+
+	
+	public ArrayList<Integer> calcAirdis(State<Position3D> s){
+		ArrayList<Integer> air =  new ArrayList<>();
+		
+		State<Position3D> pos = new State<Position3D>(s.getState());
+		
+		air.add(Math.abs(mayMaze.getEnd().getZ() - pos.getState().getZ()));
+		air.add(Math.abs(mayMaze.getEnd().getY() - pos.getState().getY()));
+		air.add(Math.abs(mayMaze.getEnd().getX() - pos.getState().getX()));
+		
+		return air;	
+	}
+
+	
+
+	
 
 
 

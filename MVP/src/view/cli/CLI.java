@@ -1,4 +1,4 @@
-package view;
+package view.cli;
 
 
 import java.io.BufferedReader;
@@ -6,16 +6,23 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Observable;
+import presenter.MyPresenter;
+
+import view.View;
 
 
 
 /**
  * <h1>The Class CLI</h1><p>
- * This class define the 
+ * This class is the client part of Command Design Pattern<br>
+ * Get an command from the user a pass it to the<br>
+ *  {@link MyPresenter} for process
+ * 
  */
 public class CLI extends Observable implements Closeable {
 	
 	//------------------------------Data Members-------------------------//
+	
 	
 	private static final String EXIT_COMMAND = "exit";
 	
@@ -31,7 +38,7 @@ public class CLI extends Observable implements Closeable {
 	/**
 	 * <h1>CLI </h1><p>
 	 * <i><ul>CLI(BufferedReader in, PrintWriter out)<i><p>
-	 * Initialize a CLI.
+	 * Initialize a new CLI.
 	 * @param in -  BufferedReader
 	 * @param out - PrintWriter
 	 */
@@ -74,6 +81,9 @@ public class CLI extends Observable implements Closeable {
 				
 				try {
 					String input;
+					out.println("************************************************************");
+					out.println("*                   Command Line Interface                 *");
+					out.println("************************************************************");
 					out.println("*To view commands enter menu");
 					out.printf("Please enter command: ");
 					out.flush();

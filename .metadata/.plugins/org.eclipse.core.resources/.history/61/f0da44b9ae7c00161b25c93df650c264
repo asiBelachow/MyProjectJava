@@ -1,8 +1,0 @@
-package presenter;
-
-public class PropertiesHandler {
-	
-	private static Properties properties;
-	
-
-}

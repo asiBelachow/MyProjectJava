@@ -1,4 +1,4 @@
-package view.widgets;
+package view.gui.widgets;
 
 public interface GameBoardDisplayAdapter {
 	
