@@ -44,7 +44,7 @@ video preview on youtube: https://www.youtube.com/watch?v=cgcbFZgwRBg
 
 ![My image](media/5.jpg)
 
-![My image](media/6.jpg)
+![My image](media/6.JPG)
 
 
 
