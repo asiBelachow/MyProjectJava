@@ -1,4 +1,4 @@
-# ![pageres](media/headline.png)
+# ![pageres](media/headline.PNG)
 # Java - Maze 3D Project
 
 Basic overview of a 3-dimensional game project, built over MVP architecture. Focusing on flexibility by using known design patterns.
