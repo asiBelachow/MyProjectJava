@@ -1,4 +1,4 @@
-# ![pageres](media/headline.PNG)
+# ![pageres](media/headline.JPG)
 
 Basic overview of a 3-dimensional game project, built over MVP architecture. Focusing on flexibility by using known design patterns.
 
