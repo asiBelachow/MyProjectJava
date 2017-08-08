@@ -1,8 +1,5 @@
 # ![pageres](media/headline.JPG)
 
-Basic overview of a 3-dimensional game project, built over MVP architecture. Focusing on flexibility by using known design patterns.
-
-
 ## Description
 
 The game generates random mazes in whatever sizes you'd like using:
